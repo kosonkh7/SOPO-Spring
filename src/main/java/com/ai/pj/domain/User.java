@@ -40,6 +40,7 @@ public class User {
     private UserRole role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<Board> posts = new ArrayList<>();
 
     public static User createUser(UserDTO dto, PasswordEncoder passwordEncoder) {
@@ -54,7 +55,12 @@ public class User {
         return user;
     }
 
+    public void setRole() {
+        this.role = UserRole.ADMIN;
+    }
+
 }
+
 
 
 enum UserRole {

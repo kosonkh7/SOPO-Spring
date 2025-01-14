@@ -23,6 +23,7 @@ public class SecurityConfig {
                         )
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(PathRequest.toH2Console()).permitAll()
+                                .requestMatchers("/admin/**").hasRole("ADMIN")
 //                        .requestMatchers("/public/**", "/login").permitAll()
 //                        .anyRequest().authenticated()
                         .anyRequest().permitAll() // 모든 요청 허용
