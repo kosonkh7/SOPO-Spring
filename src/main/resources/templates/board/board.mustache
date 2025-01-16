@@ -86,12 +86,12 @@
         </tr>
         {{#boardList}}
             <tr>
-                <th scope="row" class="index"></th>
+                <th scope="row" class="index">{{id}}</th>
 <!--                <td></td>-->
-                <td>{{title}}</td>
+                <td><a href="/board/{{id}}" class="text-decoration-none">{{title}}</a></td>
                 <td>{{userId}}</td>
-                <td>{{content}}</td>
-                <td></td>
+                <td>{{#createdDate}}{{createdDate}}{{/createdDate}}{{^createdDate}}N/A{{/createdDate}}</td> 
+                <td>{{viewCount}}</td>
             </tr>
         {{/boardList}}
         </tbody>
