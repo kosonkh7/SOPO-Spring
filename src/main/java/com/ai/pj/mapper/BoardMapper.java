@@ -20,9 +20,12 @@ public class BoardMapper {
 
     public static BoardDTO.Get EntityToGET(Board board){
         return BoardDTO.Get.builder()
+                .id(board.getId())
                 .title(board.getTitle())
                 .content(board.getContent())
                 .userId(board.getUser().getId())
+                .createdDate(board.getCreatedDate())
+                .viewCount(board.getViewCount())
                 .build();
     }
 }

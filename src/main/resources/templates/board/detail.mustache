@@ -1,0 +1,14 @@
+<h1>{{board.title}}</h1>
+<p><strong>작성자:</strong> {{board.userId}}</p>
+<p><strong>작성일:</strong> {{#board.createdDate}}{{board.createdDate}}{{/board.createdDate}}{{^board.createdDate}}N/A{{/board.createdDate}}</p>
+<p><strong>조회수:</strong> {{board.viewCount}}</p>
+<hr>
+<p>{{{board.content}}}</p>
+
+<div>
+    <!-- 목록으로 돌아가기 -->
+    <a href="/board/" class="btn btn-secondary">목록으로</a>
+
+    <!-- 글 수정 버튼 -->
+    <a href="/board/edit/{{board.id}}" class="btn btn-primary">수정</a>
+</div>
