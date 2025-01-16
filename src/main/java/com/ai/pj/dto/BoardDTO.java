@@ -2,6 +2,8 @@ package com.ai.pj.dto;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 public class BoardDTO {
 
 
@@ -25,5 +27,7 @@ public class BoardDTO {
         String title;
         String userId;
         String content;
+        Integer viewCount;
+        LocalDateTime createdDate;
     }
 }

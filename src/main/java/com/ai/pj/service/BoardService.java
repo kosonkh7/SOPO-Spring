@@ -1,10 +1,12 @@
 package com.ai.pj.service;
 
 
+import com.ai.pj.domain.Board;
 import com.ai.pj.domain.User;
 import com.ai.pj.dto.BoardDTO;
 import com.ai.pj.mapper.BoardMapper;
 import com.ai.pj.repository.BoardRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -35,6 +37,17 @@ public class BoardService {
         return boardMapper.EntityToGET(boardRepository.save(boardMapper.PostToEntity(post, user)));
     }
 
+    @Transactional
+    public BoardDTO.Get update(Long id, BoardDTO.Post updatedPost) {
+        Board board = boardRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("게시글이 존재하지 않습니다: " + id));
+
+        board.setTitle(updatedPost.getTitle());
+        board.setContent(updatedPost.getContent());
+
+        return boardMapper.EntityToGET(boardRepository.save(board));
+    }
+
     public Boolean delete(Long reqNum) {
 
         try {
@@ -54,10 +67,22 @@ public class BoardService {
                         board.getId(),
                         board.getTitle(),
                         board.getUser().getId(),
-                        board.getContent()
+                        board.getContent(),
+                        board.getViewCount(), // 조회수 추가
+                        board.getCreatedDate()
                 ))
                 .collect(Collectors.toList());
     }
 
 
+    @Transactional(readOnly = true)
+    public BoardDTO.Get getBoardById(Long id){
+        // 게시글 데이터 가져오기
+        Board board = boardRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("게시글이 존재하지 않습니다: " + id));
+        // 조회수 증가
+        boardRepository.incrementViewCount(id);
+
+        return BoardMapper.EntityToGET(board);
+    }
 }
