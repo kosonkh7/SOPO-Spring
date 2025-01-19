@@ -2,7 +2,9 @@ package com.ai.pj.controller;
 
 
 import com.ai.pj.dto.BoardDTO;
+import com.ai.pj.dto.CommentDTO;
 import com.ai.pj.service.BoardService;
+import com.ai.pj.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,7 +21,7 @@ import java.util.List;
 public class BoardController {
 
     private final BoardService boardService;
-
+    private final CommentService commentService;
 
     @GetMapping("/")
     public String reqBoard(Model model) {
@@ -55,7 +57,11 @@ public class BoardController {
     @GetMapping("/{id}")
     public String getBoardDetail(@PathVariable Long id, Model model){
         BoardDTO.Get board = boardService.getBoardById(id);
+        List<CommentDTO.Get> comments = commentService.getCommentsByBoard(id);
+
         model.addAttribute("board", board);
+        model.addAttribute("comments", comments);
+
         return "/board/detail";
     }
 
