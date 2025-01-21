@@ -47,4 +47,6 @@ public class Board {
     @Builder.Default
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
+
+    private String imageUrl;
 }
