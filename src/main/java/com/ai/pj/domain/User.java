@@ -50,7 +50,7 @@ public class User {
                 .email(dto.getEmail())
 //                .password(dto.getPassword())
                 .password(passwordEncoder.encode(dto.getPassword())) // 암호화해서 User 생성.
-                .role(UserRole.USER) //  durgkf wlwjd.
+                .role(UserRole.HOLD) //  durgkf wlwjd.
                 .build();
         return user;
     }
@@ -64,5 +64,5 @@ public class User {
 
 
 enum UserRole {
-    USER, ADMIN
+    USER, ADMIN, HOLD
 }

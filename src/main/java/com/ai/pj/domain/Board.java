@@ -44,6 +44,7 @@ public class Board {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime createdDate;
 
+    @Builder.Default
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 }
