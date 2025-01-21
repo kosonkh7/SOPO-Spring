@@ -29,5 +29,6 @@ public class BoardDTO {
         String content;
         Integer viewCount;
         LocalDateTime createdDate;
+        String imageUrl;
     }
 }
