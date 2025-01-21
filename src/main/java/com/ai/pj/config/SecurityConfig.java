@@ -18,7 +18,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf -> csrf
-                                .ignoringRequestMatchers(PathRequest.toH2Console())
+//                                .ignoringRequestMatchers(PathRequest.toH2Console())
+
                                 .disable()
                         )
                 .authorizeHttpRequests(request -> request
