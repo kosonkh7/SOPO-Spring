@@ -3,6 +3,15 @@
 <p><strong>작성일:</strong> <span class="createdDate">{{#board.createdDate}}{{board.createdDate}}{{/board.createdDate}}{{^board.createdDate}}N/A{{/board.createdDate}}</span></p>
 <p><strong>조회수:</strong> {{board.viewCount}}</p>
 <hr>
+
+<!-- 이미지 표시 -->
+{{#board.imageUrl}}
+    <div>
+        <img src="{{board.imageUrl}}" alt="게시글 이미지" style="max-width: 100%; height: auto; margin-bottom: 20px;">
+    </div>
+{{/board.imageUrl}}
+
+<!-- 게시글 내용 -->
 <p>{{{board.content}}}</p>
 <hr>
 
