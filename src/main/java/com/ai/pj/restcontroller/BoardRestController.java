@@ -6,10 +6,7 @@ import com.ai.pj.dto.BoardDTO;
 import com.ai.pj.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/board")
@@ -30,5 +27,21 @@ public class BoardRestController {
                 .status(201) // HTTP 201 Created
                 .body(board); // 저장된 게시물 정보를 포함
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<BoardDTO.Get> patchBoard(
+            @PathVariable Long id,
+            @RequestBody BoardDTO.Post updatedPost
+    ){
+        BoardDTO.Get updatedBoard = boardService.update(id, updatedPost);
+        // 수정된 게시글 반환
+        return ResponseEntity.ok(updatedBoard);
+    }
+
+//    @GetMapping("/{id}")
+//    public ResponseEntity<BoardDTO.Get> getBoardDetail(@PathVariable Long id){
+//        BoardDTO.Get board = boardService.getBoardById(id);
+//        return ResponseEntity.ok(board);
+//    }
 
 }
