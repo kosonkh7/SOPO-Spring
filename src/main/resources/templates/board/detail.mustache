@@ -4,6 +4,27 @@
 <p><strong>조회수:</strong> {{board.viewCount}}</p>
 <hr>
 <p>{{{board.content}}}</p>
+<hr>
+
+<h2>댓글</h2>
+<ul>
+    {{#comments}}
+        <li>
+            <strong>{{userId}}</strong>: {{content}}
+            <form action="/comments/{{id}}/delete" method="post" style="display: inline;">
+                <input type="hidden" name="boardId" value="{{board.id}}">
+                <button type="submit" class="btn btn-danger">삭제</button>
+            </form>
+        </li>
+    {{/comments}}
+</ul>
+
+<h3>댓글 작성</h3>
+<form action="/comments" method="post">
+    <input type="hidden" name="boardId" value="{{board.id}}">
+    <textarea name="content" required></textarea>
+    <button type="submit" class="btn btn-primary">댓글 작성</button>
+</form>
 
 <div>
     <!-- 목록으로 돌아가기 -->
