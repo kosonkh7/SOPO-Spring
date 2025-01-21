@@ -36,11 +36,11 @@ public class CommentController {
     @PostMapping("/{id}/delete")
     public String deleteComment(
             @PathVariable Long id,
-            @RequestParam Long boardID,
+            @RequestParam Long boardId,
             RedirectAttributes redirectAttributes){
         commentService.deleteComment(id);
         redirectAttributes.addFlashAttribute("message", "덧글이 삭제되었습니다.");
-        return "redirect:/board/" + boardID;
+        return "redirect:/board/" + boardId;
     }
 
 }
