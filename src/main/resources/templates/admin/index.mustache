@@ -239,30 +239,46 @@
 
         <!-- 5,6,9,10번: 승인 요청 -->
         <div class="approval">
-            <h2>5건의 승인 요청이 있습니다</h2>
+            <h2>{{userList.size}}건의 승인 요청이 있습니다</h2>
             <table>
                 <tbody>
+                {{^userList}}
+                    <td>비어있습니다.</td>
+                {{/userList}}
                 <tr>
-                    <td><a href="#">Avg. Client Rating</a></td>
-                    <td>
-                        <button class="approve">승인</button>
-                        <button class="reject">거부</button>
-                    </td>
+                    <td>아이디</td>
+                    <td>이름</td>
+                    <td>이메일</td>
                 </tr>
-                <tr>
-                    <td><a href="#">Instagram Followers</a></td>
-                    <td>
-                        <button class="approve">승인</button>
-                        <button class="reject">거부</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td><a href="#">Google Ads CPC</a></td>
-                    <td>
-                        <button class="approve">승인</button>
-                        <button class="reject">거부</button>
-                    </td>
-                </tr>
+                {{#userList}}
+                    <tr>
+                        <td>{{id}}</td>
+                        <td>{{name}}</td>
+                        <td>{{email}}</td>
+                        <td>
+                            <button class="approve">승인</button>
+                            <button class="reject">거부</button>
+                        </td>
+                    </tr>
+                {{/userList}}
+<!--                <tr>-->
+<!--                    <td><a href="#">Avg. Client Rating</a></td>-->
+<!--                    -->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td><a href="#">Instagram Followers</a></td>-->
+<!--                    <td>-->
+<!--                        <button class="approve">승인</button>-->
+<!--                        <button class="reject">거부</button>-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td><a href="#">Google Ads CPC</a></td>-->
+<!--                    <td>-->
+<!--                        <button class="approve">승인</button>-->
+<!--                        <button class="reject">거부</button>-->
+<!--                    </td>-->
+<!--                </tr>-->
                 </tbody>
             </table>
         </div>
