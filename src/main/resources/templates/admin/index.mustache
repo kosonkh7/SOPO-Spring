@@ -146,13 +146,13 @@
             cursor: pointer;
         }
 
-        .approval table td button.approve {
+        .approval table td button.approve-btn {
             background-color: rgba(51, 51, 51, 0.54);
             color: white;
             margin-right: 5px;
         }
 
-        .approval table td button.approve:hover {
+        .approval table td button.approve-btn:hover {
             background-color: #0056b3;
         }
 
@@ -209,7 +209,7 @@
         <div id="current-time"></div>
         <div class="user">
             <img src="/img/admin_potato.png" alt="User Avatar">
-            <span>대홍단 감자</span>
+            <span>{{managerName}}</span>
         </div>
     </div>
 
@@ -220,7 +220,7 @@
                 <img src="/img/count.svg" alt="회원 현황 이미지">
                 <div class="text">
                     <h2>회원 현황</h2>
-                    <span>5</span>
+                    <span>{{allUserList.size}}</span>
                 </div>
 
             </div>
@@ -232,53 +232,54 @@
                 <img src="/img/count_board.png" alt="게시판 현황 이미지">
                 <div class="text">
                     <h2>게시판 현황</h2>
-                    <span>1</span>
+                    <span>{{allBoardList.size}}</span>
                 </div>
             </div>
         </div>
 
         <!-- 5,6,9,10번: 승인 요청 -->
+
         <div class="approval">
             <h2>{{userList.size}}건의 승인 요청이 있습니다</h2>
             <table>
                 <tbody>
-                {{^userList}}
-                    <td>비어있습니다.</td>
-                {{/userList}}
                 <tr>
                     <td>아이디</td>
                     <td>이름</td>
                     <td>이메일</td>
                 </tr>
+                {{^userList}}
+                    <td>비어있습니다.</td>
+                {{/userList}}
                 {{#userList}}
-                    <tr>
+                    <tr class="userList-tr">
                         <td>{{id}}</td>
                         <td>{{name}}</td>
                         <td>{{email}}</td>
                         <td>
-                            <button class="approve">승인</button>
+                            <button class="approve-btn">승인</button>
                             <button class="reject">거부</button>
                         </td>
                     </tr>
                 {{/userList}}
-<!--                <tr>-->
-<!--                    <td><a href="#">Avg. Client Rating</a></td>-->
-<!--                    -->
-<!--                </tr>-->
-<!--                <tr>-->
-<!--                    <td><a href="#">Instagram Followers</a></td>-->
-<!--                    <td>-->
-<!--                        <button class="approve">승인</button>-->
-<!--                        <button class="reject">거부</button>-->
-<!--                    </td>-->
-<!--                </tr>-->
-<!--                <tr>-->
-<!--                    <td><a href="#">Google Ads CPC</a></td>-->
-<!--                    <td>-->
-<!--                        <button class="approve">승인</button>-->
-<!--                        <button class="reject">거부</button>-->
-<!--                    </td>-->
-<!--                </tr>-->
+                <!--                <tr>-->
+                <!--                    <td><a href="#">Avg. Client Rating</a></td>-->
+                <!--                    -->
+                <!--                </tr>-->
+                <!--                <tr>-->
+                <!--                    <td><a href="#">Instagram Followers</a></td>-->
+                <!--                    <td>-->
+                <!--                        <button class="approve">승인</button>-->
+                <!--                        <button class="reject">거부</button>-->
+                <!--                    </td>-->
+                <!--                </tr>-->
+                <!--                <tr>-->
+                <!--                    <td><a href="#">Google Ads CPC</a></td>-->
+                <!--                    <td>-->
+                <!--                        <button class="approve">승인</button>-->
+                <!--                        <button class="reject">거부</button>-->
+                <!--                    </td>-->
+                <!--                </tr>-->
                 </tbody>
             </table>
         </div>
@@ -306,6 +307,35 @@
     }
     updateTime();
     setInterval(updateTime, 1000);
+
+    const appBtns = document.querySelectorAll('.approve-btn');
+    appBtns.forEach((btn) => {
+        btn.addEventListener('click', async (event) => {
+            event.preventDefault();
+
+            // 클릭된 버튼의 부모 요소에서 id 값 추출
+            const id = event.target.closest('.userList-tr').querySelector('td').textContent.trim();
+            console.log(id);
+
+            const response = await fetch(`/admin/${id}/prove`, {
+                method: 'GET',
+            });
+
+
+
+            const data = await response.text();
+            const responseData = JSON.parse(data);
+
+            if (responseData.status == "OK") {
+                btn.parentNode.parentNode.remove();
+            }
+        });
+    });
+
+
+
+
+
 </script>
 </body>
 </html>

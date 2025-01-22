@@ -31,4 +31,22 @@ public class AdminService {
         return userDTOList;
     }
 
+    // Role 업데이트
+    @Transactional
+    public void updateRole(String id) {
+        userRepository.updateByRole(id, User.UserRole.USER);
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserDTO.Get> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(user -> new UserDTO.Get(
+                        user.getId(),
+                        user.getName(),
+                        user.getEmail(),
+                        user.getRole()
+                ))
+                .collect(Collectors.toList());
+    }
+
 }

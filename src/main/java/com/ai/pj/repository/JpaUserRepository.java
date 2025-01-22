@@ -2,9 +2,12 @@ package com.ai.pj.repository;
 
 import com.ai.pj.domain.User;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +30,7 @@ public class JpaUserRepository implements UserRepositoryCustom{
 
     @Override
     public Optional<List<User>> findByRole(User.UserRole role) {
-        String jpql = "SELECT * from Member where role=:role";
+        String jpql = "SELECT u from User where u.role=:role";
         TypedQuery<User> query = em.createQuery(jpql, User.class).setParameter("role", role);
         System.out.println("-".repeat(60));
         List<User> userList = query.getResultList();
@@ -39,4 +42,17 @@ public class JpaUserRepository implements UserRepositoryCustom{
         System.out.println(3);
         return Optional.ofNullable(userList);
     }
+
+//    @Override
+//    @Transactional
+//    public int updateByRole(String id, User.UserRole role) {
+//        String jpql = "UPDATE User SET u.role=:role WHERE u.id=:id";
+//        // TypedQuery는 반환값을 기대할 때 씀.
+//        Query query = em.createQuery(jpql);
+//        query.setParameter("role", role);
+//        query.setParameter("id", id);
+//        return query.executeUpdate(); // 업데이트된 행의 수 반환.
+//    }
+
+
 }
