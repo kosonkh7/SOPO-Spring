@@ -24,6 +24,12 @@ public class BoardController {
     private final BoardService boardService;
     private final CommentService commentService;
 
+    // /board 요청을 /board/로 리다이렉트
+    @GetMapping
+    public String redirectToSlash() {
+        return "redirect:/board/";
+    }
+
     @GetMapping("/")
     public String reqBoard(Model model) {
 

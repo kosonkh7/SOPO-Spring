@@ -59,10 +59,12 @@ public class User {
         this.role = UserRole.ADMIN;
     }
 
+    public static enum UserRole {
+        USER, ADMIN, HOLD
+    }
+
 }
 
 
 
-enum UserRole {
-    USER, ADMIN, HOLD
-}
+
