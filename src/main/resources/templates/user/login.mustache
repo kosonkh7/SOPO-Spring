@@ -121,7 +121,7 @@
                 "Content-Type": "application/x-www-form-urlencoded"
             },
             body: formData.toString() // URL-encoded 데이터 전송
-        })
+        }) // fetch
         .then(response => response.text())
         .then(data => {
 
@@ -133,7 +133,7 @@
             console.log(success)
             console.log(message)
             if (success === "true") {
-                alert(message); // "로그인 성공" 출력
+
                 window.location.href = "/board/"; // 성공 시 리다이렉트
             } else {
                 const subBtn = document.getElementById('submitBtn');
