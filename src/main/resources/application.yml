@@ -16,6 +16,7 @@ spring:
     view:
       encoding: UTF-8
 
+# h2 세팅
   h2:
     console:
       enabled: true
@@ -32,10 +33,31 @@ spring:
       enabled: true
       force: true
 
+
+
   jpa:
-    #    database-platform: org.hibernate.community.dialect.SQLiteDialect
+    open-in-view: true
     hibernate:
-      ddl-auto: update # update
+      ddl-auto: create
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      use-new-id-generator-mappings: false
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+      dialect: org.hibernate.dialect.MySQL8InnoDBDialect
+
+# MySql
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/transSys?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+#    username: root
+#    password: aivle202406
+
+
+    #    database-platform: org.hibernate.community.dialect.SQLiteDialect
+#    hibernate:
+#      ddl-auto: update # update
 #  datasource:
 #    url: jdbc:sqlite:src/main/resources/database/em.db
 #    driver-class-name: org.sqlite.JDBC

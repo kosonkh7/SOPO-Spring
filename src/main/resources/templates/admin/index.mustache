@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Page</title>
+    <!-- sidebarstyles.css 불러오기 -->
+    <link rel="stylesheet" href="/css/sidebarstyles.css">
     <style>
         /* 전체 레이아웃 스타일 */
         body {
@@ -11,76 +13,6 @@
             font-family: Arial, sans-serif;
             background-color: #f5f5f5;
             overflow: hidden;
-        }
-
-        /* 사이드바 스타일 */
-        .sidebar {
-            width: 220px;
-            height: 100vh;
-            background-color: #1e2a44;
-            color: white;
-            position: fixed;
-            padding-top: 20px;
-        }
-
-        .sidebar h1 {
-            display: flex;
-            align-items: center; /* 수직 중앙 정렬 */
-            justify-content: flex-start; /* 왼쪽 정렬 */
-            margin-left: 15px; /* 왼쪽 여백 추가 */
-            margin-right: 15px; /* 오른쪽 여백 추가 */
-            margin-bottom: 20px; /* 아래쪽 여백 */
-            font-size: 24px;
-            border-bottom: 0.45px dashed rgba(255, 255, 255, 0.38); /* 점선 추가 */
-            padding-bottom: 14px; /* 텍스트와 점선 사이 간격 */
-        }
-
-        .sidebar h1 img {
-            width: 30px;
-            height: 30px;
-            margin-right: 10px;
-        }
-
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .sidebar ul li {
-            display: flex;
-            align-items: center;
-            padding: 10px 20px;
-            cursor: pointer;
-        }
-
-        .sidebar ul li img {
-            width: 20px;
-            height: 20px;
-            margin-right: 10px;
-        }
-
-        .sidebar ul li:hover {
-            background-color: #909091;
-        }
-
-        .logout-button {
-            position: absolute;
-            bottom: 30px;
-            width: 90%;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 10px;
-            background-color: #a30d0d;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            text-align: center;
-            font-size: 16px;
-        }
-
-        .logout-button:hover {
-            background-color: #9b9ba5;
         }
 
         /* 메인 컨텐츠 스타일 */
@@ -270,16 +202,8 @@
     </style>
 </head>
 <body>
-<div class="sidebar">
-    <h1><img src="/img/logo.png" alt="Keen Icon">YMJ</h1>
-    <ul>
-        <li onclick="location.href='http://localhost:8080/'" style="cursor: pointer;"><img src="/img/home.svg" alt="Home Icon">home</li>
-        <li onclick="location.href='http://localhost:8080/admin/#'" style="cursor: pointer;"><img src="/img/dashboard.svg" alt="Dashboard Icon">시뮬레이션</li>
-        <li onclick="location.href='http://localhost:8080/board/'" style="cursor: pointer;"><img src="/img/community.svg" alt="커뮤니티 Icon">커뮤니티</li>
-        <li onclick="location.href='http://localhost:8080/admin/'" style="cursor: pointer;"><img src="/img/admin.svg" alt="Admin Icon">admin</li>
-    </ul>
-    <button class="logout-button" onclick="location.href='http://localhost:8080/login/'">Log Out</button>
-</div>
+{{> common/sidebar}}
+
 <div class="main">
     <div class="header">
         <div id="current-time"></div>

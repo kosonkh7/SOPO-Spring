@@ -65,23 +65,23 @@
         <tbody class="board-list">
         <tr>
             <th scope="row">1</th>
-            <td><a href="#" class="text-decoration-none">첫 번째 게시글</a></td>
+            <td><a href="#" class="text-decoration-none">[필독] 공지사항</a></td>
             <td>관리자</td>
-            <td>2024-01-03</td>
+            <td>2024-01-01</td>
             <td>100</td>
         </tr>
         <tr>
             <th scope="row">2</th>
-            <td><a href="#" class="text-decoration-none">두 번째 게시글</a></td>
-            <td>홍길동</td>
+            <td><a href="#" class="text-decoration-none">쌀국수 먹고 싶다</a></td>
+            <td>원대안</td>
             <td>2024-01-02</td>
             <td>80</td>
         </tr>
         <tr>
             <th scope="row">3</th>
-            <td><a href="#" class="text-decoration-none">세 번째 게시글</a></td>
-            <td>이순신</td>
-            <td>2024-01-01</td>
+            <td><a href="#" class="text-decoration-none">나는 감자. 똘똘한 감자.</a></td>
+            <td>조민지</td>
+            <td>2024-01-10</td>
             <td>75</td>
         </tr>
         {{#boardList}}
@@ -90,7 +90,7 @@
 <!--                <td></td>-->
                 <td><a href="/board/{{id}}" class="text-decoration-none">{{title}}</a></td>
                 <td>{{userId}}</td>
-                <td>{{#createdDate}}{{createdDate}}{{/createdDate}}{{^createdDate}}N/A{{/createdDate}}</td> 
+                <td class="createdDate">{{#createdDate}}{{createdDate}}{{/createdDate}}{{^createdDate}}N/A{{/createdDate}}</td>
                 <td>{{viewCount}}</td>
             </tr>
         {{/boardList}}
@@ -138,5 +138,19 @@
         rows.forEach((row, index) => {
             row.querySelector('.index').innerText = index + 1; // 1부터 시작
         });
+
+    // JavaScript로 날짜 포맷 변경
+    document.addEventListener('DOMContentLoaded', function () {
+        const dateElements = document.querySelectorAll('.createdDate');
+
+        dateElements.forEach(function (element) {
+            const dateText = element.innerText.trim();
+            if (dateText !== 'N/A') {
+                const dateObj = new Date(dateText);
+                const formattedDate = dateObj.toISOString().split('T')[0]; // "YYYY-MM-DD" 형식으로 포맷
+                element.innerText = formattedDate;
+            }
+        });
+    });
 </script>
 </html>

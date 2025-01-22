@@ -43,6 +43,8 @@ public class UserController {
     public ResponseDTO<?> signUp(@Valid @RequestBody UserDTO userDTO, BindingResult bindingResult) throws JsonProcessingException {
         System.out.println(2);
         if (bindingResult.hasErrors()) {
+            System.out.println(3);
+            System.out.println(bindingResult.toString());
             Map<String, String> errorMap = new HashMap<>();
             for (FieldError fieldError : bindingResult.getFieldErrors()) {
                 errorMap.put("error-" + fieldError.getField(), fieldError.getDefaultMessage());
@@ -52,6 +54,7 @@ public class UserController {
 
         boolean isExist = userService.isExistId(userDTO.getId());
         if (isExist) {
+            System.out.println(4);
             return new ResponseDTO<>("동일한 id 가 존재합니다", HttpStatus.CONFLICT); // 409 상태코드
         }
 
