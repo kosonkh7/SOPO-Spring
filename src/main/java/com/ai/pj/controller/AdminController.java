@@ -9,6 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin")
 public class AdminController {
 
+    @GetMapping
+    public String redirectToSlash() {
+        return "redirect:/admin/";
+    }
+
     @GetMapping("/")
     public String reqAdmin() {
 
