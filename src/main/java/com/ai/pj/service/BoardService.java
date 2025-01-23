@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -92,13 +93,11 @@ public class BoardService {
     }
 
     // 게시글 삭제
-    public Boolean delete(Long reqNum) {
-        try {
-            boardRepository.deleteById(reqNum);
-            return true;
-        } catch (EmptyResultDataAccessException e) {
-            return false;
+    public void delete(Long id) {
+        if (!boardRepository.existsById(id)){
+            throw new EntityNotFoundException("게시글을 찾을 수 없습니다. " + id);
         }
+        boardRepository.deleteById(id);
     }
 
     // 게시글 목록 조회
