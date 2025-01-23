@@ -50,6 +50,11 @@ public class AdminController {
         List<UserDTO.Get> userList = adminService.findByRole(User.UserRole.HOLD);
         model.addAttribute("userList", userList);
 
+        // 회원 현황.
+        // 게시판 현황.
+        // 관리자 메모.
+        // 관리자 이름.
+        // role = HOlD로 갖고 있는 USER 목록 및 USER 관련 company Name
         return "admin/index";
     }
 }

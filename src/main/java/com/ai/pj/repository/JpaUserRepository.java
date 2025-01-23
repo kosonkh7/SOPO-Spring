@@ -2,12 +2,9 @@ package com.ai.pj.repository;
 
 import com.ai.pj.domain.User;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;

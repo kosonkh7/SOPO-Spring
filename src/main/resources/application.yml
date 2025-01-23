@@ -10,14 +10,25 @@ server:
 
 spring:
   application:
-    name: Pj
+
+  jwt:
+    access-secret: l$Nn8x3f@9Z*P1o&uK4R6^T#mGwQ%7Yv
+    refresh-secret: mA*9R6T#yP2Z$L&Nn3vG^X1Kw%8oG7Qf
+    access-expiration: 600000  # 10 min: 10 * 60 * 1000 milliseconds
+    refresh-expiration: 10800000
+
+  profiles:
+    active: local
+
   mustache:
     charset: UTF-8
   mvc:
     view:
       encoding: UTF-8
 
-# h2 세팅
+
+
+  # h2 세팅
   h2:
     console:
       enabled: true
@@ -34,7 +45,12 @@ spring:
       enabled: true
       force: true
 
+   # 3 hours: 3 * 60 * 60 * 1000 milliseconds
 
+  data:
+    redis:
+      host: localhost # 로컬에서 테스트 할 때는 localhost로 사용 redis
+      port: 6379
 
   jpa:
     open-in-view: true

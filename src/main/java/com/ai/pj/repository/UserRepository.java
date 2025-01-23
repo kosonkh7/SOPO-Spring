@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long>, UserRepositoryCustom{
+public interface UserRepository extends JpaRepository<User, String>, UserRepositoryCustom{
 
     @Query("UPDATE User u SET u.role=:role WHERE u.id=:id")
     @Modifying
