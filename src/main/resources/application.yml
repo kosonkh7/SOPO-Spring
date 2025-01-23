@@ -6,6 +6,7 @@ server:
       force-response: true
       charset: UTF-8
       enabled: true
+  forward-headers-strategy: native
 
 spring:
   application:
