@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page</title>
+    <!-- sidebarstyles.css 불러오기 -->
+    <link rel="stylesheet" href="/css/sidebarstyles.css">
+    <style>
+        /* 전체 레이아웃 스타일 */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            overflow: hidden;
+        }
+
+        /* 메인 컨텐츠 스타일 */
+        .main {
+            margin-left: 220px;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #ffffff;
+            padding: 10px 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .header .user {
+            display: flex;
+            align-items: center;
+        }
+
+        .header .user img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        /* 카드 및 대시보드 레이아웃 */
+
+        .card {
+            background-color: white;
+            padding: 10px 20px;   /* 내부 여백 조정 */
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            height: 95px;
+            display: flex;
+            align-items: center;   /* 수직 정렬 */
+        }
+
+        .card h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .card-content {
+            display: flex;
+            align-items: center;   /* 수직 정렬 */
+            justify-content: space-between;   /* 텍스트와 아이콘을 양쪽 끝으로 배치 */
+            width: 100%;
+        }
+
+        .card img {
+            width: 25%;   /* 아이콘 크기 */
+            height: auto;
+            margin-left: 20px;   /* 아이콘을 오른쪽으로 밀기 */
+        }
+
+        .text {
+            display: flex;
+            flex-direction: column;   /* 텍스트와 숫자를 위아래로 정렬 */
+            align-items: flex-end;   /* 텍스트와 숫자를 오른쪽 정렬 */
+            flex-grow: 1;    /* 텍스트가 남은 공간 차지 */
+        }
+
+        .text h2 {
+            font-size: 25px !important; /* 텍스트 크기 */
+            margin: 0; /* 기본 여백 제거 */
+        }
+
+        .text span {
+            font-size: 20px;   /* 숫자 크기 */
+            font-weight: bold;
+        }
+
+        .approval {
+            margin-top: -96px; /* 위쪽 간격 */
+            padding: 28px; /* 내부 여백 줄임 */
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 190%; /* 너비 조정 (예: 80%) */
+            height: 237%; /* 높이는 내용에 맞춤 */
+            margin-left: auto; /* 가로 가운데 정렬 */
+            margin-right: auto; /* 가로 가운데 정렬 */
+
+        }
+
+        .approval h2 {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+
+        }
+
+        .approval table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .approval table th, .approval table td {
+            text-align: left;
+            padding: 10px 0;
+        }
+
+        .approval table td {
+            border-bottom: 1px solid #ddd;
+        }
+
+        .approval table td:last-child {
+            text-align: right;
+        }
+
+        .approval table td a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .approval table td a:hover {
+            text-decoration: underline;
+        }
+
+        .approval table td button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .approval table td button.approve-btn {
+            background-color: rgba(51, 51, 51, 0.54);
+            color: white;
+            margin-right: 5px;
+        }
+
+        .approval table td button.approve-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .approval table td button.reject {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .approval table td button.reject:hover {
+            background-color: #676b6c;
+        }
+
+        .dashboard-layout {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 4열 구성 */
+            grid-template-rows: repeat(3, 1fr); /* 3행 구성 */
+            gap: 20px; /* 박스 간 간격 */
+            margin-top: 20px;
+        }
+
+
+        .visitors, .logs {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .visitors {
+            grid-column: 3 / 5; /* 3열부터 4열까지 차지 */
+            grid-row: 1 / 3; /* 1행부터 2행까지 차지 */
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .logs {
+            grid-column: 3 / 5; /* 3열부터 4열까지 차지 */
+            grid-row: 3 / 5; /* 3행만 차지 */
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            height: 193px; /* 원하는 높이로 설정 */
+        }
+    </style>
+</head>
+<body>
+{{> common/sidebar}}
+
+<div class="main">
+    <div class="header">
+        <div id="current-time"></div>
+        <div class="user">
+            <img src="/img/admin_potato.png" alt="User Avatar">
+            <span>{{managerName}}</span>
+        </div>
+    </div>
+
+    <div class="dashboard-layout">
+        <!-- 1번: 회원 현황 -->
+        <div class="card">
+            <div class="card-content">
+                <img src="/img/count.svg" alt="회원 현황 이미지">
+                <div class="text">
+                    <h2>회원 현황</h2>
+                    <span>{{allUserList.size}}</span>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 2번: 게시판 현황 -->
+        <div class="card">
+            <div class="card-content">
+                <img src="/img/count_board.png" alt="게시판 현황 이미지">
+                <div class="text">
+                    <h2>게시판 현황</h2>
+                    <span>{{allBoardList.size}}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5,6,9,10번: 승인 요청 -->
+
+        <div class="approval">
+            <h2>{{userList.size}}건의 승인 요청이 있습니다</h2>
+            <table>
+                <tbody>
+                <tr>
+                    <td>아이디</td>
+                    <td>이름</td>
+                    <td>이메일</td>
+                </tr>
+                {{^userList}}
+                    <td>비어있습니다.</td>
+                {{/userList}}
+                {{#userList}}
+                    <tr class="userList-tr">
+                        <td>{{id}}</td>
+                        <td>{{name}}</td>
+                        <td>{{email}}</td>
+                        <td>
+                            <button class="approve-btn">승인</button>
+                            <button class="reject">거부</button>
+                        </td>
+                    </tr>
+                {{/userList}}
+                <!--                <tr>-->
+                <!--                    <td><a href="#">Avg. Client Rating</a></td>-->
+                <!--                    -->
+                <!--                </tr>-->
+                <!--                <tr>-->
+                <!--                    <td><a href="#">Instagram Followers</a></td>-->
+                <!--                    <td>-->
+                <!--                        <button class="approve">승인</button>-->
+                <!--                        <button class="reject">거부</button>-->
+                <!--                    </td>-->
+                <!--                </tr>-->
+                <!--                <tr>-->
+                <!--                    <td><a href="#">Google Ads CPC</a></td>-->
+                <!--                    <td>-->
+                <!--                        <button class="approve">승인</button>-->
+                <!--                        <button class="reject">거부</button>-->
+                <!--                    </td>-->
+                <!--                </tr>-->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 3,4,7,8번: 시간대별 방문자 수 -->
+        <div class="visitors">
+            <h2>시간대별 방문자 수</h2>
+            <p>여기에 시간대별 방문자 수 데이터를 표시합니다.</p>
+        </div>
+
+        <!-- 11,12번: 현재 접속중인 로그 -->
+        <div class="logs">
+            <h2>현재 접속중인 로그</h2>
+            <p>여기에 현재 접속중인 로그 데이터를 표시합니다.</p>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function updateTime() {
+        const now = new Date();
+        const timeString = now.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
+        document.getElementById('current-time').textContent = ` ${timeString}`;
+    }
+    updateTime();
+    setInterval(updateTime, 1000);
+
+    const appBtns = document.querySelectorAll('.approve-btn');
+    appBtns.forEach((btn) => {
+        btn.addEventListener('click', async (event) => {
+            event.preventDefault();
+
+            // 클릭된 버튼의 부모 요소에서 id 값 추출
+            const id = event.target.closest('.userList-tr').querySelector('td').textContent.trim();
+            console.log(id);
+
+            const response = await fetch(`/admin/${id}/prove`, {
+                method: 'GET',
+            });
+
+
+
+            const data = await response.text();
+            const responseData = JSON.parse(data);
+
+            if (responseData.status == "OK") {
+                btn.parentNode.parentNode.remove();
+            }
+        });
+    });
+
+
+
+
+
+</script>
+</body>
+</html>

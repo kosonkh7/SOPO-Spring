@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>글 작성</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input, textarea, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+        }
+        textarea {
+            height: 150px;
+            resize: vertical;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<h1>글 작성</h1>
+<form action="/board/post" method="POST" enctype="multipart/form-data">
+    <!-- 제목 -->
+    <label for="title">제목</label>
+    <input type="text" id="title" name="title" placeholder="제목을 입력하세요" required>
+
+    <!-- 작성자 -->
+    <label for="userId">작성자</label>
+    <input type="text" id="userId" name="userId" placeholder="작성자 이름을 입력하세요" required>
+
+    <!-- 내용 -->
+    <label for="content">내용</label>
+    <textarea id="content" name="content" placeholder="내용을 입력하세요" required></textarea>
+
+    <!-- 이미지 업로드 -->
+    <label for="imageFile">이미지 업로드</label>
+    <input type="file" id="imageFile" name="imageFile" accept="image/*">
+
+    <!-- 제출 버튼 -->
+    <button type="submit">글 작성</button>
+</form>
+</body>
+</html>

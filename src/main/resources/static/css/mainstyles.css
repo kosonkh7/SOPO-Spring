@@ -1,0 +1,25 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex; /* 전체 레이아웃을 플렉스로 설정 */
+}
+
+.layout {
+    display: flex; /* 사이드바와 메인 콘텐츠를 나란히 배치 */
+    flex-grow: 1;
+    height: 100vh;
+}
+
+main {
+    flex-grow: 1; /* 메인 콘텐츠가 남은 공간을 차지 */
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.sidebar {
+    width: 220px; /* 사이드바 너비 */
+    background-color: #1e2a44;
+    color: white;
+    height: 100vh; /* 페이지 전체 높이 */
+    position: fixed;
+}

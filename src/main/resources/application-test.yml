@@ -1,0 +1,11 @@
+spring:
+  jwt:
+    access-secret: l$Nn8x3f@9Z*P1o&uK4R6^T#mGwQ%7Yv
+    refresh-secret: mA*9R6T#yP2Z$L&Nn3vG^X1Kw%8oG7Qf
+    access-expiration: 600000
+    refresh-expiration: 10800000
+
+
+chatbot:
+  api:
+    host: http://127.0.0.1:8000
