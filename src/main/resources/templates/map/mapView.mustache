@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Map Simulation Page</title>
+
+    <!-- 스타일 시트 -->
+    <link rel="stylesheet" href="/css/sidebarstyles.css">
+    <link rel="stylesheet" href="/css/mapStyles.css" />
+
+    <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey={{tmapKey}}"></script>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- map_script.js -->
+    <script src="/js/map_script.js"></script>
+</head>
+<body>
+
+<!-- Mustache partial: sidebar.mustache가
+     /templates/common/sidebar.mustache 에 있다고 가정 -->
+{{> common/sidebar}}
+
+    <main>
+        <div class="map" id="map_div">
+            <!-- 지도 표시 -->
+        </div>
+
+        <div class="controls">
+            <h3>Control Panel</h3>
+            <br>
+            <form id="route_form">
+                <div>
+                    <label for="start_station">출발 창고:</label>
+                    <select id="start_station" name="start_station">
+                        <!-- JS로 /api/stations 호출 후 option 추가 -->
+                    </select>
+                </div>
+                <div>
+                    <label for="end_lat">배송지 위도:</label>
+                    <input type="text" id="end_lat" name="end_lat" value="37.545069" required>
+                </div>
+                <div>
+                    <label for="end_lon">배송지 경도:</label>
+                    <input type="text" id="end_lon" name="end_lon" value="127.037653" required>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button type="button" id="default_btn">기존 택배</button>
+                    <button type="button" id="subway_btn">지하철 창고</button>
+                    <button type="button" id="compare_routes_btn">경로 비교</button>
+                    <button type="button" id="reset_btn">지도 초기화</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="dashboard">
+            <h3>Dashboard</h3>
+            <br>
+            <p id="comparison_result"></p>
+        </div>
+    </main>
+
+</body>
+</html>
