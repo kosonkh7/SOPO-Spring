@@ -28,5 +28,15 @@ public class DataInitalizer {
         if (userRepository.findById("admin").isEmpty()) {
             userRepository.save(admin);
         }
+
+        User user = User.builder()
+                .id("daetu01")
+                .password(passwordEncoder.encode("12341234"))
+                .name("fasdf")
+                .email("sadfasdf@asdfanas.asdf")
+                .role(User.UserRole.HOLD)
+                .build();
+
+        userRepository.save(user);
     }
 }
