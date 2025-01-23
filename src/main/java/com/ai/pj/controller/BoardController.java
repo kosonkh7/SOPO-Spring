@@ -5,6 +5,7 @@ import com.ai.pj.dto.BoardDTO;
 import com.ai.pj.dto.CommentDTO;
 import com.ai.pj.service.BoardService;
 import com.ai.pj.service.CommentService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.swing.text.html.parser.Entity;
 import java.util.List;
 
 @Controller
@@ -75,17 +77,28 @@ public class BoardController {
     }
 
 
-    @GetMapping("/delete")
-    public String reqDelete(@RequestParam Long reqNum, Model model) {
+//    @GetMapping("/delete")
+//    public String reqDelete(@RequestParam Long reqNum, Model model) {
+//
+//        // 삭제
+//        if (boardService.delete(reqNum)) {
+//            model.addAttribute("response", "삭제성공");
+//        } else {
+//            model.addAttribute("response", "삭제실패");
+//        };
+//
+//        return "/board/";
+//    }
 
-        // 삭제
-        if (boardService.delete(reqNum)) {
-            model.addAttribute("response", "삭제성공");
-        } else {
-            model.addAttribute("response", "삭제실패");
-        };
-
-        return "/board/";
+    @PostMapping("/delete/{id}")
+    public String deleteBoard(@PathVariable Long id, RedirectAttributes redirectAttributes){
+        try {
+            boardService.delete(id);
+            redirectAttributes.addFlashAttribute("message", "게시글이 성공적으로 삭제되었습니다.");
+        } catch (EntityNotFoundException e){
+            redirectAttributes.addFlashAttribute("error", "해당 게시글을 찾을 수 없습니다.");
+        }
+        return "redirect:/board/";
     }
 
     @GetMapping("/{id}")

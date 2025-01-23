@@ -41,6 +41,10 @@
 
     <!-- 글 수정 버튼 -->
     <a href="/board/edit/{{board.id}}" class="btn btn-primary">수정</a>
+
+    <form action="/board/delete/{{board.id}}" method="post" style="display: inline;">
+        <button type="submit" class="btn btn-danger" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+    </form>
 </div>
 
 <script>
