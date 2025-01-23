@@ -26,7 +26,7 @@
           position: fixed;
           bottom: 20px;
           right: 20px;
-          background: #7b358c;
+          background: #3a4167;
           color: white;
           border: none;
           padding: 15px 20px;
@@ -132,11 +132,18 @@
         .send-button:hover {
           background: #5a2571;
         }
+        .toggle-chatbot img {
+            width: 25px; /* 버튼 크기에 맞게 조정 */
+            height: auto;
+        }
     </style>
 </head>
 <body>
 <!-- Toggle Button -->
-<button class="toggle-chatbot">Chat</button>
+<button class="toggle-chatbot">
+    <img src="/img/ai_button.svg" alt="AI Button" />
+</button>
+
 
 <!-- Chatbot Container -->
 <div class="chatbot-container" id="chatbot">
