@@ -1,8 +1,12 @@
 package com.ai.pj.config;
 
 import com.ai.pj.security.authentication.RoleBasedAuthenticationProvider;
+import com.ai.pj.security.filter.JwtAuthFilter;
+import com.ai.pj.security.handler.CustomAccessDeniedHandler;
+import com.ai.pj.security.handler.CustomAuthenticationEntryPoint;
 import com.ai.pj.security.handler.CustomAuthenticationFailureHandler;
 import com.ai.pj.security.handler.CustomAuthenticationSuccessHandler;
+import com.ai.pj.security.jwt.JwtUtil;
 import com.ai.pj.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -13,18 +17,28 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final UserDetailsService userDetailsService;
+    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
+    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
+
+    private final JwtUtil jwtUtil;
+
+//    private static final String[] AUTH_WHITELIST = {
+//            "/api/v1/member/**"
+//    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -33,18 +47,28 @@ public class SecurityConfig {
                                 .ignoringRequestMatchers(PathRequest.toH2Console())
                                 .disable()
                         )
-                .authorizeHttpRequests(request -> request
-                        .requestMatchers(PathRequest.toH2Console()).permitAll()
-                                .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/public/**", "/login").permitAll()
-                                .anyRequest().fullyAuthenticated() // 권한에 따른 로그인 다 잡기
-//                        .anyRequest().permitAll() // 모든 요청 허용
-                )
+                //
+                .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(
+                        SessionCreationPolicy.STATELESS))
                 .formLogin(form -> form
                         .loginPage("/public/login") // 사용자 정의 로그인 페이지
-                        .loginProcessingUrl("/public/loginProc")
-                        .successHandler(new CustomAuthenticationSuccessHandler())
-                        .failureHandler(new CustomAuthenticationFailureHandler()))
+                        .disable())
+                .addFilterBefore(new JwtAuthFilter(userService, jwtUtil), UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling((exceptionHandling) -> exceptionHandling
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                        .accessDeniedHandler(accessDeniedHandler))
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers(PathRequest.toH2Console()).permitAll()
+                                .anyRequest().permitAll()
+//                                .requestMatchers("/admin/**").hasRole("ADMIN")
+//                        .requestMatchers("/public/**", "/login").permitAll()
+//                                .anyRequest().fullyAuthenticated() // 권한에 따른 로그인 다 잡기
+//                        .anyRequest().permitAll() // 모든 요청 허용
+                )
+
+//                        .loginProcessingUrl("/public/loginProc")
+//                        .successHandler(new CustomAuthenticationSuccessHandler())
+//                        .failureHandler(new CustomAuthenticationFailureHandler()))
 //                        .defaultSuccessUrl("/board/", true)) // 로그인 성공 시 이동할 페이지
                 .logout(logout -> logout
                         .logoutUrl("/logout")
@@ -58,7 +82,7 @@ public class SecurityConfig {
     public AuthenticationManager authManager(HttpSecurity http) throws Exception {
         System.out.println(1010);
         return http.getSharedObject(AuthenticationManagerBuilder.class)
-                .authenticationProvider(new RoleBasedAuthenticationProvider(userDetailsService, passwordEncoder))
+                .authenticationProvider(new RoleBasedAuthenticationProvider(userService, passwordEncoder))
                 .build();
     }
 }

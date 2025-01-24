@@ -8,14 +8,19 @@ server:
       enabled: true
   forward-headers-strategy: native
 
+
+jwt:
+  expiration_time: 86400000 #1일
+  secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
+
 spring:
   application:
 
-  jwt:
-    access-secret: l$Nn8x3f@9Z*P1o&uK4R6^T#mGwQ%7Yv
-    refresh-secret: mA*9R6T#yP2Z$L&Nn3vG^X1Kw%8oG7Qf
-    access-expiration: 600000  # 10 min: 10 * 60 * 1000 milliseconds
-    refresh-expiration: 10800000
+#  jwt:
+#    access-secret: l$Nn8x3f@9Z*P1o&uK4R6^T#mGwQ%7Yv
+#    refresh-secret: mA*9R6T#yP2Z$L&Nn3vG^X1Kw%8oG7Qf
+#    access-expiration: 600000  # 10 min: 10 * 60 * 1000 milliseconds
+#    refresh-expiration: 10800000
 
   profiles:
     active: local

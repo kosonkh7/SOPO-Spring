@@ -3,9 +3,9 @@ package com.ai.pj.service;
 
 import com.ai.pj.domain.User;
 import com.ai.pj.dto.UserDTO;
-import com.ai.pj.exception.BusinessException;
+import com.ai.pj.mapper.UserMapper;
 import com.ai.pj.repository.UserRepository;
-import com.ai.pj.security.model.UserPrincipal;
+import com.ai.pj.security.details.CustomUserDetails;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,12 +16,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static com.ai.pj.exception.ErrorCode.USER_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService{
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -39,21 +39,16 @@ public class UserService implements UserDetailsService{
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = findUserById(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username : " + username));
+    public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
+//        User user = findUserById(username)
+//                .orElseThrow(() -> new UsernameNotFoundException("User not found with username : " + username));
+            User user = userRepository.findById(identifier)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found with userIdentifier"));
+
+        UserDTO.TokenUserInfo dto = userMapper.EntityToTokenUserInfo(user);
 
         // UserDetails 객체 반환
-        return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getId()) // 사용자 이름
-                .password(user.getPassword()) // 암호화된 비밀번호
-                .roles(String.valueOf(user.getRole()))        // 권한 설정
-                .build();
+        return new CustomUserDetails(dto);
     }
 
-    public UserDetails loadUserByidentifier(String identifier) throws UsernameNotFoundException {
-        User user = userRepository.findById(identifier)
-                .orElseThrow(() -> new BusinessException(USER_NOT_FOUND));
-        return new UserPrincipal(user);
-    }
 }

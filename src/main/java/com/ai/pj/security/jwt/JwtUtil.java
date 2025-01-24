@@ -1,62 +1,108 @@
 package com.ai.pj.security.jwt;
 
-import com.ai.pj.exception.BusinessException;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
+import com.ai.pj.dto.UserDTO;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.http.Cookie;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.util.Arrays;
-import java.util.Base64;
-
-import static com.ai.pj.exception.ErrorCode.INVALID_JWT;
+import java.sql.Date;
+import java.time.ZonedDateTime;
 
 
-@Service
-@RequiredArgsConstructor
-@Transactional(readOnly = true)
+/**
+ *  [JWT 관련 메서드를 제공하는 클래스]
+ */
+@Component
+@Slf4j
 public class JwtUtil {
-    public TokenStatus getTokenStatus(String token, Key secretKey) {
+    private final Key key;
+    private final long accessTokenExpTime; // 토큰 만료 시간.
+
+
+    public JwtUtil(
+            @Value("${jwt.secret}") String secretKey,
+            @Value("${jwt.expiration_time}") long accessTokenExpTime
+    ) {
+//        String secretKey = "lKNn8x3fA9ZAP1o1uK4R67T1mGwQZ7Yv";
+//        long accessTokenExpTime = 600000;
+        byte [] keyBytes = Decoders.BASE64.decode(secretKey);
+        this.key = Keys.hmacShaKeyFor(keyBytes);
+        this.accessTokenExpTime = accessTokenExpTime;
+    }
+
+    /**
+     * Access Token 생성
+     * @param member
+     * @return Access Token String
+     */
+    public String createAccessToken(UserDTO.TokenUserInfo member) {
+        return createToken(member, accessTokenExpTime);
+    }
+
+    /**
+     * JWT 생성
+     * @param member
+     * @param expireTime
+     * @return JWT string
+     */
+    private String createToken(UserDTO.TokenUserInfo member, long expireTime) {
+        Claims claims = Jwts.claims();
+        claims.put("memberIdentifier", member.getIdentifier());
+        claims.put("email", member.getEmail());
+        claims.put("role", member.getRole());
+
+        ZonedDateTime now = ZonedDateTime.now();
+        ZonedDateTime tokenValidity = now.plusSeconds(expireTime);
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(Date.from(now.toInstant()))
+                .setExpiration(Date.from(tokenValidity.toInstant()))
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    /**
+     * Token에서 User ID 추출
+     * @param token
+     * @return User Identifier
+     */
+    public String getUserIdentifier(String token) {
+        return parseClaims(token).get("memberIdentifier", String.class);
+    }
+
+    public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder()
-                    .setSigningKey(secretKey)
-                    .build()
-                    .parseClaimsJwt(token);
-            return TokenStatus.AUTHENTICATED;
-        } catch (ExpiredJwtException | IllegalArgumentException e ) {
-            return TokenStatus.EXPIRED;
-        } catch (JwtException e ) {
-            throw new BusinessException(INVALID_JWT);
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            return true;
+        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+            log.info("Invalid JWT Token", e);
+        } catch (ExpiredJwtException e) {
+            log.info("Expired JWT Token", e);
+        } catch (UnsupportedJwtException e) {
+            log.info("Unsupported JWT Token", e);
+        } catch (IllegalArgumentException e) {
+            log.info("JWT claims string is empty.", e);
         }
+        return false;
     }
 
-    public String resolveTokenFromCookie(Cookie [] cookies, JwtRule tokenPrefix) {
-        return Arrays.stream(cookies)
-                .filter(cookie -> cookie.getName().equals(tokenPrefix.getValue()))
-                .findFirst()
-                .map(Cookie::getValue)
-                .orElse("");
-    }
 
-    public Key getSignKey(String secretKey) {
-        String encodedKey = encodeToBase64(secretKey);
-        return Keys.hmacShaKeyFor(encodedKey.getBytes(StandardCharsets.UTF_8));
-    }
 
-    public String encodeToBase64(String secretKey) {
-        return Base64.getEncoder().encodeToString(secretKey.getBytes());
-    }
-
-    public Cookie resetToken(JwtRule tokenPrefix) {
-        Cookie cookie = new Cookie(tokenPrefix.getValue(), null);
-        cookie.setMaxAge(0);
-        cookie.setPath("/");
-        return cookie;
+    /**
+     * JWT Claims 추출
+     * @param accessToken
+     * @return JWT Claims
+     */
+    public Claims parseClaims(String accessToken) {
+        try {
+            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
+        } catch (ExpiredJwtException e){
+            return e.getClaims();
+        }
     }
 }

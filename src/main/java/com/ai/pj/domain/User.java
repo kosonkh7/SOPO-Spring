@@ -19,9 +19,13 @@ import java.util.List;
 @Table(name = "Member")
 public class User {
 
+
+    /**
+     * 식별자임. UUID 코드로.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String num;
+    private String identifier;
 
     @Column(name = "id")
     private String id;
@@ -38,6 +42,7 @@ public class User {
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default

@@ -33,4 +33,20 @@ public class UserDTO {
         String email;
         User.UserRole role;
     }
+
+    @Getter
+    @Builder
+    public static class TokenUserInfo {
+
+        String identifier;
+        String email;
+        User.UserRole role;
+    }
+
+    @Getter
+
+    public static class LoginRequest {
+        String id;
+        String password;
+    }
 }

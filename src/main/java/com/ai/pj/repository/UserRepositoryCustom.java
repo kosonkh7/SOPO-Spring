@@ -2,6 +2,7 @@ package com.ai.pj.repository;
 
 
 import com.ai.pj.domain.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 import java.util.Optional;
