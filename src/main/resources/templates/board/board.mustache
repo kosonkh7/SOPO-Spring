@@ -21,13 +21,13 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
+                <li onclick="location.href='http://localhost:8080/'" style="cursor: pointer;" class="nav-item">
                     <a class="nav-link active" aria-current="page" href="#">홈</a>
                 </li>
-                <li class="nav-item">
+                <li onclick="location.href='http://localhost:8080/board'" class="nav-item">
                     <a class="nav-link" href="#">게시판</a>
                 </li>
-                <li class="nav-item">
+                <li onclick="location.href='http://localhost:8080/admin'"class="nav-item">
                     <a class="nav-link" href="#">{{userId}}</a>
                 </li>
                 <li class="nav-item">
@@ -84,6 +84,13 @@
             <td>2024-01-10</td>
             <td>75</td>
         </tr>
+        <tr>
+            <th scope="row">3</th>
+            <td><a href="#" class="text-decoration-none">월요일은 월래 코딩하는 날~</a></td>
+            <td>권용민</td>
+            <td>2024-01-16</td>
+            <td>20</td>
+        </tr>
         {{#boardList}}
             <tr>
                 <th scope="row" class="index">{{id}}</th>
@@ -91,6 +98,14 @@
                 <td><a href="/board/{{id}}" class="text-decoration-none">{{title}}</a></td>
                 <td>{{userId}}</td>
                 <td class="createdDate">{{#createdDate}}{{createdDate}}{{/createdDate}}{{^createdDate}}N/A{{/createdDate}}</td>
+<!--                <td> 수정 삭제 버튼 활성화 할 거면 쓰기.-->
+<!--                    <a href="/board/edit/{{id}}" class="btn btn-primary btn-sm">수정</a>-->
+<!--                </td>-->
+<!--                <td>-->
+<!--                <form action="/board/delete/{{id}}" method="post" style="display: inline;">-->
+<!--                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>-->
+<!--                </form>-->
+<!--                </td>-->
                 <td>{{viewCount}}</td>
             </tr>
         {{/boardList}}

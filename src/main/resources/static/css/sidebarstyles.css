@@ -67,4 +67,9 @@
 
 .logout-button:hover {
     background-color: #9b9ba5;
+
+}
+.logout-button img {
+    width: 24px;
+    height: auto;
 }
