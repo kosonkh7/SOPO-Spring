@@ -10,7 +10,7 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
-@EnableRedisRepositories(basePackages = "com.ai.pj.repository")
+@EnableRedisRepositories(basePackages = "com.ai.pj.security")
 public class RedisConfig {
     @Value("${spring.data.redis.port}")
     private int port;

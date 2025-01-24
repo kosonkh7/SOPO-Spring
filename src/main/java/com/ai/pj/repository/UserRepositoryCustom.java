@@ -8,6 +8,6 @@ import java.util.Optional;
 
 
 public interface UserRepositoryCustom {
-    Optional<User> findById(String id);
+    Optional<User> findUserById(String id);
     Optional<List<User>> findByRole(User.UserRole role);
 }

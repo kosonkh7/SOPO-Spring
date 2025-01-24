@@ -30,17 +30,17 @@ public class UserService implements UserDetailsService{
         return userRepository.save(user);
     }
 
-    public Optional<User> findById(String id) {
-        return userRepository.findById(id);
+    public Optional<User> findUserById(String id) {
+        return userRepository.findUserById(id);
     }
 
     public boolean isExistId(String id) {
-        return this.findById(id).isPresent();
+        return this.findUserById(id).isPresent();
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = findById(username)
+        User user = findUserById(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username : " + username));
 
         // UserDetails 객체 반환

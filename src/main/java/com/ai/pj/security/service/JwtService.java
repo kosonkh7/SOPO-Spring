@@ -1,14 +1,15 @@
-package com.ai.pj.service;
+package com.ai.pj.security.service;
 
 import com.ai.pj.domain.Token;
 import com.ai.pj.domain.User;
 import com.ai.pj.exception.BusinessException;
 import com.ai.pj.exception.ErrorCode;
-import com.ai.pj.repository.TokenRepository;
 import com.ai.pj.security.jwt.JwtGenerator;
 import com.ai.pj.security.jwt.JwtRule;
 import com.ai.pj.security.jwt.JwtUtil;
 import com.ai.pj.security.jwt.TokenStatus;
+import com.ai.pj.security.repository.TokenRepository;
+import com.ai.pj.service.UserService;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

@@ -60,7 +60,7 @@ public class BoardService {
         String userId = post.getUserId();
 
         // 유효한 사용자 검증
-        User user = userService.findById(userId)
+        User user = userService.findUserById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("no User Here" + userId));
 
         Board board = Board.builder()
