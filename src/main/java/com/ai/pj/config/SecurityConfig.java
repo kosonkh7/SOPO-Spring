@@ -4,29 +4,30 @@ import com.ai.pj.security.authentication.RoleBasedAuthenticationProvider;
 import com.ai.pj.security.filter.JwtAuthFilter;
 import com.ai.pj.security.handler.CustomAccessDeniedHandler;
 import com.ai.pj.security.handler.CustomAuthenticationEntryPoint;
-import com.ai.pj.security.handler.CustomAuthenticationFailureHandler;
-import com.ai.pj.security.handler.CustomAuthenticationSuccessHandler;
+
 import com.ai.pj.security.jwt.JwtUtil;
 import com.ai.pj.service.UserService;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@EnableWebSecurity
+
 @Configuration
-@RequiredArgsConstructor
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
+@AllArgsConstructor
 public class SecurityConfig {
 
     private final UserService userService;
@@ -36,9 +37,9 @@ public class SecurityConfig {
 
     private final JwtUtil jwtUtil;
 
-//    private static final String[] AUTH_WHITELIST = {
-//            "/api/v1/member/**"
-//    }
+    private static final String[] AUTH_WHITELIST = {
+            "/api/v1/auth/**", "/img/**", "/css/**", "/js/**", "/favicon.ico"
+    };
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -58,11 +59,13 @@ public class SecurityConfig {
                         .authenticationEntryPoint(authenticationEntryPoint)
                         .accessDeniedHandler(accessDeniedHandler))
                 .authorizeHttpRequests(request -> request
+                        .requestMatchers(AUTH_WHITELIST).permitAll()
                         .requestMatchers(PathRequest.toH2Console()).permitAll()
-                                .anyRequest().permitAll()
-//                                .requestMatchers("/admin/**").hasRole("ADMIN")
-//                        .requestMatchers("/public/**", "/login").permitAll()
-//                                .anyRequest().fullyAuthenticated() // 권한에 따른 로그인 다 잡기
+//                       .anyRequest().permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/public/**", "/login").permitAll()
+                                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                        .anyRequest().fullyAuthenticated() // 권한에 따른 로그인 다 잡기
 //                        .anyRequest().permitAll() // 모든 요청 허용
                 )
 
@@ -71,8 +74,10 @@ public class SecurityConfig {
 //                        .failureHandler(new CustomAuthenticationFailureHandler()))
 //                        .defaultSuccessUrl("/board/", true)) // 로그인 성공 시 이동할 페이지
                 .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/public/home"))
+//                        .logoutUrl("/logout")
+//                        .logoutSuccessUrl("/public/home")
+                        .disable())
+
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .build();
     }

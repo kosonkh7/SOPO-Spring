@@ -4,10 +4,13 @@ package com.ai.pj.controller;
 import com.ai.pj.domain.User;
 import com.ai.pj.dto.BoardDTO;
 import com.ai.pj.dto.UserDTO;
+import com.ai.pj.security.details.CustomUserDetails;
 import com.ai.pj.service.AdminService;
 import com.ai.pj.service.BoardService;
 import com.ai.pj.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -31,12 +34,14 @@ public class AdminController {
         return "redirect:/admin/";
     }
 
+    @Secured("ROLE_ADMIN")
     @GetMapping("/")
     public String reqAdmin(Model model, Authentication authentication) {
         // 관리자 메모 ?
         // 현 관리자 이름
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        model.addAttribute("managerName", userDetails.getUsername());
+
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+        model.addAttribute("managerName", customUserDetails.getTokenUserInfo().getIdentifier());
 
         // 회원 현황
         List<UserDTO.Get> allUserList = adminService.getAllUsers();

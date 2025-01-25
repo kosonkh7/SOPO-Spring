@@ -39,6 +39,7 @@ public class UserDTO {
     public static class TokenUserInfo {
 
         String identifier;
+        String userid;
         String email;
         User.UserRole role;
     }

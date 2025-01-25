@@ -5,6 +5,8 @@ import com.ai.pj.dto.UserDTO;
 import com.ai.pj.mapper.UserMapper;
 import com.ai.pj.repository.UserRepository;
 import com.ai.pj.security.jwt.JwtUtil;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -38,4 +40,6 @@ public class AuthService {
         String accessToken = jwtUtil.createAccessToken(info);
         return accessToken;
     }
+
+
 }

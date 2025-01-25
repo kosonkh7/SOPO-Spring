@@ -42,7 +42,8 @@ public class UserService implements UserDetailsService{
     public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
 //        User user = findUserById(username)
 //                .orElseThrow(() -> new UsernameNotFoundException("User not found with username : " + username));
-            User user = userRepository.findById(identifier)
+        System.out.println(identifier);
+        User user = userRepository.findById(identifier)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found with userIdentifier"));
 
         UserDTO.TokenUserInfo dto = userMapper.EntityToTokenUserInfo(user);

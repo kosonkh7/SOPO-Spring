@@ -25,6 +25,7 @@ public class User {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "identifier")
     private String identifier;
 
     @Column(name = "id")

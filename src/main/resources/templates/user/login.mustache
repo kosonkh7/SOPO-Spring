@@ -113,26 +113,23 @@
      // const formData = new URLSearchParams();
      // formData.append('username', form1.username.value);
      // formData.append('password', form1.password.value);
-        console.log(formData);
+
         const response = await fetch("/api/v1/auth/login", {
             method: 'POST',
             headers: {
                 //"Content-Type": "application/x-www-form-urlencoded"
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                credentials: 'include'
             },
             body: JSON.stringify(data) // URL-encoded 데이터 전송
         }) // fetch
-        .then((response) => {
-            console.log(response)
-        })
-        .then(data => {
 
-        })
-        .catch(error => console.error("Error:", error));
+        if (response.ok) {
+            const token = await response.text();
+            console.log('Token received', token) ;
+            console.log(response.json());
+        }
 
  });
-
-
-
 </script>
 </html>
