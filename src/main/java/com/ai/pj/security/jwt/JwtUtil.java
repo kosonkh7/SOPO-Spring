@@ -1,16 +1,21 @@
 package com.ai.pj.security.jwt;
 
 import com.ai.pj.dto.UserDTO;
+import com.ai.pj.service.LogMarkerService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.sql.Date;
+
 import java.time.ZonedDateTime;
+import java.util.Date;
 
 
 /**
@@ -20,18 +25,25 @@ import java.time.ZonedDateTime;
 @Slf4j
 public class JwtUtil {
     private final Key key;
-    private final long accessTokenExpTime; // 토큰 만료 시간.
+    private final long ACCESS_TOKEN_EXPIRATION; // 15분 토큰 만료 시간.]
+    private final long REFRESH_TOKEN_EXPIRATION; // 7일
+
+    @Autowired
+    private LogMarkerService logMarkerService;
+
 
 
     public JwtUtil(
             @Value("${jwt.secret}") String secretKey,
-            @Value("${jwt.expiration_time}") long accessTokenExpTime
+            @Value("${jwt.access_token_expiration_time}") long accessTokenExpTime,
+            @Value("${jwt.refresh_token_expiration_time}") long refreshTokenExpTime
     ) {
 //        String secretKey = "lKNn8x3fA9ZAP1o1uK4R67T1mGwQZ7Yv";
 //        long accessTokenExpTime = 600000;
         byte [] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
-        this.accessTokenExpTime = accessTokenExpTime;
+        this.ACCESS_TOKEN_EXPIRATION = accessTokenExpTime;
+        this.REFRESH_TOKEN_EXPIRATION = refreshTokenExpTime;
     }
 
     /**
@@ -40,7 +52,21 @@ public class JwtUtil {
      * @return Access Token String
      */
     public String createAccessToken(UserDTO.TokenUserInfo member) {
-        return createToken(member, accessTokenExpTime);
+        return createToken(member, ACCESS_TOKEN_EXPIRATION);
+    }
+
+    /**
+     *
+     * @param member
+     * @return refreshToken
+     */
+    public String createRefreshToken(UserDTO.TokenUserInfo member){
+        return Jwts.builder()
+                .setId(member.getIdentifier())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION))
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
     }
 
     /**
@@ -66,6 +92,7 @@ public class JwtUtil {
                 .compact();
     }
 
+
     /**
      * Token에서 User ID 추출
      * @param token
@@ -80,13 +107,15 @@ public class JwtUtil {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.info("Invalid JWT Token", e);
+            log.info(logMarkerService.getInvalidTokenMarker(),"Invalid JWT Token", e);
         } catch (ExpiredJwtException e) {
-            log.info("Expired JWT Token", e);
+            // token refresh 후.  true 값 리턴.
+            log.info(logMarkerService.getExpiredTokenMarker(), "Expired JWT Token");
+            return true;
         } catch (UnsupportedJwtException e) {
-            log.info("Unsupported JWT Token", e);
+            log.info(logMarkerService.getInvalidTokenMarker(),"Unsupported JWT Token", e);
         } catch (IllegalArgumentException e) {
-            log.info("JWT claims string is empty.", e);
+            log.info(logMarkerService.getInvalidTokenMarker(),"JWT claims string is empty.", e);
         }
         return false;
     }

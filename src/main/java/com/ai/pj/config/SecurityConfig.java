@@ -6,6 +6,7 @@ import com.ai.pj.security.handler.CustomAccessDeniedHandler;
 import com.ai.pj.security.handler.CustomAuthenticationEntryPoint;
 
 import com.ai.pj.security.jwt.JwtUtil;
+import com.ai.pj.service.AuthService;
 import com.ai.pj.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -26,19 +27,19 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
+//@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @AllArgsConstructor
 public class SecurityConfig {
 
     private final UserService userService;
+    private final AuthService authService;
     private final PasswordEncoder passwordEncoder;
     private final CustomAccessDeniedHandler accessDeniedHandler;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
-
     private final JwtUtil jwtUtil;
 
     private static final String[] AUTH_WHITELIST = {
-            "/api/v1/auth/**", "/img/**", "/css/**", "/js/**", "/favicon.ico"
+            "/api/v1/auth/**", "/img/**", "/css/**", "/js/**", "/favicon.ico", "/"
     };
 
     @Bean
@@ -54,7 +55,7 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/public/login") // 사용자 정의 로그인 페이지
                         .disable())
-                .addFilterBefore(new JwtAuthFilter(userService, jwtUtil), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthFilter(userService, authService, jwtUtil), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling((exceptionHandling) -> exceptionHandling
                         .authenticationEntryPoint(authenticationEntryPoint)
                         .accessDeniedHandler(accessDeniedHandler))
@@ -64,7 +65,7 @@ public class SecurityConfig {
 //                       .anyRequest().permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/public/**", "/login").permitAll()
-                                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .anyRequest().fullyAuthenticated() // 권한에 따른 로그인 다 잡기
 //                        .anyRequest().permitAll() // 모든 요청 허용
                 )

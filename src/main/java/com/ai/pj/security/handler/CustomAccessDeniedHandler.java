@@ -15,9 +15,10 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
+
 @AllArgsConstructor
 @Component
-public class CustomAccessDeniedHandler implements AccessDeniedHandler {
+public class CustomAccessDeniedHandler implements AccessDeniedHandler  {
 
     private final ObjectMapper objectMapper;
     @Override

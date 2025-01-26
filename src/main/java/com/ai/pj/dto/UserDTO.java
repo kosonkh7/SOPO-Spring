@@ -37,7 +37,6 @@ public class UserDTO {
     @Getter
     @Builder
     public static class TokenUserInfo {
-
         String identifier;
         String userid;
         String email;
