@@ -22,10 +22,10 @@ $(document).ready(function() {
     }
 
     function displayStations() {
-        // 지하철역 데이터 요청
-        $.getJSON('/api/stations', function(stations) {
+        // 1) stations 데이터 한 번만 불러옴
+        $.getJSON("/api/stations", function(stations) {
 
-            // 1) 지도에 역 마커 표시
+            // 2) 지도에 마커 표시
             stations.forEach(station => {
                 var marker = new Tmapv2.Marker({
                     position: new Tmapv2.LatLng(station.latitude, station.longitude),
@@ -35,13 +35,13 @@ $(document).ready(function() {
                 markers.push(marker);
             });
 
-            // 2) <select>에 <option>들 추가
-            // 먼저 기존 옵션 제거 (중복 방지)
-            $("#start_station").empty();
+            // 3) <select> 박스 갱신 (초기화 후 옵션 추가)
+            const $select = $("#start_station");
+            $select.empty();
 
             stations.forEach(station => {
                 const optionHtml = `<option value="${station.name}">${station.name}</option>`;
-                $("#start_station").append(optionHtml);
+                $select.append(optionHtml);
             });
         });
     }
