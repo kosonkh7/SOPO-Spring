@@ -22,10 +22,10 @@ $(document).ready(function() {
     }
 
     function displayStations() {
-        // 지하철역 데이터 요청
-        $.getJSON('/api/stations', function(stations) {
+        // 1) stations 데이터 한 번만 불러옴
+        $.getJSON("/api/stations", function(stations) {
 
-            // 1) 지도에 역 마커 표시
+            // 2) 지도에 마커 표시
             stations.forEach(station => {
                 var marker = new Tmapv2.Marker({
                     position: new Tmapv2.LatLng(station.latitude, station.longitude),
@@ -35,13 +35,13 @@ $(document).ready(function() {
                 markers.push(marker);
             });
 
-            // 2) <select>에 <option>들 추가
-            // 먼저 기존 옵션 제거 (중복 방지)
-            $("#start_station").empty();
+            // 3) <select> 박스 갱신 (초기화 후 옵션 추가)
+            const $select = $("#start_station");
+            $select.empty();
 
             stations.forEach(station => {
                 const optionHtml = `<option value="${station.name}">${station.name}</option>`;
-                $("#start_station").append(optionHtml);
+                $select.append(optionHtml);
             });
         });
     }
@@ -143,6 +143,7 @@ $(document).ready(function() {
         // 대시보드 업데이트
         $(".dashboard").empty();
         $(".dashboard").append(`<h3>기존 택배 프로세스</h3>`);
+        $(".dashboard").append(`<img class="dashboard-ex" src="/img/map_ex1.png" alt="기존 택배 경로 설명">`);
         $(".dashboard").append(`<p>출발 Sub 터미널: ${data.start_sub_terminal.name}</p>`);
         $(".dashboard").append(`<p>Hub 터미널: ${data.hub_terminal.name}</p>`);
         $(".dashboard").append(`<p>도착 Sub 터미널: ${data.end_sub_terminal.name}</p>`);
@@ -204,6 +205,7 @@ $(document).ready(function() {
         // 대시보드 업데이트
         $(".dashboard").empty();
         $(".dashboard").append(`<h3>지하철 창고 프로세스</h3>`);
+        $(".dashboard").append(`<img class="dashboard-ex" src="/img/map_ex2.png" alt="지하철 창고 경로 설명">`);
 
         // 지하철 예상 소요 시간 표시 (유효하지 않은 값이면 0으로 대체)
         var subwayTime = isNaN(data.subway_total_time) || data.subway_total_time <= 0 ? 0 : Math.round(data.subway_total_time / 60);
@@ -337,11 +339,24 @@ $(document).ready(function() {
         // 지도 영역 조정
         adjustMapBounds(markers);
 
+        // 기존 택배 데이터
+        const parcelDistance = data.parcel.distance.toFixed(2);
+        const parcelTime = Math.round(data.parcel.time);
+        const parcelCost = data.parcel.cost.toFixed(1);
+        const parcelEmission = data.parcel.emission.toFixed(2);
+
+        // 지하철 창고 데이터
+        const subwayDistance = selectedRoute.distance.toFixed(2);
+        const subwayTime = Math.round(selectedRoute.time);
+        const subwayCost = selectedRoute.cost.toFixed(1);
+        const subwayEmission = selectedRoute.emission.toFixed(2);
+
+
         // 대시보드 업데이트
         $(".dashboard").empty();
         $(".dashboard").append(`
             <h3>이동 경로 비교 결과</h3>
-            <p>선택된 이동 경로: ${data.faster_route}</p>
+            <img class="dashboard-ex" src="/img/map_ex3.png" alt="경로 비교 설명">
             <table>
                 <thead>
                     <tr>
@@ -356,23 +371,126 @@ $(document).ready(function() {
                 <tbody>
                     <tr>
                         <td>기존 택배</td>
-                        <td>${data.parcel.distance.toFixed(2)} km</td>
-                        <td>${Math.round(data.parcel.time)}분</td>
-                        <td>${data.parcel.cost.toLocaleString()}₩</td>
-                        <td>${data.parcel.emission.toFixed(2)} g CO₂</td>
+                        <td>${parcelDistance} km</td>
+                        <td>${parcelTime}분</td>
+                        <td>${parcelCost}₩</td>
+                        <td>${parcelEmission} g CO₂</td>
                         <td>3단계</td>
                     </tr>
                     <tr>
                         <td>지하철 창고</td>
-                        <td>${selectedRoute.distance.toFixed(2)} km</td>
-                        <td>${Math.round(selectedRoute.time)}분</td>
-                        <td>${selectedRoute.cost.toLocaleString()}₩</td>
-                        <td>${selectedRoute.emission.toFixed(2)} g CO₂</td>
+                        <td>${subwayDistance} km</td>
+                        <td>${subwayTime}분</td>
+                        <td>${subwayCost}₩</td>
+                        <td>${subwayEmission} g CO₂</td>
                         <td>${Math.round(selectedRoute.level)}단계</td>
                     </tr>
                 </tbody>
             </table>
         `);
+
+        // 감소율 계산 함수
+        function calculateReduction(original, newValue) {
+            return ((original - newValue) / original * 100).toFixed(2); // 감소율 계산 (소수점 2자리)
+        }
+
+        // 각 지표의 감소율 계산
+        const distanceReduction = calculateReduction(parcelDistance, subwayDistance); // 거리 감소율
+        const timeReduction = calculateReduction(parcelTime, subwayTime); // 시간 감소율
+        const costReduction = calculateReduction(parcelCost, subwayCost); // 비용 감소율
+        const emissionReduction = calculateReduction(parcelEmission, subwayEmission); // 탄소 배출량 감소율
+
+        // 대시보드에 결과 추가
+        $(".dashboard").append(`
+            <p>거리 감소: ${distanceReduction}% 감소 (${parcelDistance} km → ${subwayDistance} km)</p>
+            <p>시간 감소: ${timeReduction}% 감소 (${parcelTime}분 → ${subwayTime}분)</p>
+            <p>비용 감소: ${costReduction}% 감소 (${parcelCost.toLocaleString()}₩ → ${subwayCost.toLocaleString()}₩)</p>
+            <p>탄소 배출량 감소: ${emissionReduction}% 감소 (${parcelEmission} g CO₂ → ${subwayEmission} g CO₂)</p>
+        `);
+
+        // 그래프 캔버스 추가
+        $(".dashboard").append(`
+            <div class="chart-container">
+                <canvas id="timeDistanceChart"></canvas>
+            </div>
+        `);
+                $(".dashboard").append(`
+            <div class="chart-container">
+                <canvas id="stackedCostEmissionChart"></canvas>
+            </div>
+        `);
+
+        // 시간 및 거리 비교 (막대 차트)
+        const timeDistanceCtx = document.getElementById("timeDistanceChart").getContext("2d");
+        new Chart(timeDistanceCtx, {
+            type: "bar",
+            data: {
+                labels: ["기존 택배", "지하철 창고"],
+                datasets: [
+                    {
+                        label: "총 시간 (분)",
+                        data: [Math.round(data.parcel.time), Math.round(data.subway.time)],
+                        backgroundColor: "rgba(54, 162, 235, 0.6)",
+                    },
+                    {
+                        label: "총 거리 (km)",
+                        data: [data.parcel.distance.toFixed(2), data.subway.distance.toFixed(2)],
+                        backgroundColor: "rgba(255, 99, 132, 0.6)",
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true, // 가로/세로 비율 유지
+                plugins: {
+                    legend: { position: "top" }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // 스택형 막대 차트: 비용 및 탄소 배출량 비교
+        const stackedCostEmissionCtx = document.getElementById("stackedCostEmissionChart").getContext("2d");
+        new Chart(stackedCostEmissionCtx, {
+            type: "bar",
+            data: {
+                labels: ["기존 택배", "지하철 창고"],
+                datasets: [
+                    {
+                        label: "비용 (₩)",
+                        data: [data.parcel.cost, data.subway.cost],
+                        backgroundColor: "rgba(54, 162, 235, 0.6)"
+                    },
+                    {
+                        label: "탄소 배출량 (g CO₂)",
+                        data: [data.parcel.emission.toFixed(2), data.subway.emission.toFixed(2)],
+                        backgroundColor: "rgba(255, 99, 132, 0.6)"
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true, // 가로/세로 비율 유지
+                plugins: {
+                    legend: { position: "top" }
+                },
+                scales: {
+                    x: {
+                        stacked: true // X축 스택형
+                    },
+                    y: {
+                        type: "logarithmic", // 로그 스케일 적용
+                        stacked: true, // Y축 스택형
+                        beginAtZero: true,
+                        title: { display: true, text: "비용 및 배출량 (로그 스케일)" }
+                    }
+                }
+            }
+        });
     }
 
     $("#default_btn").on("click", function() {
@@ -421,7 +539,6 @@ $(document).ready(function() {
                 alert("서버와 통신 중 문제가 발생했습니다. 다시 시도해주세요.");
             });
     });
-
 
     $("#reset_btn").on("click", function() {
         clearMap(); // 기존 마커와 경로 제거
