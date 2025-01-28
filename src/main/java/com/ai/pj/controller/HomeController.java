@@ -4,9 +4,6 @@ package com.ai.pj.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
 
 @Controller
 public class HomeController {
@@ -14,7 +11,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model){
-        model.addAttribute("managerName", "Admin User"); // 실제 로그인 사용자 정보를 여기에 넣을 수도 있음
+        model.addAttribute("managerName", "Admin"); // 실제 로그인 사용자 정보를 여기에 넣을 수도 있음
         return "home"; // home.mustache 렌더링
     }
 
