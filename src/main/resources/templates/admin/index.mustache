@@ -98,6 +98,7 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             width: 190%; /* 너비 조정 (예: 80%) */
             height: 237%; /* 높이는 내용에 맞춤 */
+            overflow-y: auto;
             margin-left: auto; /* 가로 가운데 정렬 */
             margin-right: auto; /* 가로 가운데 정렬 */
 
@@ -199,19 +200,117 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             height: 193px; /* 원하는 높이로 설정 */
         }
+        /* 사이드바 */
+          .sidebar {
+              top: 0;          /* 상단에 위치 */
+              left: 0;         /* 왼쪽에 위치 */
+              width: 220px;
+              height: 100vh;
+              background-color: #1e2a44;
+              color: white;
+              position: fixed;
+              padding-top: 20px;
+          }
+
+        .sidebar h1 {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            margin-left: 15px;
+            margin-right: 15px;
+            margin-bottom: 20px;
+            font-size: 29px;
+            border-bottom: 0.45px dashed rgba(255, 255, 255, 0.38);
+            padding-bottom: 14px;
+        }
+
+        .sidebar h1 img {
+            width: 36px;
+            height: auto;
+            margin-right: 10px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        .sidebar ul li img {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+
+        .sidebar ul li:hover {
+            background-color: #909091;
+        }
+
+        .logout-button {
+            position: absolute;
+            bottom: 30px;
+            width: 90%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px;
+            background-color: #a30d0d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .logout-button:hover {
+            background-color: #9b9ba5;
+
+        }
+        .logout-button img {
+            width: 24px;
+            height: auto;
+        }
+
     </style>
 </head>
 <body>
-{{> common/sidebar}}
+<div class="sidebar">
+    <h1><img src="/img/logo.png" alt="Keen Icon"><span>YMJ</span></h1>
+    <ul>
+        <li onclick="location.href='http://localhost:8080/'" style="cursor: pointer;">
+            <img src="/img/home.svg" alt="Home Icon">home
+        </li>
+        <li onclick="location.href='http://localhost:8080/map/'" style="cursor: pointer;">
+            <img src="/img/dashboard.svg" alt="Dashboard Icon">경로 시뮬레이션
+        </li>
+        <li onclick="location.href='http://localhost:8080/stock/'" style="cursor: pointer;">
+            <img src="/img/admin.svg" alt="Admin Icon">재고관리
+        </li>
+        <li onclick="location.href='http://localhost:8080/inspect/'" style="cursor: pointer;">
+            <img src="/img/admin.svg" alt="Admin Icon">상품검수
+        </li>
+        <li onclick="location.href='http://localhost:8080/board/'" style="cursor: pointer;">
+            <img src="/img/community.svg" alt="커뮤니티 Icon">커뮤니티
+        </li>
+        <li onclick="location.href='http://localhost:8080/admin/'" style="cursor: pointer;">
+            <img src="/img/admin.svg" alt="Admin Icon">admin
+        </li>
+
+    </ul>
+    <button class="logout-button" onclick="location.href='http://localhost:8080/public/login/'">
+        <img src="/img/logout.svg" alt="logout-Icon">
+    </button>
+</div>
+
 
 <div class="main">
-    <div class="header">
-        <div id="current-time"></div>
-        <div class="user">
-            <img src="/img/admin_potato.png" alt="User Avatar">
-            <span>{{managerName}}</span>
-        </div>
-    </div>
+    {{> common/header}}
 
     <div class="dashboard-layout">
         <!-- 1번: 회원 현황 -->
@@ -331,10 +430,6 @@
             }
         });
     });
-
-
-
-
 
 </script>
 </body>
