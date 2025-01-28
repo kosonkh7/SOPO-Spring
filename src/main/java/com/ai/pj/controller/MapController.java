@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class MapController {
 
-    @Value("${tmap.api.key}")
+    @Value("${tmap.api.key:}")
     private String tmapKey;
 
     // 브라우저에서 http://localhost:8080/map 로 접속하면,
