@@ -10,8 +10,7 @@ public class HomeController {
 
 
     @GetMapping("/")
-    public String home(Model model){
-        model.addAttribute("managerName", "Admin"); // 실제 로그인 사용자 정보를 여기에 넣을 수도 있음
+    public String home(){
         return "home"; // home.mustache 렌더링
     }
 

@@ -34,9 +34,6 @@ public class AdminController {
     @GetMapping("/")
     public String reqAdmin(Model model, Authentication authentication) {
         // 관리자 메모 ?
-        // 현 관리자 이름
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        model.addAttribute("managerName", userDetails.getUsername());
 
         // 회원 현황
         List<UserDTO.Get> allUserList = adminService.getAllUsers();

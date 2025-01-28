@@ -6,6 +6,7 @@
     <title>Map Simulation Page</title>
 
     <!-- 스타일 시트 -->
+    <link rel="stylesheet" href="/css/headerstyles.css">
     <link rel="stylesheet" href="/css/sidebarstyles.css">
     <link rel="stylesheet" href="/css/mapStyles.css" />
 
@@ -23,7 +24,9 @@
 
 <!-- Mustache partial: sidebar.mustache가
      /templates/common/sidebar.mustache 에 있다고 가정 -->
-
+{{> common/header}}
+{{> common/sidebar}}
+{{> common/footer}}
 
 <main>
     <div class="map" id="map_div">
