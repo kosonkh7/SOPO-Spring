@@ -10,7 +10,7 @@ server:
 
 
 jwt:
-  access_token_expiration_time: 20 #1일
+  access_token_expiration_time: 20 #20초
   refresh_token_expiration_time: 604800
   secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
 
