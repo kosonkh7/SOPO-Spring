@@ -11,6 +11,43 @@ $(document).ready(function() {
     const initialCenter = new Tmapv2.LatLng(37.5665, 126.9780); // 초기 중심 좌표
     const initialZoom = 11; // 초기 줌 레벨
 
+    // 초기 상태 대시보드 템플릿 정의
+    const initialDashboardTemplate = `
+        <div class="cards-container">
+            <!-- 카드 1: 거리 비교 -->
+            <div class="card">
+                <h4>🚛 거리 비교</h4>
+                <p>기존 택배: <span id="distance_original">--</span> km</p>
+                <p>지하철 창고: <span id="distance_subway">--</span> km</p>
+                <p>📉 절감률: <span id="distance_reduction">--</span>%</p>
+            </div>
+
+            <!-- 카드 2: 시간 비교 -->
+            <div class="card">
+                <h4>⏳ 시간 비교</h4>
+                <p>기존 택배: <span id="time_original">--</span> 분</p>
+                <p>지하철 창고: <span id="time_subway">--</span> 분</p>
+                <p>📉 절감률: <span id="time_reduction">--</span>%</p>
+            </div>
+
+            <!-- 카드 3: 비용 비교 -->
+            <div class="card">
+                <h4>💰 비용 비교</h4>
+                <p>기존 택배: <span id="cost_original">--</span> 원</p>
+                <p>지하철 창고: <span id="cost_subway">--</span> 원</p>
+                <p>📉 절감률: <span id="cost_reduction">--</span>%</p>
+            </div>
+
+            <!-- 카드 4: 탄소 배출 비교 -->
+            <div class="card">
+                <h4>🌱 탄소 배출 비교</h4>
+                <p>기존 택배: <span id="carbon_original">--</span> g CO₂</p>
+                <p>지하철 창고: <span id="carbon_subway">--</span> g CO₂</p>
+                <p>📉 절감률: <span id="carbon_reduction">--</span>%</p>
+            </div>
+        </div>
+    `;
+
     function clearMap() {
         // 기존 마커 제거
         markers.forEach(marker => marker.setMap(null));
@@ -63,6 +100,7 @@ $(document).ready(function() {
 
     function updateParcelRouteMap(data) {
         clearMap(); // 기존 지도 상태 초기화
+        $(".map .map-overlay-image").remove();
 
         // 출발 Sub 터미널과 도착 Sub 터미널이 같은 경우 처리
         if (data.start_sub_terminal.name === data.end_sub_terminal.name) {
@@ -106,6 +144,14 @@ $(document).ready(function() {
         });
         markers.push(deliveryPin);
 
+        // 지도 왼쪽 위에 이미지 추가
+        $(".map").append(`
+            <img 
+                class="map-overlay-image" 
+                src="/img/map_ex1.png" 
+                alt="기존 택배 경로 설명">
+        `);
+
         // 경로 추가
         if (data.to_hub_route && data.to_hub_route.length > 0) {
             var toHubPolyline = new Tmapv2.Polyline({
@@ -143,7 +189,6 @@ $(document).ready(function() {
         // 대시보드 업데이트
         $(".dashboard").empty();
         $(".dashboard").append(`<h3>기존 택배 프로세스</h3>`);
-        $(".dashboard").append(`<img class="dashboard-ex" src="/img/map_ex1.png" alt="기존 택배 경로 설명">`);
         $(".dashboard").append(`<p>출발 Sub 터미널: ${data.start_sub_terminal.name}</p>`);
         $(".dashboard").append(`<p>Hub 터미널: ${data.hub_terminal.name}</p>`);
         $(".dashboard").append(`<p>도착 Sub 터미널: ${data.end_sub_terminal.name}</p>`);
@@ -151,8 +196,9 @@ $(document).ready(function() {
     }
 
     function updateMap(data) {
-        // 기존 마커와 경로 제거
+        // 기존 마커와 경로, 이미지 제거
         clearMap();
+        $(".map .map-overlay-image").remove();
 
         // 출발지 마커 추가
         var startMarker = new Tmapv2.Marker({
@@ -169,6 +215,14 @@ $(document).ready(function() {
             title: "배송지"
         });
         markers.push(endMarker); // 배열에 저장
+
+        // 지도 왼쪽 위에 이미지 추가
+        $(".map").append(`
+            <img 
+                class="map-overlay-image" 
+                src="/img/map_ex2.png" 
+                alt="지하철 창고 경로 설명">
+        `);
 
         // 경로 중심 계산
         var centerLat = (data.start_lat + data.end_lat) / 2;
@@ -205,7 +259,6 @@ $(document).ready(function() {
         // 대시보드 업데이트
         $(".dashboard").empty();
         $(".dashboard").append(`<h3>지하철 창고 프로세스</h3>`);
-        $(".dashboard").append(`<img class="dashboard-ex" src="/img/map_ex2.png" alt="지하철 창고 경로 설명">`);
 
         // 지하철 예상 소요 시간 표시 (유효하지 않은 값이면 0으로 대체)
         var subwayTime = isNaN(data.subway_total_time) || data.subway_total_time <= 0 ? 0 : Math.round(data.subway_total_time / 60);
@@ -227,6 +280,7 @@ $(document).ready(function() {
 
     function updateComparisonRoutes(data) {
         clearMap(); // 기존 지도 상태 초기화
+        $(".map .map-overlay-image").remove();
 
         // 출발 Sub 터미널과 도착 Sub 터미널이 같은 경우 처리
         if (data.parcel.start_sub_terminal.name === data.parcel.end_sub_terminal.name) {
@@ -277,6 +331,14 @@ $(document).ready(function() {
             title: "배송지"
         });
         markers.push(deliveryPin);
+
+        // 지도 왼쪽 위에 이미지 추가
+        $(".map").append(`
+            <img 
+                class="map-overlay-image" 
+                src="/img/map_ex3.png" 
+                alt="경로 비교 설명">
+        `);
 
         // 지도 영역 조정
         adjustMapBounds(markers);
@@ -354,40 +416,7 @@ $(document).ready(function() {
 
         // 대시보드 업데이트
         $(".dashboard").empty();
-        $(".dashboard").append(`
-            <h3>이동 경로 비교 결과</h3>
-            <img class="dashboard-ex" src="/img/map_ex3.png" alt="경로 비교 설명">
-            <table>
-                <thead>
-                    <tr>
-                        <th>프로세스</th>
-                        <th>총 거리 (km)</th>
-                        <th>총 시간 (분)</th>
-                        <th>비용 (₩)</th>
-                        <th>탄소 배출량 (g CO₂)</th>
-                        <th>단계 수</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>기존 택배</td>
-                        <td>${parcelDistance} km</td>
-                        <td>${parcelTime}분</td>
-                        <td>${parcelCost}₩</td>
-                        <td>${parcelEmission} g CO₂</td>
-                        <td>3단계</td>
-                    </tr>
-                    <tr>
-                        <td>지하철 창고</td>
-                        <td>${subwayDistance} km</td>
-                        <td>${subwayTime}분</td>
-                        <td>${subwayCost}₩</td>
-                        <td>${subwayEmission} g CO₂</td>
-                        <td>${Math.round(selectedRoute.level)}단계</td>
-                    </tr>
-                </tbody>
-            </table>
-        `);
+        $(".dashboard").append(`<h3>이동 경로 비교 결과</h3>`);
 
         // 감소율 계산 함수
         function calculateReduction(original, newValue) {
@@ -401,12 +430,37 @@ $(document).ready(function() {
         const emissionReduction = calculateReduction(parcelEmission, subwayEmission); // 탄소 배출량 감소율
 
         // 대시보드에 결과 추가
-        $(".dashboard").append(`
-            <p>거리 감소: ${distanceReduction}% 감소 (${parcelDistance} km → ${subwayDistance} km)</p>
-            <p>시간 감소: ${timeReduction}% 감소 (${parcelTime}분 → ${subwayTime}분)</p>
-            <p>비용 감소: ${costReduction}% 감소 (${parcelCost.toLocaleString()}₩ → ${subwayCost.toLocaleString()}₩)</p>
-            <p>탄소 배출량 감소: ${emissionReduction}% 감소 (${parcelEmission} g CO₂ → ${subwayEmission} g CO₂)</p>
-        `);
+        const comparisonData = {
+            distance: { original: parcelDistance, subway: subwayDistance, reduction: distanceReduction },
+            time: { original: parcelTime, subway: subwayTime, reduction: timeReduction },
+            cost: { original: parcelCost.toLocaleString(), subway: subwayCost.toLocaleString(), reduction: costReduction },
+            carbon: { original: parcelEmission.toLocaleString(), subway: subwayEmission.toLocaleString(), reduction: emissionReduction },
+        };
+
+        $(".dashboard").append(initialDashboardTemplate);
+
+        const updateDashboard = (data) => {
+            // 데이터를 DOM에 업데이트
+            document.getElementById("distance_original").textContent = data.distance.original;
+            document.getElementById("distance_subway").textContent = data.distance.subway;
+            document.getElementById("distance_reduction").textContent = data.distance.reduction;
+
+            document.getElementById("time_original").textContent = data.time.original;
+            document.getElementById("time_subway").textContent = data.time.subway;
+            document.getElementById("time_reduction").textContent = data.time.reduction;
+
+            document.getElementById("cost_original").textContent = data.cost.original;
+            document.getElementById("cost_subway").textContent = data.cost.subway;
+            document.getElementById("cost_reduction").textContent = data.cost.reduction;
+
+            document.getElementById("carbon_original").textContent = data.carbon.original;
+            document.getElementById("carbon_subway").textContent = data.carbon.subway;
+            document.getElementById("carbon_reduction").textContent = data.carbon.reduction;
+        }
+
+        // 업데이트 호출
+        updateDashboard(comparisonData);
+
 
         // 그래프 캔버스 추가
         $(".dashboard").append(`
@@ -414,7 +468,7 @@ $(document).ready(function() {
                 <canvas id="timeDistanceChart"></canvas>
             </div>
         `);
-                $(".dashboard").append(`
+        $(".dashboard").append(`
             <div class="chart-container">
                 <canvas id="stackedCostEmissionChart"></canvas>
             </div>
@@ -493,6 +547,12 @@ $(document).ready(function() {
         });
     }
 
+
+    // // 주소 입력 필드에서 주소 검색
+    // $("#search_btn").on("click", function() {
+    //     searchAddressToLatLon();
+    // });
+
     $("#default_btn").on("click", function() {
         var formData = $("#route_form").serialize();
         $.post("/api/parcel-route", formData, function(data) {
@@ -546,9 +606,13 @@ $(document).ready(function() {
         map.setCenter(initialCenter); // 초기 중심 좌표로 이동
         map.setZoom(initialZoom); // 초기 줌 레벨로 복원
 
-        // 대시보드 초기화
+        // 대시보드를 초기 템플릿 상태로 복원
         $(".dashboard").empty();
-        $(".dashboard").append(`<h3>Dashboard</h3><br>`);
+        $(".dashboard").append(`<h3>Dashboard</h3>`);
+        $(".dashboard").append(initialDashboardTemplate);
+
+        // 이미지 제거
+        $(".map .map-overlay-image").remove();
         console.log("지도가 초기화되었습니다."); // 디버깅 로그
     });
 
