@@ -59,14 +59,14 @@
                 sidebarTitle.style.display = "none";
                 sidebarTexts.forEach(text => text.style.display = "none");
                 sidebarToggleImg.style.transform = "rotate(180deg)";
-                header.style.left = "60px"; // ✅ 헤더 위치 조정
-                header.style.width = "calc(100% - 60px)"; // ✅ 헤더 크기 조정
+                header.style.left = "60px"; // 헤더 위치 조정
+                header.style.width = "calc(100% - 60px)"; // 헤더 크기 조정
             } else {
                 sidebarTitle.style.display = "flex"; //다시 보이게
                 sidebarTexts.forEach(text => text.style.display = "inline-block");
                 sidebarToggleImg.style.transform = "rotate(0deg)";
-                header.style.left = "220px"; // ✅ 헤더 원래 크기로 복구
-                header.style.width = "calc(100% - 220px)"; // ✅ 헤더 원래 크기로 복구
+                header.style.left = "220px"; // 헤더 원래 크기로 복구
+                header.style.width = "calc(100% - 220px)"; // 헤더 원래 크기로 복구
             }
         });
     });

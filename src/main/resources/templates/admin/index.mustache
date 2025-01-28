@@ -82,7 +82,7 @@
 
         .text h2 {
             font-size: 25px !important; /* 텍스트 크기 */
-            margin: 0; /* 기본 여백 제거 */
+            margin: 0 0 14px 0; /* 기본 여백 제거 */
         }
 
         .text span {
@@ -105,9 +105,11 @@
         }
 
         .approval h2 {
-            font-size: 18px;
+            font-size: 22px;
+            color: #605a5a;
             font-weight: bold;
-            margin-bottom: 15px;
+            margin-bottom: 17px;
+            margin-top: -6px;
 
         }
 
@@ -116,8 +118,26 @@
             border-collapse: collapse;
         }
 
+        /* 아이디(1번째), 이름(2번째), 이메일(3번째) 헤더 정렬 */
+        .approval table th:nth-child(1),
+        .approval table th:nth-child(2),
+        .approval table th:nth-child(3) {
+            text-align: center;
+        }
+
+        .approval table th:nth-child(4) {
+            text-align: right; /* 4번째 헤더를 오른쪽 정렬 */
+        }
+        .approval table td:nth-child(1),
+        .approval table td:nth-child(2),
+        .approval table td:nth-child(3) {
+            text-align: center; /* 중앙 정렬 */
+        }
+        .approval table td:nth-child(4) {
+            text-align: right; /* 중앙 정렬 */
+        }
+
         .approval table th, .approval table td {
-            text-align: left;
             padding: 10px 0;
         }
 
@@ -128,6 +148,7 @@
         .approval table td:last-child {
             text-align: right;
         }
+
 
         .approval table td a {
             text-decoration: none;
@@ -199,6 +220,7 @@
             padding: 20px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             height: 193px; /* 원하는 높이로 설정 */
+            overflow: auto; /* 내용이 넘치면 스크롤 */
         }
         /* 사이드바 */
           .sidebar {
@@ -343,9 +365,10 @@
             <table>
                 <tbody>
                 <tr>
-                    <td>아이디</td>
-                    <td>이름</td>
-                    <td>이메일</td>
+                    <th>아이디</th>
+                    <th>이름</th>
+                    <th>이메일</th>
+                    <th>권한</th>
                 </tr>
                 {{^userList}}
                     <td>비어있습니다.</td>
@@ -433,4 +456,5 @@
 
 </script>
 </body>
+
 </html>
