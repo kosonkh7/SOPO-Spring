@@ -4,7 +4,7 @@
     left: 220px; /* 사이드바 너비만큼 이동 */
     width: calc(100% - 220px); /* 화면 너비에 맞게 */
     height: 60px; /* 원하는 높이 설정 */
-    background-color: #ffffff; /* 배경색 */
+    background-color: rgb(255, 255, 255); /* 배경색 */
     display: flex;
     justify-content: space-between;
     align-items: center;
