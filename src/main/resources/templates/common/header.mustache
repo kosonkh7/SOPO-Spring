@@ -1,0 +1,18 @@
+<div class="header">
+    <div id="current-time"></div>
+    <div class="user">
+        <img src="/img/admin_potato.png" alt="User Avatar">
+        <span>{{managerName}}</span>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
+            document.getElementById('current-time').textContent = timeString;
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
+    });
+</script>

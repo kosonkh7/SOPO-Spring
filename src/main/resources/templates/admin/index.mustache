@@ -205,13 +205,7 @@
 {{> common/sidebar}}
 
 <div class="main">
-    <div class="header">
-        <div id="current-time"></div>
-        <div class="user">
-            <img src="/img/admin_potato.png" alt="User Avatar">
-            <span>{{managerName}}</span>
-        </div>
-    </div>
+    {{> common/header}}
 
     <div class="dashboard-layout">
         <!-- 1번: 회원 현황 -->
@@ -331,10 +325,6 @@
             }
         });
     });
-
-
-
-
 
 </script>
 </body>

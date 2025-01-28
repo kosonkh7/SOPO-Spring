@@ -1,27 +1,73 @@
-<div class="sidebar">
-    <h1><img src="/img/logo.png" alt="Keen Icon">YMJ</h1>
+<div class="sidebar" id="sidebar">
+    <div class="toggle-button" id="sidebarToggle">
+        <img src="/img/sidebutton.svg" alt="Toggle Sidebar">
+    </div>
+    <h1 id="sidebarTitle"><img src="/img/logo.png" alt="Keen Icon"><span>YMJ</span></h1>
     <ul>
         <li onclick="location.href='http://localhost:8080/'" style="cursor: pointer;">
-            <img src="/img/home.svg" alt="Home Icon">home
+            <img src="/img/home.svg" alt="Home Icon">
+            <span>home</span>
         </li>
         <li onclick="location.href='http://localhost:8080/map/'" style="cursor: pointer;">
-            <img src="/img/dashboard.svg" alt="Dashboard Icon">경로 시뮬레이션
+            <img src="/img/dashboard.svg" alt="Dashboard Icon">
+            <span>경로 시뮬레이션</span>
         </li>
         <li onclick="location.href='http://localhost:8080/stock/'" style="cursor: pointer;">
-            <img src="/img/admin.svg" alt="Admin Icon">재고관리
+            <img src="/img/admin.svg" alt="Admin Icon">
+            <span>재고관리</span>
         </li>
         <li onclick="location.href='http://localhost:8080/inspect/'" style="cursor: pointer;">
-            <img src="/img/admin.svg" alt="Admin Icon">상품검수
+            <img src="/img/admin.svg" alt="Admin Icon">
+            <span>상품검수</span>
         </li>
         <li onclick="location.href='http://localhost:8080/board/'" style="cursor: pointer;">
-            <img src="/img/community.svg" alt="커뮤니티 Icon">커뮤니티
+            <img src="/img/community.svg" alt="커뮤니티 Icon">
+            <span>커뮤니티</span>
         </li>
         <li onclick="location.href='http://localhost:8080/admin/'" style="cursor: pointer;">
-            <img src="/img/admin.svg" alt="Admin Icon">admin
+            <img src="/img/admin.svg" alt="Admin Icon">
+            <span>admin</span>
         </li>
-
     </ul>
     <button class="logout-button" onclick="location.href='http://localhost:8080/public/login/'">
         <img src="/img/logout.svg" alt="logout-Icon">
     </button>
 </div>
+
+<!-- *중요* header가 sidebar 뒤에 형제로 와야 .sidebar.collapsed ~ .header CSS 규칙이 적용됩니다. -->
+<div class="header">
+    <div id="current-time"></div>
+    <div class="user">
+        <img src="/img/admin_potato.png" alt="User Avatar">
+        <span>{{managerName}}</span>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const sidebar = document.getElementById("sidebar");
+        const sidebarToggle = document.getElementById("sidebarToggle");
+        const sidebarTitle = document.getElementById("sidebarTitle"); // YMJ 텍스트와 로고
+        const sidebarToggleImg = sidebarToggle.querySelector("img");
+        const header = document.querySelector(".header"); // 헤더 선택
+
+        sidebarToggle.addEventListener("click", () => {
+            sidebar.classList.toggle("collapsed");
+
+            // 사이드바가 접혔을 때 타이틀 숨기기
+            if (sidebar.classList.contains("collapsed")) {
+                sidebarTitle.style.display = "none";
+                sidebarTexts.forEach(text => text.style.display = "none");
+                sidebarToggleImg.style.transform = "rotate(180deg)";
+                header.style.left = "60px"; // ✅ 헤더 위치 조정
+                header.style.width = "calc(100% - 60px)"; // ✅ 헤더 크기 조정
+            } else {
+                sidebarTitle.style.display = "flex"; //다시 보이게
+                sidebarTexts.forEach(text => text.style.display = "inline-block");
+                sidebarToggleImg.style.transform = "rotate(0deg)";
+                header.style.left = "220px"; // ✅ 헤더 원래 크기로 복구
+                header.style.width = "calc(100% - 220px)"; // ✅ 헤더 원래 크기로 복구
+            }
+        });
+    });
+</script>
