@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Predictions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+        }
+        select, input[type="date"] {
+            display: block;
+            width: 100%;
+            margin: 10px 0 20px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .data {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+        .data:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Stock Predictions</h1>
+
+    <!-- 검색 폼 -->
+    <form action="/stock" method="get">
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" required>
+
+        <label for="location">Location:</label>
+        <select id="location" name="location" required>
+            {{#locations}}
+                <option value="{{.}}">{{.}}</option>
+            {{/locations}}
+        </select>
+
+        <label for="category_name">Category:</label>
+        <select id="category_name" name="category_name" required>
+            {{#categories}}
+                <option value="{{.}}">{{.}}</option>
+            {{/categories}}
+        </select>
+
+        <button type="submit">Get Prediction</button>
+    </form>
+
+    <!-- 결과 출력 -->
+    {{#predictedValue}}
+        <div class="data">
+            <div class="label">Predicted Value:</div>
+            <div>{{predictedValue}}</div>
+        </div>
+        <div class="data">
+            <div class="label">Safety Stock:</div>
+            <div>{{safetyStock}}</div>
+        </div>
+        <div class="data">
+            <div class="label">Profer Stock:</div>
+            <div>{{properStock}}</div>
+        </div>
+    {{/predictedValue}}
+</div>
+</body>
+</html>
