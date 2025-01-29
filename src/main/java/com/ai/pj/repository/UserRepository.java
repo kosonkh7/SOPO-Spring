@@ -16,4 +16,10 @@ public interface UserRepository extends JpaRepository<User, String>, UserReposit
     @Modifying
     @Transactional
     void updateByRole(@Param("id") String id, @Param("role") User.UserRole role);
+
+    @Query("DELETE FROM User u WHERE u.id=:id AND u.role=:role")
+    @Modifying
+    @Transactional
+    void deleteByRole(@Param("id") String id, @Param("role") User.UserRole role);
+
 }

@@ -6,6 +6,7 @@
     <title>Map Simulation Page</title>
 
     <!-- 스타일 시트 -->
+    <link rel="stylesheet" href="/css/headerstyles.css">
     <link rel="stylesheet" href="/css/sidebarstyles.css">
     <link rel="stylesheet" href="/css/mapStyles.css" />
 
@@ -23,51 +24,86 @@
 
 <!-- Mustache partial: sidebar.mustache가
      /templates/common/sidebar.mustache 에 있다고 가정 -->
+{{> common/header}}
 {{> common/sidebar}}
+{{> common/footer}}
 
-    <main>
-        <div class="map" id="map_div">
-            <!-- 지도 표시 -->
-        </div>
+<main>
+    <div class="map" id="map_div">
+        <!-- 지도 표시 -->
+    </div>
 
-        <form id="route_form">
-            <div class="controls">
-                <div class="start-section">
-                    <label for="start_station">출발 창고:</label>
-                    <select id="start_station" name="start_station">
-                        <!-- JS로 /api/stations 호출 후 option 추가 -->
-                    </select>
-                </div>
-                <div class="location-section">
-                    <label for="end_lat">배송지 위도:</label>
-                    <input type="text" id="end_lat" name="end_lat" value="37.545069" required>
-                    <label for="end_lon">배송지 경도:</label>
-                    <input type="text" id="end_lon" name="end_lon" value="127.037653" required>
-                    <div class="address-section">
-                        <label for="address_input">주소 입력:</label>
-                        <input id="address_input" type="text" placeholder="주소를 입력하세요" />
-                        <button id="search_address_btn">주소 검색</button>
-                    </div>
-                </div>
-                <div class="button-section">
-                    <label for="button-section">경로 출력:</label>
-                    <div>
-                        <button type="button" id="default_btn">기존 택배</button>
-                        <button type="button" id="subway_btn">지하철 창고</button>
-                        <button type="button" id="compare_routes_btn">경로 비교</button>
-                        <button type="button" id="reset_btn">지도 초기화</button>
-                    </div>
+    <form id="route_form">
+        <div class="controls">
+            <div class="start-section">
+                <label for="start_station">출발 창고:</label>
+                <select id="start_station" name="start_station">
+                    <!-- JS로 /api/stations 호출 후 option 추가 -->
+                </select>
+                <div class="address-section">
+                    <label for="address_input">주소 입력:</label>
+                    <input id="address_input" type="text" value="서울특별시 성동구 뚝섬로 273" required>
+                    <button id="search_address_btn">주소 검색</button>
                 </div>
             </div>
-        </form>
-
-
-        <div class="dashboard">
-            <h3>Dashboard</h3>
-            <br>
-            <p id="comparison_result"></p>
+            <div class="location-section">
+                <label for="end_lat">배송지 위도:</label>
+                <input type="text" id="end_lat" name="end_lat" value="37.545069" required>
+                <label for="end_lon">배송지 경도:</label>
+                <input type="text" id="end_lon" name="end_lon" value="127.037653" required>
+            </div>
+            <div class="button-section">
+                <label for="button-section">경로 출력:</label>
+                <div>
+                    <button type="button" id="default_btn">기존 택배</button>
+                    <button type="button" id="subway_btn">지하철 창고</button>
+                    <button type="button" id="compare_routes_btn">경로 비교</button>
+                    <button type="button" id="reset_btn">지도 초기화</button>
+                </div>
+            </div>
         </div>
-    </main>
+    </form>
+
+
+    <div class="dashboard">
+        <h3>Dashboard</h3>
+        <p id="comparison_result"></p>
+
+        <div class="cards-container">
+            <!-- 카드 1: 거리 비교 -->
+            <div class="card">
+                <h4>🚛 거리 비교</h4>
+                <p>기존 택배: <span id="distance_original">--</span> km</p>
+                <p>지하철 창고: <span id="distance_subway">--</span> km</p>
+                <p>📉 절감률: <span id="distance_reduction">--</span>%</p>
+            </div>
+
+            <!-- 카드 2: 시간 비교 -->
+            <div class="card">
+                <h4>⏳ 시간 비교</h4>
+                <p>기존 택배: <span id="time_original">--</span> 분</p>
+                <p>지하철 창고: <span id="time_subway">--</span> 분</p>
+                <p>📉 절감률: <span id="time_reduction">--</span>%</p>
+            </div>
+
+            <!-- 카드 3: 비용 비교 -->
+            <div class="card">
+                <h4>💰 비용 비교</h4>
+                <p>기존 택배: <span id="cost_original">--</span> 원</p>
+                <p>지하철 창고: <span id="cost_subway">--</span> 원</p>
+                <p>📉 절감률: <span id="cost_reduction">--</span>%</p>
+            </div>
+
+            <!-- 카드 4: 탄소 배출 비교 -->
+            <div class="card">
+                <h4>🌱 탄소 배출 비교</h4>
+                <p>기존 택배: <span id="carbon_original">--</span> g CO₂</p>
+                <p>지하철 창고: <span id="carbon_subway">--</span> g CO₂</p>
+                <p>📉 절감률: <span id="carbon_reduction">--</span>%</p>
+            </div>
+        </div>
+    </div>
+</main>
 
 </body>
 </html>
