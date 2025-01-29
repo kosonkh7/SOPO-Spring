@@ -32,7 +32,7 @@ public class StockController {
         List<String> categories = List.of("food", "life", "baby", "book", "cosmetic", "digital", "fashion",
                 "furniture", "goods", "other", "sports");
 
-        // 템플릿으로 드롭다운 데이터 전달
+        // 템플릿 엔진으로 드롭다운 데이터 전달
         model.addAttribute("locations", locations);
         model.addAttribute("categories", categories);
 
