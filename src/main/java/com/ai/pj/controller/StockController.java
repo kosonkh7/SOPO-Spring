@@ -46,7 +46,12 @@ public class StockController {
                     requestDTO.getLocation(),
                     requestDTO.getCategoryName()
             );
-            // 응답 데이터를 모델에 추가. 템플릿으로 전달
+            // 요청 데이터를 stock.mustache 템플릿에 전달
+            model.addAttribute("inputDate", date);
+            model.addAttribute("inputLocation", location);
+            model.addAttribute("inputCategory", categoryName);
+
+            // 응답 데이터를 모델에 추가. stock.mustache 템플릿에 전달
             if (responseDTO != null) {
                 model.addAttribute("predictedValue", responseDTO.getPredictedValue());
                 model.addAttribute("safetyStock", responseDTO.getSafetyStock());
