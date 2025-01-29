@@ -156,8 +156,9 @@ $(document).ready(function() {
         if (data.to_hub_route && data.to_hub_route.length > 0) {
             var toHubPolyline = new Tmapv2.Polyline({
                 path: data.to_hub_route.map(coord => new Tmapv2.LatLng(coord[0], coord[1])),
-                strokeColor: "#FF0000", // 빨간색
+                strokeColor: "#FF5733", // 빨간색
                 strokeWeight: 6,
+                //strokeOpacity: 0.8,  // 반투명 효과 추가
                 map: map
             });
             polylines.push(toHubPolyline);
@@ -166,8 +167,9 @@ $(document).ready(function() {
         if (data.from_hub_route && data.from_hub_route.length > 0) {
             var fromHubPolyline = new Tmapv2.Polyline({
                 path: data.from_hub_route.map(coord => new Tmapv2.LatLng(coord[0], coord[1])),
-                strokeColor: "#2E64FE", // 파란색
+                strokeColor: "#3388FF", // 파란색
                 strokeWeight: 6,
+                //strokeOpacity: 0.8,  // 반투명 효과 추가
                 map: map
             });
             polylines.push(fromHubPolyline);
@@ -176,8 +178,9 @@ $(document).ready(function() {
         if (data.to_destination_route && data.to_destination_route.length > 0) {
             var toDestinationPolyline = new Tmapv2.Polyline({
                 path: data.to_destination_route.map(coord => new Tmapv2.LatLng(coord[0], coord[1])),
-                strokeColor: "#04B431", // 초록색
+                strokeColor: "#28A745", // 초록색
                 strokeWeight: 6,
+                //strokeOpacity: 0.8,  // 반투명 효과 추가
                 map: map
             });
             polylines.push(toDestinationPolyline);
@@ -462,40 +465,40 @@ $(document).ready(function() {
         updateDashboard(comparisonData);
 
 
-        // 그래프 캔버스 추가
+        // 대시보드에 차트 추가
         $(".dashboard").append(`
             <div class="chart-container">
-                <canvas id="timeDistanceChart"></canvas>
+                <canvas id="distanceTimeChart"></canvas>
             </div>
         `);
         $(".dashboard").append(`
             <div class="chart-container">
-                <canvas id="stackedCostEmissionChart"></canvas>
+                <canvas id="costEmissionChart"></canvas>
             </div>
         `);
 
-        // 시간 및 거리 비교 (막대 차트)
-        const timeDistanceCtx = document.getElementById("timeDistanceChart").getContext("2d");
-        new Chart(timeDistanceCtx, {
+        // 이동 거리 & 시간 비교 (막대 그래프)
+        const distanceTimeCtx = document.getElementById("distanceTimeChart").getContext("2d");
+        new Chart(distanceTimeCtx, {
             type: "bar",
             data: {
                 labels: ["기존 택배", "지하철 창고"],
                 datasets: [
                     {
-                        label: "총 시간 (분)",
-                        data: [Math.round(data.parcel.time), Math.round(data.subway.time)],
-                        backgroundColor: "rgba(54, 162, 235, 0.6)",
-                    },
-                    {
                         label: "총 거리 (km)",
                         data: [data.parcel.distance.toFixed(2), data.subway.distance.toFixed(2)],
-                        backgroundColor: "rgba(255, 99, 132, 0.6)",
+                        backgroundColor: "rgba(255, 99, 132, 0.7)"
+                    },
+                    {
+                        label: "총 시간 (분)",
+                        data: [Math.round(data.parcel.time), Math.round(data.subway.time)],
+                        backgroundColor: "rgba(54, 162, 235, 0.7)"
                     }
                 ]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: true, // 가로/세로 비율 유지
+                maintainAspectRatio: true,
                 plugins: {
                     legend: { position: "top" }
                 },
@@ -507,9 +510,9 @@ $(document).ready(function() {
             }
         });
 
-        // 스택형 막대 차트: 비용 및 탄소 배출량 비교
-        const stackedCostEmissionCtx = document.getElementById("stackedCostEmissionChart").getContext("2d");
-        new Chart(stackedCostEmissionCtx, {
+        // 비용 & 탄소 배출 비교 (막대 그래프)
+        const costEmissionCtx = document.getElementById("costEmissionChart").getContext("2d");
+        new Chart(costEmissionCtx, {
             type: "bar",
             data: {
                 labels: ["기존 택배", "지하철 창고"],
@@ -517,30 +520,24 @@ $(document).ready(function() {
                     {
                         label: "비용 (₩)",
                         data: [data.parcel.cost, data.subway.cost],
-                        backgroundColor: "rgba(54, 162, 235, 0.6)"
+                        backgroundColor: "rgba(255, 206, 86, 0.7)"
                     },
                     {
                         label: "탄소 배출량 (g CO₂)",
                         data: [data.parcel.emission.toFixed(2), data.subway.emission.toFixed(2)],
-                        backgroundColor: "rgba(255, 99, 132, 0.6)"
+                        backgroundColor: "rgba(75, 192, 192, 0.7)"
                     }
                 ]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: true, // 가로/세로 비율 유지
+                maintainAspectRatio: true,
                 plugins: {
                     legend: { position: "top" }
                 },
                 scales: {
-                    x: {
-                        stacked: true // X축 스택형
-                    },
                     y: {
-                        type: "logarithmic", // 로그 스케일 적용
-                        stacked: true, // Y축 스택형
-                        beginAtZero: true,
-                        title: { display: true, text: "비용 및 배출량 (로그 스케일)" }
+                        beginAtZero: true
                     }
                 }
             }
