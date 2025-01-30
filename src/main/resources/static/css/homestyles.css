@@ -1,0 +1,187 @@
+/* 기본 스타일 초기화 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    /*background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyJjJdiENSTL-jM-KNq9r9tt56g3Empa35-g&s') !important;*/
+    /*background-size: cover; !* 이미지가 화면 전체를 덮도록 설정 *!*/
+    /*background-repeat: no-repeat; !* 이미지 반복 방지 *!*/
+    /*background-position: center; !* 이미지를 화면 중앙에 위치 *!*/
+    display: flex;
+    height: 100vh; /* 전체 화면 높이로 설정 */
+    min-height: 100vh; /* 최소 높이를 화면 전체로 유지 */
+    overflow-y: auto; /* 브라우저 스크롤 활성화 */
+}
+
+/* 메인 컨텐츠 영역 */
+main {
+    margin-left: 220px; /* 사이드바 크기만큼 오른쪽으로 밀기 */
+    display: flex;
+    flex-direction: column;
+    padding-top: 65px;
+    width: calc(100% - 220px);
+    overflow: hidden;
+}
+
+/* 레이아웃 컨테이너 */
+.layout-container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    flex: 1; /* 남은 공간을 채우도록 설정 */
+}
+
+/* 지도와 버튼을 담는 컨테이너 */
+.map-button-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    flex: 2; /* 부모 컨테이너의 남은 공간을 더 많이 차지하도록 설정 */
+    margin-bottom: 40px;
+}
+
+/* 지도 영역 */
+.map-container {
+    flex: 5;
+    margin-right: 20px;
+}
+
+.map {
+    width: 100%;
+    height: 100%; /* 부모 컨테이너의 높이를 채우도록 설정 */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* 버튼 영역 */
+.buttons-container {
+    flex: 5;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* 버튼 간의 간격을 동일하게 */
+    gap: 10px; /* 버튼 간격 추가 */
+    height: 100%; /* 부모 컨테이너의 높이를 채우도록 설정 */
+}
+
+.info-box {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-align: center; /* 텍스트 중앙 정렬 */
+}
+
+.info-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.info-title {
+    font-size: 0.8em;
+    color: #777;
+    margin-bottom: 10px;
+}
+
+.info-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    align-self: center; /* info-content 자체를 중앙에 정렬 */
+    justify-content: center; /* 내부 아이콘과 텍스트를 중앙에 배치 */
+    width: 100%; /* 필요 시 전체 너비를 차지 */
+}
+
+.info-icon {
+    width: 50px;
+    height: 50px;
+    object-fit: contain; /* 이미지가 비율을 유지하며 컨테이너에 맞게 조절되도록 설정 */
+}
+
+.info-text {
+    font-size: 1.1em;
+    color: #333;
+    /* 나중에 이미지로 교체할 경우 텍스트 숨기기 */
+    /* display: none; */
+}
+
+/* 프로세스 플로우 스타일 */
+.process-flow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 2px solid #ddd;
+    padding-top: 20px;
+    flex-wrap: wrap; /* 반응형을 위해 줄바꿈 허용 */
+}
+
+.process-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    flex: 1;
+    min-width: 100px; /* 최소 너비 설정 */
+    margin: 10px 0;
+}
+
+.process-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 20px;
+    right: -50%;
+    width: 100%;
+    height: 2px;
+    background-color: #ddd;
+    z-index: -1;
+}
+
+.step-icon {
+    font-size: 2em;
+    margin-bottom: 5px;
+}
+
+.step-label {
+    font-size: 1em;
+    color: #333;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .map-button-container {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .map-container, .buttons-container {
+        flex: none;
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+
+    .process-flow {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .process-step {
+        flex-direction: row;
+        margin-bottom: 10px;
+    }
+
+    .process-step:not(:last-child)::after {
+        display: none;
+    }
+}
