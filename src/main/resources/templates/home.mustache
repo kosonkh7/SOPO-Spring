@@ -4,25 +4,94 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
+    <link rel="stylesheet" href="/css/homestyles.css" />
     <link rel="stylesheet" href="/css/sidebarstyles.css">
     <link rel="stylesheet" href="/css/headerstyles.css">
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQA7xrIfleNq4ec_Ry9i7kxrEAG7vRJyt--5Q&s') !important;
-            background-size: cover; /* 이미지가 화면 전체를 덮도록 설정 */
-            background-repeat: no-repeat; /* 이미지 반복 방지 */
-            background-position: center; /* 이미지를 화면 중앙에 위치 */
-        }
-    </style>
+    <!-- jQuery 추가 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Tmap API -->
+    <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey={{tmapKey}}"></script>
+    <script src="/js/home_script.js"></script>
 </head>
 <body>
 <!-- 헤더 포함 -->
 {{> common/header}}
+<!-- 사이드바 -->
 {{> common/sidebar}}
+
+<main>
+    <div class="layout-container">
+        <div class="map-button-container">
+            <!-- 지도 영역 -->
+            <div class="map-container">
+                <div class="map" id="map_div">
+                    <!-- 지도 표시 -->
+                </div>
+            </div>
+
+            <!-- 버튼 영역 -->
+            <div class="buttons-container">
+                <div class="info-box">
+                    <div class="info-content">
+                        <img src="/img/h_subway.png" alt="지하철" class="info-icon">
+                        <span class="info-text">지하철 창고 위치</span>
+                    </div>
+                </div>
+
+                <div class="info-box" onclick="location.href='http://localhost:8080/stock'" style="cursor: pointer;">
+                    <span class="info-title">보관 & 관리</span>
+                    <div class="info-content">
+                        <img src="/img/h_storage.png" alt="보관" class="info-icon">
+                        <span class="info-text">재고량 예측</span>
+                    </div>
+                </div>
+
+                <div class="info-box" onclick="location.href='http://localhost:8080/inspect'" style="cursor: pointer;">
+                    <span class="info-title">검수 / 포장</span>
+                    <div class="info-content">
+                        <img src="/img/h_inspection.png" alt="검수" class="info-icon">
+                        <span class="info-text">상품 검수</span>
+                    </div>
+                </div>
+
+                <div class="info-box" onclick="location.href='http://localhost:8080/map'" style="cursor: pointer;">
+                    <span class="info-title">출고</span>
+                    <div class="info-content">
+                        <img src="/img/h_shipping.png" alt="출고" class="info-icon">
+                        <span class="info-text">배송 시뮬레이션</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 입고 → 출고 프로세스 -->
+        <div class="process-flow">
+            <div class="process-step">
+                <div class="step-icon">📥</div>
+                <div class="step-label">입고</div>
+            </div>
+            <div class="process-step">
+                <div class="step-icon">✅</div>
+                <div class="step-label">보관</div>
+            </div>
+            <div class="process-step">
+                <div class="step-icon">📋</div>
+                <div class="step-label">피킹/분류</div>
+            </div>
+            <div class="process-step">
+                <div class="step-icon">📦</div>
+                <div class="step-label">검수/포장</div>
+            </div>
+            <div class="process-step">
+                <div class="step-icon">🚚</div>
+                <div class="step-label">출고</div>
+            </div>
+        </div>
+    </div>
+</main>
 
 <!-- 푸터 포함 -->
 {{> common/footer}}
+
 </body>
 </html>

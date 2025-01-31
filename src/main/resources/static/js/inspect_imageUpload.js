@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const uploadForm = document.getElementById("uploadForm");
     const imageInput = document.getElementById("imageInput");
     const uploadedImage = document.getElementById("uploadedImage");
+    const detectionsList = document.getElementById("detections");
 
     uploadForm.addEventListener("submit", function (event) {
         event.preventDefault(); // 기본 폼 제출 방지
@@ -15,18 +16,28 @@ document.addEventListener("DOMContentLoaded", function () {
         const formData = new FormData();
         formData.append("file", file);
 
-        fetch("/api/upload", {
+        fetch("/upload/", {
             method: "POST",
             body: formData
         })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert("이미지 업로드 성공!");
-                    uploadedImage.src = data.imageUrl; // 업로드된 이미지 경로 표시
+                    alert("이미지 업로드 및 탐지 완료!");
+
+                    // 이미지 표시
+                    uploadedImage.src = data.image_url;
                     uploadedImage.style.display = "block";
+
+                    // 탐지된 객체 목록 업데이트
+                    detectionsList.innerHTML = "";
+                    data.detections.forEach(item => {
+                        const li = document.createElement("li");
+                        li.textContent = `${item.label} (신뢰도: ${(item.confidence * 100).toFixed(2)}%)`;
+                        detectionsList.appendChild(li);
+                    });
                 } else {
-                    alert("업로드 실패: " + data.message);
+                    alert("탐지 실패: " + data.message);
                 }
             })
             .catch(error => console.error("Error:", error));
