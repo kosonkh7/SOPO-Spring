@@ -3,7 +3,9 @@ package com.ai.pj.service;
 
 import com.ai.pj.domain.User;
 import com.ai.pj.dto.UserDTO;
+import com.ai.pj.mapper.UserMapper;
 import com.ai.pj.repository.UserRepository;
+import com.ai.pj.security.details.CustomUserDetails;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,10 +16,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService{
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -26,24 +30,26 @@ public class UserService implements UserDetailsService{
         return userRepository.save(user);
     }
 
-    public Optional<User> findById(String id) {
-        return userRepository.findById(id);
+    public Optional<User> findUserById(String id) {
+        return userRepository.findUserById(id);
     }
 
     public boolean isExistId(String id) {
-        return this.findById(id).isPresent();
+        return this.findUserById(id).isPresent();
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = findById(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username : " + username));
+    public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
+//        User user = findUserById(username)
+//                .orElseThrow(() -> new UsernameNotFoundException("User not found with username : " + username));
+        System.out.println(identifier);
+        User user = userRepository.findById(identifier)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found with userIdentifier"));
+
+        UserDTO.TokenUserInfo dto = userMapper.EntityToTokenUserInfo(user);
 
         // UserDetails 객체 반환
-        return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getId()) // 사용자 이름
-                .password(user.getPassword()) // 암호화된 비밀번호
-                .roles(String.valueOf(user.getRole()))        // 권한 설정
-                .build();
+        return new CustomUserDetails(dto);
     }
+
 }

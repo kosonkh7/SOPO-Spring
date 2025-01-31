@@ -31,4 +31,12 @@ public class AdminRestController {
         // 없
         return new ResponseDTO<>(1, HttpStatus.OK);
     }
+
+    @GetMapping("/{id}/reject")
+    public ResponseDTO<?> reqReject(@PathVariable String id) {
+
+        adminService.deleteByRole(id);
+
+        return new ResponseDTO<>(1, HttpStatus.OK);
+    }
 }

@@ -85,11 +85,11 @@
     </div>
     <!-- 우측 로그인 폼 -->
     <div class="col-md-8 form-section">
-        <form id="form1" action="/public/loginProc" method="POST">
+        <form id="form1" method="POST">
             <h2 class="mb-4">로그인</h2>
             <div class="mb-3">
                 <label for="email" class="form-label">이메일</label>
-                <input type="text" class="form-control" id="username" name="username" placeholder="업무용 아이디를 입력해주세요" required>
+                <input type="text" class="form-control" id="username" name="id" placeholder="업무용 아이디를 입력해주세요" required>
                 <input type="password" class="form-control" id="password" name="password" placeholder="패스워드를 입력해주세요" required>
             </div>
             <button id="submitBtn" type="submit" class="btn btn-primary w-100 mb-3">로그인</button>
@@ -107,53 +107,30 @@
 
  form1.addEventListener('submit', async (event) => {
      event.preventDefault(); // 기본 폼 제출 방지
-
+     const formData = new FormData(form1);
+     const data = Object.fromEntries(formData.entries());
      // URL-encoded 방식으로 데이터 변환
-     const formData = new URLSearchParams();
-     formData.append('username', form1.username.value);
-     formData.append('password', form1.password.value);
+     // const formData = new URLSearchParams();
+     // formData.append('username', form1.username.value);
+     // formData.append('password', form1.password.value);
 
-
-
-        const response = await fetch("/public/loginProc", {
+        const response = await fetch("/api/v1/auth/login", {
             method: 'POST',
             headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
+                //"Content-Type": "application/x-www-form-urlencoded"
+                "Content-Type": "application/json",
+                credentials: 'include'
             },
-            body: formData.toString() // URL-encoded 데이터 전송
+            body: JSON.stringify(data) // URL-encoded 데이터 전송
         }) // fetch
-        .then(response => response.text())
-        .then(data => {
 
-            const params = new URLSearchParams(data);
-            console.log(params)
-            const success = params.get("success");
-            const message = params.get("message");
+        if (response.ok) {
+            const token = await response.text();
+            console.log('Token received', token) ;
+            console.log(response.json());
+        }
 
-            console.log(success)
-            console.log(message)
-            if (success === "true") {
-
-                window.location.href = "/home"; // 성공 시 리다이렉트
-            } else {
-                const subBtn = document.getElementById('submitBtn');
-                let errorMsg = document.getElementById('errorMsg');
-
-                if (!errorMsg) {
-                    errorMsg = document.createElement('p');
-                    errorMsg.id = 'errorMsg';
-                    errorMsg.style.color = 'red';
-                    errorMsg.style.marginTop = '10px';
-                    errorMsg.textContent = message
-                    subBtn.insertAdjacentElement('afterend', errorMsg);
-                }
-            }
-        })
-        .catch(error => console.error("Error:", error));
 
  });
-
-
-
 </script>
 </html>

@@ -6,20 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chatbot Toggle</title>
     <style>
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-        }
+<!--        * {-->
+<!--          margin: 0;-->
+<!--          padding: 0;-->
+<!--          box-sizing: border-box;-->
+<!--        }-->
 
-        body {
-          font-family: Arial, sans-serif;
-          background: #f5f5f5;
-          height: 100vh;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
+<!--        body {-->
+<!--          font-family: Arial, sans-serif;-->
+<!--          background: #f5f5f5;-->
+<!--          height: 100vh;-->
+<!--          display: flex;-->
+<!--          align-items: center;-->
+<!--          justify-content: center;-->
+<!--        }-->
 
         /* Chatbot Toggle Button */
         .toggle-chatbot {
@@ -226,6 +226,69 @@
             console.error('Error', error);
         })
     })
+
+
+// Token Init
+
+    window.onload = async function () {
+    // 헤더에서 가져오기.
+    //  const accessToken = localStorage.getItem('accessToken');
+    function getCookie(cookieName) {
+        const cookies = document.cookie.split(';');
+
+        for (let i = 0 ; i < cookies.length; i++) {
+            let cookie = cookies[i].trim();
+
+            console.log(cookie);
+
+            // 쿠키명이 주어진 쿠키명과 일치하는지 확인합니다.
+            if(cookie.startsWith(cookieName +'=')) {
+                return cookie.substring(cookieName.length + 1);
+            }
+        }
+
+        return null;
+    }
+
+        const accessToken = getCookie('accessToken');
+
+        console.log(accessToken);
+        if (!accessToken) {
+            // window.location.href = '/public/login';
+            // return ;
+        }
+
+        if (isTokenExpiringSoon(accessToken)) {
+            try {
+                await refreshToken();
+            } catch (error) {
+                console.error('Failed to refresh token', error);
+                window.location.href = '/login'; //갱신 실패 시 로그인 페이지로 이동
+            }
+        }// if
+    }; // function
+
+    // Access Token 만료 여부 확인
+    function isTokenExpiringSoon(token) {
+        const decodedToken = JSON.parse(atob(token.split(".")[1])); // Base64 디코딩
+        const currentTime = Math.floor(Date.now() / 1000) ; // 현재 시간 (초 단위)
+        return decodedToken.exp - currentTime < 60 ; // 만료 60초 전
+    }
+
+    // Refresh Token 요청
+    async function refreshToken() {
+        const response = await fetch('api/v1/auth/refresh', {
+            method: 'POST',
+            credentials: 'include', // Refresh Token 쿠키 자동 전송
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to refresh token");
+        }
+
+        const data = await response.json();
+
+    }
 </script>
 </body>
 </html>

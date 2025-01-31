@@ -187,6 +187,8 @@
             background-color: #dc3545;
         }
 
+
+
         .dashboard-layout {
             display: grid;
             grid-template-columns: repeat(4, 1fr); /* 4열 구성 */
@@ -380,7 +382,7 @@
                         <td>{{email}}</td>
                         <td>
                             <button class="approve-btn">승인</button>
-                            <button class="reject">거부</button>
+                            <button class="reject-btn">거부</button>
                         </td>
                     </tr>
                 {{/userList}}
@@ -431,6 +433,7 @@
     setInterval(updateTime, 1000);
 
     const appBtns = document.querySelectorAll('.approve-btn');
+    const rejectBtns = document.querySelectorAll('.reject-btn');
     appBtns.forEach((btn) => {
         btn.addEventListener('click', async (event) => {
             event.preventDefault();
@@ -453,6 +456,33 @@
             }
         });
     });
+
+
+    rejectBtns.forEach((btn) => {
+        btn.addEventListener('click', async (event) => {
+            event.preventDefault();
+
+            //
+
+            // 클릭된 버튼의 부모 요소에서 id 값 추출
+            const id = event.target.closest('.userList-tr').querySelector('td').textContent.trim();
+            console.log(id);
+
+            const response = await fetch(`/admin/${id}/reject`, {
+                method: 'GET',
+            });
+
+            const data = await response.text();
+            const responseData = JSON.parse(data);
+
+            if ( responseData.status == "OK") {
+                btn.parentNode.parentNode.remove();
+            }
+
+
+        }) // async Enbd
+    }); // rejectBtns End
+
 
 </script>
 </body>

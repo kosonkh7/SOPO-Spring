@@ -10,10 +10,16 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long>, UserRepositoryCustom{
+public interface UserRepository extends JpaRepository<User, String>, UserRepositoryCustom{
 
     @Query("UPDATE User u SET u.role=:role WHERE u.id=:id")
     @Modifying
     @Transactional
     void updateByRole(@Param("id") String id, @Param("role") User.UserRole role);
+
+    @Query("DELETE FROM User u WHERE u.id=:id AND u.role=:role")
+    @Modifying
+    @Transactional
+    void deleteByRole(@Param("id") String id, @Param("role") User.UserRole role);
+
 }
