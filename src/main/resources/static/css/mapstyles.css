@@ -196,6 +196,15 @@ main {
     transform: scale(0.95);
 }
 
+/* 버튼 호버 & 클릭 효과 */
+.button-group button:hover {
+    opacity: 0.9;
+}
+
+.button-group button:active {
+    transform: scale(0.95);
+}
+
 .dashboard {
     grid-area: dashboard;
     background-color: #fff;
