@@ -26,7 +26,7 @@
           position: fixed;
           bottom: 20px;
           right: 20px;
-          background: #3a4167;
+          background: rgba(5, 29, 175, 0.9);
           color: white;
           border: none;
           padding: 15px 20px;
@@ -35,10 +35,11 @@
           cursor: pointer;
           box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
           transition: background 0.3s ease;
+
         }
 
         .toggle-chatbot:hover {
-          background: #5a2571;
+          background: #3a4167;
         }
 
         /* Chatbot Container */
@@ -55,10 +56,11 @@
           bottom: 100px;
           right: 20px;
           display: none; /* Initially hidden */
+
         }
 
         .chat-header {
-          background: linear-gradient(90deg, #7b358c, #b437cc);
+          background: linear-gradient(90deg, #061ca1, #061ca1);
           color: white;
           padding: 15px;
           text-align: center;
@@ -119,7 +121,7 @@
         }
 
         .send-button {
-          background: #7b358c;
+          background: rgba(0, 123, 255, 0.96);
           color: white;
           border: none;
           padding: 10px 15px;
@@ -130,7 +132,7 @@
         }
 
         .send-button:hover {
-          background: #5a2571;
+          background: #0123d3;
         }
         .toggle-chatbot img {
             width: 25px; /* 버튼 크기에 맞게 조정 */
@@ -155,13 +157,14 @@
     <!-- Chat Body -->
     <div class="chat-body">
         <!-- Bot Message -->
-        <div class="message bot">Hello! How can I assist you today?</div>
+        <div class="message bot">안녕하세요, {{managerName}}님. 오늘은 무엇을 도와 드릴까요?</div>
     </div>
 
     <!-- Chat Footer -->
     <div class="chat-footer">
-        <input type="text" class="chat-input" placeholder="Type a message..." />
-        <button class="send-button">Send</button>
+        <input type="text" class="chat-input" placeholder="궁금한 사항을 입력해 주세요" />
+        <button class="send-button"><img src="/img/send.svg" alt="Send" style="width: 21px; height: 21px;"  /></button>
+
     </div>
 </div>
 

@@ -3,161 +3,247 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>부트스트랩 게시판</title>
+    <title>COMMUNITY</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/sidebarstyles.css">
+    <link rel="stylesheet" href="/css/headerstyles.css">
     <style>
+
+        /* 게시판 컨테이너 */
         .board-container {
             margin-top: 50px;
+            margin-left: 260px;
+            width: calc(100% - 260px);
+            padding: 20px;
+            border-radius: 10px;
+
+        }
+
+        /* q&a 스타일*/
+        .board-container h2 {
+            font-weight: bolder;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 55px;  /* 폰트크기 */
+            font-family: monospace;  /* 폰트 */
+            position: relative;  /* 밑줄을 위한 위치 설정 */
+        }
+
+        /* Q&A 밑에 가로줄 추가 */
+        .board-container h2::after {
+            content: "";
+            display: block;
+            width: 60px;  /* 가로줄 길이 조절 */
+            height: 3px;  /* 가로줄 두께 */
+            background-color: black;  /* 가로줄 색상 */
+            margin: 5px auto 0;  /* 위쪽 여백, 가운데 정렬 */
+        }
+        /* Q&A / 1:1 문의 버튼 스타일 */
+        .qa-menu {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;  /* 여백 조정 */
+        }
+
+        .qa-tab {
+            padding: 2px 1px;
+            font-size: 16px;
+            text-decoration: none;
+            color: #888;  /* 비활성화된 상태의 색상 */
+            font-weight: bold;
+            margin: 0 20px;
+        }
+
+        .qa-tab.active {
+            display: inline-block;
+            color: black;
+            border-bottom: 1px solid black; /* 활성화된 탭 */
+        }
+
+        .qa-tab:hover {
+
+            color: black;
+        }
+
+        /* 검색바, q&a 스타일 */
+        .table {
+            margin-top: 50px;
+            background-color: transparent !important; /* 강제 적용 */
+        }
+
+        .table thead {
+            background-color: transparent !important;
+            font-weight: bold;
+            border-top: 1px solid black; /* 테이블 헤더 밑줄 진하게 */
+        }
+
+        /* 제목(두 번째 열)만 가운데 정렬 */
+        .table thead th:nth-child(2) {
+            text-align: center;
+        }
+
+        /* 테이블 전체 행 스타일 */
+        .table tbody tr {
+            background-color: transparent !important; /* 기본 배경 없애기 */
+        }
+        /* 첫 번째 행(공지 행) 배경색 적용 */
+        .table tbody tr:first-child {
+            background-color: #e9ecef !important; /* 부트스트랩 기본 hover 색상과 유사 */
+        }
+
+
+        /* 테이블 셀(열) 스타일 */
+        .table th, .table td {
+            background-color: transparent !important; /* 개별 셀 배경도 제거 */
+        }
+
+        /* 검색창 스타일 */
+        .search-container {
+            max-width: 300px;  /* 검색창 너비 조절 */
+            margin: 0 auto;  /* 가운데 정렬 */
+        }
+
+        /* 검색 입력창 스타일 */
+        .search-input {
+            border-radius: 0; /* 왼쪽 모서리 둥글게 */
+            border-right: none; /* 오른쪽 테두리 제거 */
+
+
+        }
+
+        /* 검색 아이콘 스타일 */
+        .search-icon {
+            border-radius: 0; /* 검색 버튼의 둥근 모서리 제거 */
+            background: white;
+            border-left: none; /* 왼쪽 테두리 제거 */
+            cursor: pointer;
+        }
+
+        /* 검색 아이콘 크기 조절 */
+        .search-icon img {
+            width: 18px;
+            height: auto;
+        }
+
+
+        /* 글쓰기 버튼 스타일 */
+        .write-button {
+            border-radius: 7px;
+            background-color: black;
+            color: white;
+            padding: 5px 10px;
+        }
+        /* Flag 아이콘 크기 조절 */
+        .flag-icon {
+            width: 16px;  /* 원하는 너비 (예: 16px) */
+            height: auto; /* 비율 유지 */
+            vertical-align: middle; /* 텍스트와 정렬 */
+        }
+        /* Lock 아이콘 크기 조절 */
+        .lock-icon {
+            width: 14px;  /* 원하는 크기로 조절 */
+            height: auto; /* 비율 유지 */
+            margin-right: 5px; /* 텍스트와 간격 */
+            vertical-align: middle; /* 텍스트 정렬 */
         }
     </style>
 </head>
 <body>
-<!-- 네비게이션 바 -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">📋 게시판</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="메뉴 열기">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li onclick="location.href='http://localhost:8080/'" style="cursor: pointer;" class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">홈</a>
-                </li>
-                <li onclick="location.href='http://localhost:8080/board'" class="nav-item">
-                    <a class="nav-link" href="#">게시판</a>
-                </li>
-                <li onclick="location.href='http://localhost:8080/admin'"class="nav-item">
-                    <a class="nav-link" href="#">{{userId}}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/logout">LogOut</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+{{> common/header}}
+{{> common/sidebar}}
+{{> common/footer}}
 
 <!-- 게시판 컨테이너 -->
 <div class="container board-container">
-    <h2 class="mb-4">📚 게시판</h2>
-    <!-- 검색창 -->
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <input type="text" class="form-control" placeholder="검색어를 입력하세요">
-        </div>
-        <div class="col-md-2">
-            <button class="btn btn-primary w-100">검색</button>
-        </div>
+    <h2>Q&A</h2>
+
+    <!-- Q&A / 1:1 문의 버튼 -->
+    <div class="qa-menu">
+        <a href="javascript:void(0);" class="qa-tab active" onclick="refreshBoard()">Q&A</a>
+        <a href="#" class="qa-tab">1:1 문의</a>
     </div>
 
     <!-- 게시판 테이블 -->
     <table class="table table-hover">
-        <thead class="table-dark">
+        <thead>
         <tr>
-            <th scope="col">번호</th>
+            <th scope="col">No</th>
             <th scope="col">제목</th>
-            <th scope="col">작성자</th>
-            <th scope="col">날짜</th>
-            <th scope="col">조회수</th>
+            <th scope="col">글쓴이</th>
+            <th scope="col">작성시간</th>
         </tr>
         </thead>
-        <tbody class="board-list">
+        <tbody>
         <tr>
-            <th scope="row">1</th>
-            <td><a href="#" class="text-decoration-none">[필독] 공지사항</a></td>
-            <td>관리자</td>
-            <td>2024-01-01</td>
-            <td>100</td>
+            <td><img src="/img/flag.svg" alt="Flag Icon" class="flag-icon"></td>
+            <td>2025년 게시판 신설</td>
+            <td>YMJ</td>
+            <td>2024-12-26</td>
         </tr>
         <tr>
-            <th scope="row">2</th>
-            <td><a href="#" class="text-decoration-none">쌀국수 먹고 싶다</a></td>
-            <td>원대안</td>
-            <td>2024-01-02</td>
-            <td>80</td>
+            <td>3</td>
+            <td><img src="/img/lock.svg" alt="Lock Icon" class="lock-icon"> [문의] 문의드립니다.</td>
+            <td>익명</td>
+            <td>2024-12-25</td>
         </tr>
         <tr>
-            <th scope="row">3</th>
-            <td><a href="#" class="text-decoration-none">나는 감자. 똘똘한 감자.</a></td>
-            <td>조민지</td>
-            <td>2024-01-10</td>
-            <td>75</td>
+            <td>2</td>
+
+
+            <td><img src="/img/lock.svg" alt="Lock Icon" class="lock-icon"> [문의] 문의드립니다.</td>
+            <td>익명</td>
+            <td>2024-12-24</td>
         </tr>
         <tr>
-            <th scope="row">4</th>
-            <td><a href="#" class="text-decoration-none">월요일은 월래 코딩하는 날~</a></td>
-            <td>권용민</td>
-            <td>2024-01-16</td>
-            <td>20</td>
+            <td>1</td>
+
+
+            <td><img src="/img/lock.svg" alt="Lock Icon" class="lock-icon"> [문의] 문의드립니다.</td>
+            <td>익명</td>
+            <td>2024-12-23</td>
         </tr>
         {{#boardList}}
             <tr>
-                <th scope="row" class="index">{{id}}</th>
-<!--                <td></td>-->
-                <td><a href="/board/{{id}}" class="text-decoration-none">{{title}}</a></td>
+                <td>{{id}}</td>
+                <td><a href="/board/{{id}}" class="text-decoration-none" style="color: inherit;">{{title}}</a></td>
                 <td>{{userId}}</td>
-                <td class="createdDate">{{#createdDate}}{{createdDate}}{{/createdDate}}{{^createdDate}}N/A{{/createdDate}}</td>
-<!--                <td> 수정 삭제 버튼 활성화 할 거면 쓰기.-->
-<!--                    <a href="/board/edit/{{id}}" class="btn btn-primary btn-sm">수정</a>-->
-<!--                </td>-->
-<!--                <td>-->
-<!--                <form action="/board/delete/{{id}}" method="post" style="display: inline;">-->
-<!--                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>-->
-<!--                </form>-->
-<!--                </td>-->
-                <td>{{viewCount}}</td>
+                <td class="createdDate">{{createdDate}}</td>
             </tr>
         {{/boardList}}
         </tbody>
     </table>
 
-    <!-- 페이지네이션 -->
-    <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-center">
-            <li class="page-item disabled">
-                <a class="page-link">이전</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-                <a class="page-link" href="#">다음</a>
-            </li>
-        </ul>
-    </nav>
+    <!-- 검색창과 글쓰기 버튼을 같은 줄에 배치 -->
+    <div class="d-flex justify-content-between align-items-center mt-3">
+        <!-- 검색창 -->
+        <div class="search-container input-group">
+            <input type="text" class="form-control search-input" placeholder="Search" id="searchBox">
+            <span class="input-group-text search-icon" id="searchButton">
+            <img src="/img/searchButton.svg" alt="Search Icon">
+            </span>
+        </div>
 
-    <!-- 글쓰기 버튼 -->
-    <div class="d-flex justify-content-end mt-3">
-        <a href="/board/write"><button class="btn btn-success">글쓰기</button></a>
+        <!-- 글쓰기 버튼 -->
+        <div class="d-flex justify-content-end mt-3">
+            <a href="/board/write"><button class="write-button">글쓰기</button></a>
+        </div>
     </div>
+
 </div>
 
 <!-- 부트스트랩 JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 <script>
-<!--    const item = document.querySelector('.btn-success');-->
-
-<!--    item.onclick = function(event) {-->
-<!--        event.preventDefault(); // 기본 동작(예: 폼 제출) 방지-->
-<!--        alert('버튼이 클릭되었습니다!'); // 알림 표시-->
-<!--        // 추가 동작-->
-<!--        console.log('Success 버튼 클릭 이벤트 실행됨!');-->
-<!--        location.href=-->
-<!--    };-->
-
     // JavaScript로 Index 추가
-        const rows = document.querySelectorAll('#board-list th');
-        console.log(rows);
-        rows.forEach((row, index) => {
-            row.querySelector('.index').innerText = index + 1; // 1부터 시작
-        });
+    const rows = document.querySelectorAll('#board-list th');
+    rows.forEach((row, index) => {
+        row.querySelector('.index').innerText = index + 1; // 1부터 시작
+    });
 
     // JavaScript로 날짜 포맷 변경
     document.addEventListener('DOMContentLoaded', function () {
         const dateElements = document.querySelectorAll('.createdDate');
-
         dateElements.forEach(function (element) {
             const dateText = element.innerText.trim();
             if (dateText !== 'N/A') {
@@ -167,5 +253,33 @@
             }
         });
     });
+    document.addEventListener("DOMContentLoaded", function () {
+        let searchBox = document.getElementById("searchBox");
+        let searchButton = document.getElementById("searchButton");
+
+        function performSearch() {
+            let query = searchBox.value.trim();
+            if (query !== "") {
+                alert("검색 실행: " + query); // 여기에 실제 검색 로직 추가
+            }
+        }
+
+        // 엔터 키 입력 시 검색 실행
+        searchBox.addEventListener("keypress", function (event) {
+            if (event.key === "Enter") {
+                performSearch();
+            }
+        });
+
+        // 검색 아이콘 클릭 시 검색 실행
+        searchButton.addEventListener("click", function () {
+            performSearch();
+        });
+    });
+
+    function refreshBoard() {
+        location.reload();  // 현재 페이지 새로고침
+    }
+
 </script>
 </html>

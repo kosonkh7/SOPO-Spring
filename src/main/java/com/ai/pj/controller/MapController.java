@@ -22,6 +22,7 @@ public class MapController {
         return "map/mapView";
     }
 
+
     // 필요하다면 "/" 로도 매핑할 수 있음
 //    @GetMapping("/")
 //    public String home() {
