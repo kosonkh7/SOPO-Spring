@@ -32,35 +32,38 @@
 
         <form id="route_form">
             <div class="controls">
-                <div class="start-section">
+                <!-- 출발 창고 및 주소 입력 -->
+                <div class="input-group">
                     <label for="start_station">출발 창고:</label>
-                    <select id="start_station" name="start_station">
-                        <!-- JS로 /api/stations 호출 후 option 추가 -->
-                    </select>
-                    <div class="address-section">
-                        <label for="address_input">주소 입력:</label>
-                        <input id="address_input" type="text" value="서울특별시 성동구 뚝섬로 273" required>
-                        <button id="search_address_btn">주소 검색</button>
-                    </div>
+                    <select id="start_station" name="start_station"></select>
+
+                    <label for="address_input">주소 입력:</label>
+                    <input id="address_input" type="text" value="서울특별시 성동구 뚝섬로 273" required>
+                    <button id="search_address_btn">주소 검색</button>
                 </div>
-                <div class="location-section">
-                    <label for="end_lat">배송지 위도:</label>
+
+                <!-- 배송지 위도/경도 입력 -->
+                <div class="coordinate-group">
+                    <label for="end_lat">위도:</label>
                     <input type="text" id="end_lat" name="end_lat" value="37.545069" required>
-                    <label for="end_lon">배송지 경도:</label>
+
+                    <label for="end_lon">경도:</label>
                     <input type="text" id="end_lon" name="end_lon" value="127.037653" required>
                 </div>
-                <div class="button-section">
-                    <label for="button-section">경로 출력:</label>
-                    <div>
-                        <button type="button" id="default_btn">기존 택배</button>
-                        <button type="button" id="subway_btn">지하철 창고</button>
-                        <button type="button" id="compare_routes_btn">경로 비교</button>
-                        <button type="button" id="reset_btn">지도 초기화</button>
+
+                <!-- 경로 선택 및 액션 버튼 -->
+                <div class="button-group">
+                    <div class="route-buttons">
+                        <button type="button" id="default_btn">🚚 기존 택배</button>
+                        <button type="button" id="subway_btn">🚆 지하철 창고</button>
+                    </div>
+                    <div class="action-buttons">
+                        <button type="button" id="compare_routes_btn">🔄 경로 비교</button>
+                        <button type="button" id="reset_btn">🗺️ 지도 초기화</button>
                     </div>
                 </div>
             </div>
         </form>
-
 
         <div class="dashboard">
             <h3>Dashboard</h3>

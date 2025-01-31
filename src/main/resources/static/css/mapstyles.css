@@ -48,34 +48,81 @@ main {
     pointer-events: none; /* 클릭이 지도에 전달되도록 설정 */
 }
 
+/* 컨트롤 패널 전체 정리 */
 .controls {
-    grid-area: controls;
-    background-color: #fff;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
     display: flex;
-    grid-template-areas: "start location buttons";
-    grid-template-columns: 1fr 1fr 1fr; /* 출발 창고, 배송지, 버튼 비율 설정 */
-    gap: 10px;
-    align-items: start;
-    height: auto; /* 높이 자동 조정 */
-    min-height: 80px; /* 컨트롤 패널 높이를 대시보드와 동일하게 유지 */
+    flex-direction: column;
+    gap: 15px;
+    background-color: #fff;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
 }
 
-.controls .start-section,
-.controls .location-section,
-.controls .button-section {
+/* 출발 창고 & 주소 입력 */
+.input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.input-group label {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.input-group input,
+.input-group select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* 배송지 위도/경도 */
+.coordinate-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.coordinate-group input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* 버튼 정리 */
+.button-group {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-.controls .button-section div {
-    display: grid; /* 그리드 레이아웃 사용 */
-    grid-template-columns: repeat(2, 1fr); /* 2개의 열로 나누기 */
-    gap: 10px; /* 버튼 간격 */
+/* 경로 선택 버튼 */
+.route-buttons {
+    display: flex;
+    gap: 10px;
 }
+
+.route-buttons button {
+    flex: 1;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+}
+
+#default_btn {
+    background-color: #007bff;
+    color: white;
+}
+
+#subway_btn {
+    background-color: #28a745;
+    color: white;
+}
+
 
 .dashboard {
     grid-area: dashboard;
@@ -194,11 +241,18 @@ button:hover {
     }
 
     .controls {
-        grid-template-columns: 1fr; /* 컨트롤 섹션도 단일 열로 전환 */
-        gap: 15px;
+        flex-direction: column;
     }
 
-    .controls .button-section div {
-        grid-template-columns: 1fr; /* 버튼도 단일 열로 배치 */
+    .input-group,
+    .coordinate-group,
+    .button-group {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .route-buttons,
+    .action-buttons {
+        flex-direction: column;
     }
 }
