@@ -238,7 +238,7 @@ $(document).ready(function() {
         if (data.subway_route && data.subway_route.length > 0) {
             var subwayPolyline = new Tmapv2.Polyline({
                 path: data.subway_route.map(coord => new Tmapv2.LatLng(coord[1], coord[0])),
-                strokeColor: "#2E64FE",
+                strokeColor: "#3388FF",
                 strokeWeight: 6,
                 map: map
             });
@@ -249,7 +249,7 @@ $(document).ready(function() {
         if (data.driving_route && data.driving_route.length > 0) {
             var drivingPolyline = new Tmapv2.Polyline({
                 path: data.driving_route.map(coord => new Tmapv2.LatLng(coord[0], coord[1])),
-                strokeColor: "#04B431",
+                strokeColor: "#28A745",
                 strokeWeight: 6,
                 map: map
             });
@@ -350,7 +350,7 @@ $(document).ready(function() {
         if (data.parcel.to_hub_route && data.parcel.to_hub_route.length > 0) {
             const toHubPolyline = new Tmapv2.Polyline({
                 path: data.parcel.to_hub_route.map(coord => new Tmapv2.LatLng(coord[0], coord[1])),
-                strokeColor: "#FF0000", // 빨간색 #FF0000
+                strokeColor: "#FF5733",
                 strokeWeight: 6,
                 map: map
             });
@@ -360,7 +360,7 @@ $(document).ready(function() {
         if (data.parcel.from_hub_route && data.parcel.from_hub_route.length > 0) {
             const fromHubPolyline = new Tmapv2.Polyline({
                 path: data.parcel.from_hub_route.map(coord => new Tmapv2.LatLng(coord[0], coord[1])),
-                strokeColor: "#FF0000", // 주황색 #FFA500
+                strokeColor: "#FF5733",
                 strokeWeight: 6,
                 map: map
             });
@@ -370,7 +370,7 @@ $(document).ready(function() {
         if (data.parcel.to_destination_route && data.parcel.to_destination_route.length > 0) {
             const toDestinationPolyline = new Tmapv2.Polyline({
                 path: data.parcel.to_destination_route.map(coord => new Tmapv2.LatLng(coord[0], coord[1])),
-                strokeColor: "#FF0000", // 노란색 #FFFF00
+                strokeColor: "#FF5733",
                 strokeWeight: 6,
                 map: map
             });
@@ -383,7 +383,7 @@ $(document).ready(function() {
             if (selectedRoute.subway_route && selectedRoute.subway_route.length > 0) {
                 const subwayPolyline = new Tmapv2.Polyline({
                     path: selectedRoute.subway_route.map(coord => new Tmapv2.LatLng(coord[0], coord[1])),
-                    strokeColor: "#2E64FE", // 파란색 #0000FF
+                    strokeColor: "#3388FF",
                     strokeWeight: 6,
                     map: map
                 });
@@ -394,7 +394,7 @@ $(document).ready(function() {
         if (selectedRoute.driving_route && selectedRoute.driving_route.length > 0) {
             const drivingPolyline = new Tmapv2.Polyline({
                 path: selectedRoute.driving_route.map(coord => new Tmapv2.LatLng(coord[0], coord[1])),
-                strokeColor: "#2E64FE", // 초록색
+                strokeColor: "#3388FF",
                 strokeWeight: 6,
                 map: map
             });
@@ -419,7 +419,7 @@ $(document).ready(function() {
 
         // 대시보드 업데이트
         $(".dashboard").empty();
-        $(".dashboard").append(`<h3>이동 경로 비교 결과</h3>`);
+        // $(".dashboard").append(`<h3>이동 경로 비교 결과</h3>`);
 
         // 감소율 계산 함수
         function calculateReduction(original, newValue) {
@@ -605,7 +605,7 @@ $(document).ready(function() {
 
         // 대시보드를 초기 템플릿 상태로 복원
         $(".dashboard").empty();
-        $(".dashboard").append(`<h3>Dashboard</h3>`);
+        // $(".dashboard").append(`<h3>Dashboard</h3>`);
         $(".dashboard").append(initialDashboardTemplate);
 
         // 이미지 제거
