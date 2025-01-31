@@ -16,6 +16,7 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -70,7 +71,19 @@ public class JwtAuthFilter extends OncePerRequestFilter { // OncePerRequestFilte
                 // 만약에 에러 로그가 있는 상태로 왔다?
                 if (log.isErrorEnabled()) {
                     System.out.println("EXPIREDDDDD".repeat(3));
-                    String newAccessToken = authService.refreshToken(identifier);
+                    String newAccessToken = null;
+                    try {
+                         newAccessToken = authService.refreshToken(identifier);
+                    } catch (UsernameNotFoundException e) {
+                        Cookie cookie = new Cookie("accessToken", null);
+                        cookie.setHttpOnly(true);
+                        cookie.setSecure(true);
+                        cookie.setPath("/");
+                        cookie.setMaxAge(0);
+                        response.addCookie(cookie);
+
+                        filterChain.doFilter(request, response);
+                    }
 
                     // RefreshToken이 없다면 다음으로 넘겨버리기.
                     if (newAccessToken == null) {

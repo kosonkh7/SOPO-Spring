@@ -4,6 +4,7 @@ import com.ai.pj.domain.User;
 
 import com.ai.pj.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -41,5 +42,6 @@ public class DataInitalizer {
                 .build();
 
         userRepository.save(user);
+
     }
 }
