@@ -21,7 +21,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,7 +61,7 @@ public class BoardService {
         String userId = post.getUserId();
 
         // 유효한 사용자 검증
-        User user = userService.findById(userId)
+        User user = userService.findUserById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("no User Here" + userId));
 
         Board board = Board.builder()

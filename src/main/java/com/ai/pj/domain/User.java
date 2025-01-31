@@ -19,9 +19,14 @@ import java.util.List;
 @Table(name = "Member")
 public class User {
 
+
+    /**
+     * 식별자임. UUID 코드로.
+     */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long num;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "identifier")
+    private String identifier;
 
     @Column(name = "id")
     private String id;
@@ -38,6 +43,7 @@ public class User {
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
@@ -59,8 +65,16 @@ public class User {
         this.role = UserRole.ADMIN;
     }
 
+    @Getter
+    @RequiredArgsConstructor
     public static enum UserRole {
-        USER, ADMIN, HOLD
+        HOLD("ROLE_NOT_REGISTERED", "회원가입 이전 사용자"),
+        USER("ROLE_USER", "일반 사용자"),
+        ADMIN("ROLE_ADMIN","관리자");
+
+
+        private final String key;
+        private final String title;
     }
 
 }

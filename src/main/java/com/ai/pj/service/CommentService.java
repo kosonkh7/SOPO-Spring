@@ -28,7 +28,7 @@ public class CommentService {
         Board board = boardRepository.findById(commentDTO.getBoardId())
                 .orElseThrow(() -> new EntityNotFoundException("게시글이 존재하지 않습니다: " + commentDTO.getBoardId()));
 
-        User user = userService.findById(commentDTO.getUserId())
+        User user = userService.findUserById(commentDTO.getUserId())
                 .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + commentDTO.getUserId()));
 
         Comment comment = Comment.builder()
