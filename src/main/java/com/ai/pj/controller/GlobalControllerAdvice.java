@@ -17,7 +17,7 @@ public class GlobalControllerAdvice {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
             CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
-            model.addAttribute("managerName", customUserDetails.getTokenUserInfo().getUserid()); // 로그인한 사용자명
+                model.addAttribute("managerName", customUserDetails.getTokenUserInfo().getUserid()); // 로그인한 사용자명
         }
     }
 }

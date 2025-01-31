@@ -40,9 +40,6 @@ public class AdminController {
         // 관리자 메모 ?
         // 현 관리자 이름
 
-        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
-        model.addAttribute("managerName", customUserDetails.getTokenUserInfo().getIdentifier());
-
         // 회원 현황
         List<UserDTO.Get> allUserList = adminService.getAllUsers();
         model.addAttribute("allUserList", allUserList);
