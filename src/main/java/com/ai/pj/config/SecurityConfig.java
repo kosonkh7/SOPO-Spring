@@ -40,7 +40,7 @@ public class SecurityConfig {
     private final JwtUtil jwtUtil;
 
     private static final String[] AUTH_WHITELIST = {
-            "/api/v1/auth/**", "/img/**", "/css/**", "/js/**", "/favicon.ico", "/", "/public/login"
+            "/api/v1/auth/**", "/img/**", "/css/**", "/js/**", "/favicon.ico","/public/**"
     };
 
     @Bean
@@ -66,10 +66,10 @@ public class SecurityConfig {
                         .requestMatchers(PathRequest.toH2Console()).permitAll()
 //                       .anyRequest().permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/public/**").permitAll()
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .anyRequest().fullyAuthenticated() // 권한에 따른 로그인 다 잡기
-//                        .anyRequest().permitAll() // 모든 요청 허용
+                        .anyRequest().fullyAuthenticated()
+                        // 권한에 따른 로그인 다 잡기
+//                      anyRequest().permitAll() // 모든 요청 허용
                 )
 
 //                        .loginProcessingUrl("/public/loginProc")
