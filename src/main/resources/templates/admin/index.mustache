@@ -271,7 +271,7 @@
         }
 
         .sidebar ul li:hover {
-            background-color: #0606dd;
+            background-color: #909091;
         }
 
         .logout-button {
@@ -298,29 +298,33 @@
             width: 24px;
             height: auto;
         }
+        footer {
+
+        }
 
     </style>
 </head>
 <body>
+{{> common/footer}}
 <div class="sidebar">
     <h1><img src="/img/logo.png" alt="Keen Icon"><span>YMJ</span></h1>
     <ul>
-        <li onclick="location.href='http://localhost:8080/'" style="cursor: pointer;">
-            <img src="/img/home.svg" alt="Home Icon">home
+        <li onclick="location.href='http://localhost:8080'" style="cursor: pointer;">
+            <img src="/img/home.svg" alt="Home Icon">홈
         </li>
-        <li onclick="location.href='http://localhost:8080/stock/'" style="cursor: pointer;">
-            <img src="/img/admin.svg" alt="Admin Icon">재고관리
+        <li onclick="location.href='http://localhost:8080/stock'" style="cursor: pointer;">
+            <img src="/img/stock.svg" alt="Admin Icon">재고 관리
         </li>
         <li onclick="location.href='http://localhost:8080/inspect/'" style="cursor: pointer;">
-            <img src="/img/admin.svg" alt="Admin Icon">상품검수
+            <img src="/img/check.svg" alt="Admin Icon">상품 검수
         </li>
-        <li onclick="location.href='http://localhost:8080/map/'" style="cursor: pointer;">
+        <li onclick="location.href='http://localhost:8080/map'" style="cursor: pointer;">
             <img src="/img/dashboard.svg" alt="Dashboard Icon">배송 시뮬레이션
         </li>
-        <li onclick="location.href='http://localhost:8080/board/'" style="cursor: pointer;">
+        <li onclick="location.href='http://localhost:8080/board'" style="cursor: pointer;">
             <img src="/img/community.svg" alt="커뮤니티 Icon">커뮤니티
         </li>
-        <li onclick="location.href='http://localhost:8080/admin/'" style="cursor: pointer;">
+        <li onclick="location.href='http://localhost:8080/admin'" style="cursor: pointer;">
             <img src="/img/admin.svg" alt="Admin Icon">admin
         </li>
 
