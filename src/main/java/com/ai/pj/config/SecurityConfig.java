@@ -1,6 +1,7 @@
 package com.ai.pj.config;
 
 import com.ai.pj.security.authentication.RoleBasedAuthenticationProvider;
+import com.ai.pj.security.filter.IpLogginFilter;
 import com.ai.pj.security.filter.JwtAuthFilter;
 import com.ai.pj.security.handler.CustomAccessDeniedHandler;
 import com.ai.pj.security.handler.CustomAuthenticationEntryPoint;
@@ -56,6 +57,7 @@ public class SecurityConfig {
                         .loginPage("/public/login") // 사용자 정의 로그인 페이지
                         .disable())
                 .addFilterBefore(new JwtAuthFilter(userService, authService, jwtUtil), UsernamePasswordAuthenticationFilter.class)
+//                .addFilterBefore(new IpLogginFilter(), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling((exceptionHandling) -> exceptionHandling
                         .authenticationEntryPoint(authenticationEntryPoint)
                         .accessDeniedHandler(accessDeniedHandler))
