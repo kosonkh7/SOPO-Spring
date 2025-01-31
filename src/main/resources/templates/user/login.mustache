@@ -126,8 +126,7 @@
 
         if (response.ok) {
             const token = await response.text();
-            console.log('Token received', token) ;
-            console.log(response.json());
+            location.href='/board/';
         }
 
 
