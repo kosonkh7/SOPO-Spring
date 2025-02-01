@@ -10,9 +10,22 @@ server:
 
 
 jwt:
-  access_token_expiration_time: 20 #20초
+  access_token_expiration_time: 900 #15분초
   refresh_token_expiration_time: 604800
   secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "prometheus,httptrace,metrics"
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+  tracing:
+    sampling:
+      probability: 1.0  # 100% 요청 추적
 
 spring:
   application:
@@ -29,6 +42,7 @@ spring:
   mustache:
     charset: UTF-8
   mvc:
+    static-path-pattern: "/**" #모든 정적 자원 서빙 가능
     view:
       encoding: UTF-8
 

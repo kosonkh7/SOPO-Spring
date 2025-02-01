@@ -1,15 +1,19 @@
 package com.ai.pj.config;
 
+import com.ai.pj.domain.VisitCount;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-@Configuration
+@Configuration(enforceUniqueMethods = false)
+@EnableCaching
 @EnableRedisRepositories(basePackages = "com.ai.pj.security")
 public class RedisConfig {
     @Value("${spring.data.redis.port}")
@@ -35,5 +39,19 @@ public class RedisConfig {
         redisTemplate.setConnectionFactory(redisConnectionFactory());
 
         return redisTemplate;
+    }
+
+    @Bean
+    public RedisTemplate<String, VisitCount> redisTemplate(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, VisitCount> template = new RedisTemplate<>();
+        template.setConnectionFactory(connectionFactory);
+
+        // (De)Serialization 설정 (JSON 형식 저장)
+        Jackson2JsonRedisSerializer<VisitCount> serializer = new Jackson2JsonRedisSerializer<>(VisitCount.class);
+        template.setDefaultSerializer(serializer);
+        template.setValueSerializer(serializer);
+        template.setKeySerializer(new StringRedisSerializer());
+
+        return template;
     }
 }

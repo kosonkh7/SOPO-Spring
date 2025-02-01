@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <title>Admin Page</title>
     <!-- sidebarstyles.css 불러오기 -->
     <link rel="stylesheet" href="/css/sidebarstyles.css">
@@ -415,10 +417,10 @@
         <!-- 3,4,7,8번: 시간대별 방문자 수 -->
         <div class="visitors">
             <h2>시간대별 방문자 수</h2>
-            <p>여기에 시간대별 방문자 수 데이터를 표시합니다.</p>
+            <canvas id="visitorChart"></canvas> <!-- 방문자 차트 추가 -->
         </div>
 
-        <!-- 11,12번: 현재 접속중인 로그 -->
+        <!-- 접속 로그 -->
         <div class="logs">
             <h2>현재 접속중인 로그</h2>
             <p>여기에 현재 접속중인 로그 데이터를 표시합니다.</p>
@@ -506,6 +508,54 @@
     }
 }
 
+
+    // 방문자 수 가져오기
+    async function fetchVisitorData() {
+        try {
+            const response = await fetch('/admin/api/visitor-data');
+            const data = await response.json();
+
+            console.log(data);
+            const labels = Object.keys(data).map(label => `${data[label].time}시`);
+            for (const name in labels) {
+                console.log(name);
+            }
+            const counts = Object.keys(data).map(label => data[label].count);
+
+            renderVisitorChart(labels, counts);
+        } catch (error) {
+            console.error('Error fetching visitor data:', error);
+        }
+    }
+
+    // 방문자 수 차트 렌더링
+    function renderVisitorChart(labels, counts) {
+        const ctx = document.getElementById('visitorChart').getContext('2d');
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '방문자 수',
+                    data: counts,
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    fetchVisitorData();
 
 
 </script>

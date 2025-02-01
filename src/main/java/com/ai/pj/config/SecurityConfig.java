@@ -1,7 +1,6 @@
 package com.ai.pj.config;
 
 import com.ai.pj.security.authentication.RoleBasedAuthenticationProvider;
-import com.ai.pj.security.filter.IpLogginFilter;
 import com.ai.pj.security.filter.JwtAuthFilter;
 import com.ai.pj.security.handler.CustomAccessDeniedHandler;
 import com.ai.pj.security.handler.CustomAuthenticationEntryPoint;
@@ -15,8 +14,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
@@ -40,7 +37,7 @@ public class SecurityConfig {
     private final JwtUtil jwtUtil;
 
     private static final String[] AUTH_WHITELIST = {
-            "/api/v1/auth/**", "/img/**", "/css/**", "/js/**", "/favicon.ico","/public/**"
+            "/api/v1/auth/**", "/img/**", "/css/**", "/js/**", "/favicon.ico", "/public/login"
     };
 
     @Bean
@@ -57,7 +54,6 @@ public class SecurityConfig {
                         .loginPage("/public/login") // 사용자 정의 로그인 페이지
                         .disable())
                 .addFilterBefore(new JwtAuthFilter(userService, authService, jwtUtil), UsernamePasswordAuthenticationFilter.class)
-//                .addFilterBefore(new IpLogginFilter(), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling((exceptionHandling) -> exceptionHandling
                         .authenticationEntryPoint(authenticationEntryPoint)
                         .accessDeniedHandler(accessDeniedHandler))
@@ -69,7 +65,7 @@ public class SecurityConfig {
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .anyRequest().fullyAuthenticated()
                         // 권한에 따른 로그인 다 잡기
-//                      anyRequest().permitAll() // 모든 요청 허용
+//                        .anyRequest().permitAll() // 모든 요청 허용
                 )
 
 //                        .loginProcessingUrl("/public/loginProc")

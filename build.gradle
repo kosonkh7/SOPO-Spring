@@ -31,6 +31,12 @@ dependencies {
 	// OAuth2
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
+	// Spring Boot Actuator
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+	// Micrometer Prometheus Registry
+	implementation 'io.micrometer:micrometer-registry-prometheus'
+
 
 	// Sprint Security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
