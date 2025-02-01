@@ -63,9 +63,9 @@ public class SecurityConfig {
 //                       .anyRequest().permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-//                        .anyRequest().fullyAuthenticated()
+                        .anyRequest().fullyAuthenticated()
                         // 권한에 따른 로그인 다 잡기
-                        .anyRequest().permitAll() // 모든 요청 허용
+//                        .anyRequest().permitAll() // 모든 요청 허용
                 )
 
 //                        .loginProcessingUrl("/public/loginProc")
