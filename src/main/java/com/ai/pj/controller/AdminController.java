@@ -8,6 +8,7 @@ import com.ai.pj.security.details.CustomUserDetails;
 import com.ai.pj.service.AdminService;
 import com.ai.pj.service.BoardService;
 import com.ai.pj.service.UserService;
+import com.ai.pj.service.VisitCounterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -27,7 +29,6 @@ public class AdminController {
 
     private final AdminService adminService;
     private final BoardService boardService;
-
 
     @GetMapping
     public String redirectToSlash() {
@@ -51,6 +52,7 @@ public class AdminController {
         // role = HOLD로 갖고 있는 USER 목록 및 USER 관련 companyName
         List<UserDTO.Get> userList = adminService.findByRole(User.UserRole.HOLD);
         model.addAttribute("userList", userList);
+
 
         // 회원 현황.
         // 게시판 현황.

@@ -107,11 +107,6 @@ public class JwtAuthFilter extends OncePerRequestFilter { // OncePerRequestFilte
                 filterChain.doFilter(request, response);
             }
         }
-
-        if (accessToken == null) {
-
-        }
-
         filterChain.doFilter(request, response); // 다음 필터로 넘기기
     }
 
