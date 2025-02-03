@@ -81,8 +81,6 @@ button[type="submit"] {
     cursor: pointer;
 }
 
-
-
 /* 📌 예측 결과 스타일 */
 .data {
     display: flex;
@@ -92,6 +90,17 @@ button[type="submit"] {
 }
 .data:last-child {
     border-bottom: none;
+}
+
+/* 📌 주의사항 문구 스타일 */
+.precaution {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #fff8e1; /* 연한 노란색 배경 */
+    border-left: 4px solid #ffcc00; /* 왼쪽 경계선 강조 */
+    font-size: 14px;
+    color: #333;
+    font-weight: bold;
 }
 
 /* 🚛 로딩 애니메이션 스타일 */
