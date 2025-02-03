@@ -54,7 +54,7 @@
                     <label for="address_input">배송지 주소:</label>
                     <div class="input-row">
                         <input id="address_input" type="text" value="서울특별시 성동구 뚝섬로 273" required>
-                        <button id="search_address_btn">🔍</button>
+<!--                        <button id="search_address_btn">🔍</button>-->
                     </div>
                     <div class="coordinate-row">
                         <label for="end_lat">위도</label>
@@ -62,7 +62,12 @@
                         <label for="end_lon">경도</label>
                         <input type="text" id="end_lon" name="end_lon" value="127.037653" required>
                     </div>
+                    <div class="c-button-group">
+                        <button id="add_marker_btn" type="button">배송지 선택</button>
+                        <button id="confirm_location_btn" type="button">위치 확인</button>
+                    </div>
                 </div>
+
 
                 <!-- 버튼 그룹 -->
                 <div class="section button-group">
