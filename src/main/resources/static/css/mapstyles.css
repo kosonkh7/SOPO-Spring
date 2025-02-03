@@ -37,13 +37,32 @@ main {
     position: relative;
 }
 
-.map-overlay-image {
-    position: absolute; /* 지도 위에 고정 */
-    top: 10px; /* 상단에서 10px */
-    left: 10px; /* 왼쪽에서 10px */
-    width: 150px; /* 이미지 크기 */
-    z-index: 1000; /* 지도 위에 표시되도록 z-index를 높임 */
-    pointer-events: none; /* 클릭이 지도에 전달되도록 설정 */
+.map-legend {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(255, 255, 255, 0.85); /* 반투명 배경 */
+    padding: 10px 15px;
+    border-radius: 10px; /* 둥근 모서리 */
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
+    font-size: 12px;
+    font-family: 'Arial', sans-serif;
+    z-index: 1000;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.legend-color {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%; /* 원형 색상칩 */
+    display: inline-block;
+    margin-right: 8px;
+    border: 1px solid #ccc;
 }
 
 /* 컨트롤 패널 전체 정리 */
@@ -99,8 +118,7 @@ main {
     font-size: 12px; /* 글씨 크기 조정 */
 }
 
-.input-row label,
-.input-row input {
+.input-row label {
     font-size: 12px; /* 글씨 크기 조정 */
 }
 
@@ -112,24 +130,26 @@ main {
     width: 100%; /* 반응형 적용 */
     min-width: 210px;
     height: 35px; /* 검색 버튼과 동일한 높이 맞추기 */
-    box-sizing: border-box; /* 패딩 포함 높이 유지 */
+    font-size: 12px;
+    line-height: normal; /* 기본 라인 높이로 맞추기 */
+    box-sizing: border-box;
 }
 
 .input-row button {
-    padding: 8px;
+    width: 35px;
+    height: 35px; /* 입력창과 같은 높이 */
     background-color: #f0f0f0;
     color: #333;
     border: 1px solid #ccc; /* 버튼 테두리 추가 */
     border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
-    width: 35px;
-    height: 35px; /* 입력창과 같은 높이 */
+    font-size: 18px;
     box-sizing: border-box; /* 패딩 포함 높이 유지 */
     display: flex;
     align-items: center; /* 텍스트 중앙 정렬 */
     justify-content: center;
-    line-height: 1; /* line-height 기본값 제거 */
+    padding: 0;
+    line-height: normal; /* 기본 라인 높이로 맞추기 */
 }
 
 .input-row button:hover {
@@ -233,6 +253,56 @@ main {
     height: 100%; /* `main` 내에서 자동으로 확장 */
 }
 
+/*--택배 대시보드--*/
+
+.process-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.process-card {
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 8px;
+    border-left: 5px solid #007bff;
+    display: flex;
+    flex-direction: column;
+}
+
+.process-card h4 {
+    font-size: 16px;
+    margin: 0;
+    color: #333;
+}
+
+.process-card p {
+    font-size: 14px;
+    color: #555;
+    margin-top: 5px;
+}
+
+.time-highlight {
+    font-size: 18px;
+    font-weight: bold;
+    color: #d9534f;
+}
+
+.startsub-card { border-left: 5px solid #FF5733; } /* 츌발서브터미널 - 빨간색 */
+.hub-card { border-left: 5px solid #007bff; }  /* 허브 - 파란색 */
+.endsub-card { border-left: 5px solid #28a745; }   /* 도착서브터미널 - 초록색 */
+.time-card { border-left: 5px solid #6c757d; }  /* 총 이동 시간 - 회색 */
+
+.subway-card { border-left: 5px solid #007bff; }  /* 지하철 - 파란색 */
+.driving-card { border-left: 5px solid #FF5733; } /* 자동차 - 빨간색 */
+.total-card { border-left: 5px solid #6c757d;; }   /* 총 이동 시간 - 초록색 */
+
+/*--*/
+
 .cards-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* 반응형 카드 */
@@ -315,6 +385,39 @@ button:hover {
     background-color: #0056b3;
 }
 
+/* 로딩 팝업 스타일 */
+.loading-popup {
+    display: none; /* 기본적으로 숨김 */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.7); /* 반투명 배경 */
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    z-index: 1000;
+}
+
+/* 로딩 스피너 */
+.spinner {
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid #fff;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 /* 반응형 디자인: 화면 너비가 줄어들면 레이아웃 조정 */
 @media screen and (max-width: 768px) {
     main {
@@ -358,5 +461,9 @@ button:hover {
 
     .coordinate-row {
         flex-wrap: wrap;
+    }
+
+    .map-legend {
+        font-size: 12px;
     }
 }

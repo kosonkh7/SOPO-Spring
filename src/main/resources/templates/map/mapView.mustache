@@ -33,7 +33,15 @@
         <!-- 지도 표시 -->
     </div>
 
-        <form id="route_form">
+    <!-- 로딩 팝업 -->
+    <div id="loadingPopup" class="loading-popup">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <p>경로 계산 중...</p>
+        </div>
+    </div>
+
+    <form id="route_form">
             <div class="controls">
                 <!-- 출발 창고 및 주소 입력 -->
                 <div class="section start-group">
@@ -93,7 +101,7 @@
 
             <!-- 카드 3: 비용 비교 -->
             <div class="card">
-                <h4>💰 비용 비교</h4>
+                <h4>💰 운행 비용 비교</h4>
                 <p>기존 택배: <span id="cost_original">--</span> 원</p>
                 <p>지하철 창고: <span id="cost_subway">--</span> 원</p>
                 <p>📉 절감률: <span id="cost_reduction">--</span>%</p>
