@@ -67,7 +67,10 @@ $(document).ready(function() {
                 var marker = new Tmapv2.Marker({
                     position: new Tmapv2.LatLng(station.latitude, station.longitude),
                     map: map,
-                    title: station.name
+                    title: station.name,
+                    icon: "/img/h_warehouse.png",  // Spring 서버에서 제공하는 정적 경로
+                    iconSize: new Tmapv2.Size(30, 30), // 마커 크기 설정
+                    iconAnchor: new Tmapv2.Point(15, 30) // 마커 중심 조정 (선택 사항)
                 });
                 markers.push(marker);
             });
@@ -95,6 +98,16 @@ $(document).ready(function() {
         map.fitBounds(bounds);
     }
 
+    // 로딩 화면 보이기
+    function showLoading() {
+        $("#loadingPopup").fadeIn(300);
+    }
+
+    // 로딩 화면 숨기기
+    function hideLoading() {
+        $("#loadingPopup").fadeOut(300);
+    }
+
     // 지도 초기화 시 역 표시
     displayStations();
 
@@ -107,7 +120,10 @@ $(document).ready(function() {
             var subTerminalPin = new Tmapv2.Marker({
                 position: new Tmapv2.LatLng(data.start_sub_terminal.lat, data.start_sub_terminal.lon),
                 map: map,
-                title: `출발 및 도착 Sub 터미널: ${data.start_sub_terminal.name}`
+                title: `출발 및 도착 Sub 터미널: ${data.start_sub_terminal.name}`,
+                icon: "/img/h_warehouse.png",  // Spring 서버에서 제공하는 정적 경로
+                iconSize: new Tmapv2.Size(30, 30), // 마커 크기 설정
+                iconAnchor: new Tmapv2.Point(15, 30) // 마커 중심 조정 (선택 사항)
             });
             markers.push(subTerminalPin);
         } else {
@@ -115,7 +131,10 @@ $(document).ready(function() {
             var startSubPin = new Tmapv2.Marker({
                 position: new Tmapv2.LatLng(data.start_sub_terminal.lat, data.start_sub_terminal.lon),
                 map: map,
-                title: `출발 Sub 터미널: ${data.start_sub_terminal.name}`
+                title: `출발 Sub 터미널: ${data.start_sub_terminal.name}`,
+                icon: "/img/h_warehouse.png",  // Spring 서버에서 제공하는 정적 경로
+                iconSize: new Tmapv2.Size(30, 30), // 마커 크기 설정
+                iconAnchor: new Tmapv2.Point(15, 30) // 마커 중심 조정 (선택 사항)
             });
             markers.push(startSubPin);
 
@@ -123,7 +142,10 @@ $(document).ready(function() {
             var endSubPin = new Tmapv2.Marker({
                 position: new Tmapv2.LatLng(data.end_sub_terminal.lat, data.end_sub_terminal.lon),
                 map: map,
-                title: `도착 Sub 터미널: ${data.end_sub_terminal.name}`
+                title: `도착 Sub 터미널: ${data.end_sub_terminal.name}`,
+                icon: "/img/h_warehouse.png",  // Spring 서버에서 제공하는 정적 경로
+                iconSize: new Tmapv2.Size(30, 30), // 마커 크기 설정
+                iconAnchor: new Tmapv2.Point(15, 30) // 마커 중심 조정 (선택 사항)
             });
             markers.push(endSubPin);
         }
@@ -132,7 +154,10 @@ $(document).ready(function() {
         var hubPin = new Tmapv2.Marker({
             position: new Tmapv2.LatLng(data.hub_terminal.lat, data.hub_terminal.lon),
             map: map,
-            title: `Hub 터미널: ${data.hub_terminal.name}`
+            title: `Hub 터미널: ${data.hub_terminal.name}`,
+            icon: "/img/h_warehouse.png",  // Spring 서버에서 제공하는 정적 경로
+            iconSize: new Tmapv2.Size(30, 30), // 마커 크기 설정
+            iconAnchor: new Tmapv2.Point(15, 30) // 마커 중심 조정 (선택 사항)
         });
         markers.push(hubPin);
 
@@ -140,7 +165,10 @@ $(document).ready(function() {
         var deliveryPin = new Tmapv2.Marker({
             position: new Tmapv2.LatLng(data.end_lat, data.end_lon),
             map: map,
-            title: "최종 배송지"
+            title: "최종 배송지",
+            icon: "/img/map_end.png",  // Spring 서버에서 제공하는 정적 경로
+            iconSize: new Tmapv2.Size(30, 30), // 마커 크기 설정
+            iconAnchor: new Tmapv2.Point(15, 30) // 마커 중심 조정 (선택 사항)
         });
         markers.push(deliveryPin);
 
@@ -234,7 +262,10 @@ $(document).ready(function() {
         var startMarker = new Tmapv2.Marker({
             position: new Tmapv2.LatLng(data.start_lat, data.start_lon),
             map: map,
-            title: `출발지: ${data.start_station}`
+            title: `출발지: ${data.start_station}`,
+            icon: "/img/map_start.png",  // Spring 서버에서 제공하는 정적 경로
+            iconSize: new Tmapv2.Size(30, 30), // 마커 크기 설정
+            iconAnchor: new Tmapv2.Point(15, 30) // 마커 중심 조정 (선택 사항)
         });
         markers.push(startMarker); // 배열에 저장
 
@@ -242,7 +273,10 @@ $(document).ready(function() {
         var endMarker = new Tmapv2.Marker({
             position: new Tmapv2.LatLng(data.end_lat, data.end_lon),
             map: map,
-            title: "배송지"
+            title: "배송지",
+            icon: "/img/map_end.png",  // Spring 서버에서 제공하는 정적 경로
+            iconSize: new Tmapv2.Size(30, 30), // 마커 크기 설정
+            iconAnchor: new Tmapv2.Point(15, 30) // 마커 중심 조정 (선택 사항)
         });
         markers.push(endMarker); // 배열에 저장
 
@@ -336,7 +370,10 @@ $(document).ready(function() {
             const subTerminalPin = new Tmapv2.Marker({
                 position: new Tmapv2.LatLng(data.parcel.start_sub_terminal.lat, data.parcel.start_sub_terminal.lon),
                 map: map,
-                title: `출발 및 도착 Sub 터미널: ${data.parcel.start_sub_terminal.name}`
+                title: `출발 및 도착 Sub 터미널: ${data.parcel.start_sub_terminal.name}`,
+                icon: "/img/h_warehouse.png",  // Spring 서버에서 제공하는 정적 경로
+                iconSize: new Tmapv2.Size(30, 30), // 마커 크기 설정
+                iconAnchor: new Tmapv2.Point(15, 30) // 마커 중심 조정 (선택 사항)
             });
             markers.push(subTerminalPin);
         } else {
@@ -344,7 +381,10 @@ $(document).ready(function() {
             const startSubPin = new Tmapv2.Marker({
                 position: new Tmapv2.LatLng(data.parcel.start_sub_terminal.lat, data.parcel.start_sub_terminal.lon),
                 map: map,
-                title: `출발 Sub 터미널: ${data.parcel.start_sub_terminal.name}`
+                title: `출발 Sub 터미널: ${data.parcel.start_sub_terminal.name}`,
+                icon: "/img/h_warehouse.png",  // Spring 서버에서 제공하는 정적 경로
+                iconSize: new Tmapv2.Size(30, 30), // 마커 크기 설정
+                iconAnchor: new Tmapv2.Point(15, 30) // 마커 중심 조정 (선택 사항)
             });
             markers.push(startSubPin);
 
@@ -352,7 +392,10 @@ $(document).ready(function() {
             const endSubPin = new Tmapv2.Marker({
                 position: new Tmapv2.LatLng(data.parcel.end_sub_terminal.lat, data.parcel.end_sub_terminal.lon),
                 map: map,
-                title: `도착 Sub 터미널: ${data.parcel.end_sub_terminal.name}`
+                title: `도착 Sub 터미널: ${data.parcel.end_sub_terminal.name}`,
+                icon: "/img/h_warehouse.png",  // Spring 서버에서 제공하는 정적 경로
+                iconSize: new Tmapv2.Size(30, 30), // 마커 크기 설정
+                iconAnchor: new Tmapv2.Point(15, 30) // 마커 중심 조정 (선택 사항)
             });
             markers.push(endSubPin);
         }
@@ -361,7 +404,10 @@ $(document).ready(function() {
         const hubPin = new Tmapv2.Marker({
             position: new Tmapv2.LatLng(data.parcel.hub_terminal.lat, data.parcel.hub_terminal.lon),
             map: map,
-            title: `Hub 터미널: ${data.parcel.hub_terminal.name}`
+            title: `Hub 터미널: ${data.parcel.hub_terminal.name}`,
+            icon: "/img/h_warehouse.png",  // Spring 서버에서 제공하는 정적 경로
+            iconSize: new Tmapv2.Size(30, 30), // 마커 크기 설정
+            iconAnchor: new Tmapv2.Point(15, 30) // 마커 중심 조정 (선택 사항)
         });
         markers.push(hubPin);
 
@@ -369,7 +415,10 @@ $(document).ready(function() {
         const startMarker = new Tmapv2.Marker({
             position: new Tmapv2.LatLng(data.parcel.start_lat, data.parcel.start_lon),
             map: map,
-            title: `출발지: ${data.parcel.start_station}`
+            title: `출발지: ${data.parcel.start_station}`,
+            icon: "/img/map_start.png",  // Spring 서버에서 제공하는 정적 경로
+            iconSize: new Tmapv2.Size(30, 30), // 마커 크기 설정
+            iconAnchor: new Tmapv2.Point(15, 30) // 마커 중심 조정 (선택 사항)
         });
         markers.push(startMarker); // 배열에 저장
 
@@ -377,7 +426,10 @@ $(document).ready(function() {
         const deliveryPin = new Tmapv2.Marker({
             position: new Tmapv2.LatLng(data.parcel.end_lat, data.parcel.end_lon),
             map: map,
-            title: "배송지"
+            title: "배송지",
+            icon: "/img/map_end.png",  // Spring 서버에서 제공하는 정적 경로
+            iconSize: new Tmapv2.Size(30, 30), // 마커 크기 설정
+            iconAnchor: new Tmapv2.Point(15, 30) // 마커 중심 조정 (선택 사항)
         });
         markers.push(deliveryPin);
 
@@ -601,6 +653,8 @@ $(document).ready(function() {
     // });
 
     $("#default_btn").on("click", function() {
+        showLoading(); // 로딩 화면 표시
+
         var formData = $("#route_form").serialize();
         $.post("/api/parcel-route", formData, function(data) {
             console.log("택배 경로 응답 데이터:", data);
@@ -608,10 +662,14 @@ $(document).ready(function() {
         }).fail(function(xhr, status, error) {
             console.error("에러:", error);
             console.error("서버 응답:", xhr.responseText);
+        }).always(function() {
+            hideLoading(); // 요청이 끝나면 로딩 화면 숨기기
         });
     });
 
     $("#subway_btn").on("click", function() {
+        showLoading(); // 로딩 화면 표시
+
         var formData = $("#route_form").serialize();
         $.post("/api/compare-routes", formData, function(data) {
             console.log("응답 데이터:", data); // 디버깅 로그
@@ -620,10 +678,13 @@ $(document).ready(function() {
             console.error("에러 상태:", status); // 에러 상태 확인
             console.error("에러 메시지:", error); // 에러 메시지 확인
             console.error("서버 응답:", xhr.responseText); // 서버에서 반환된 에러 메시지
+        }).always(function() {
+            hideLoading(); // 요청이 끝나면 로딩 화면 숨기기
         });
     });
 
     $("#compare_routes_btn").on("click", function() {
+        showLoading(); // 로딩 화면 표시
         const formData = $("#route_form").serialize(); // 폼 데이터를 가져옴
 
         // 서버로 요청 보내기
@@ -644,7 +705,9 @@ $(document).ready(function() {
                 console.error("에러 메시지:", error);
                 console.error("서버 응답:", xhr.responseText);
                 alert("서버와 통신 중 문제가 발생했습니다. 다시 시도해주세요.");
-            });
+            }).always(function() {
+            hideLoading(); // 요청이 끝나면 로딩 화면 숨기기
+        });
     });
 
     $("#reset_btn").on("click", function() {
