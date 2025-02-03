@@ -182,6 +182,20 @@ main {
     height: 35px;
 }
 
+.c-button-group {
+    display: flex; /* 버튼을 가로로 배치 */
+    gap: 10px; /* 버튼 사이 여백 */
+    justify-content: center; /* 중앙 정렬 */
+    margin-top: 10px; /* 버튼 그룹 위쪽 여백 */
+}
+
+.c-button-group button {
+    flex: 1; /* 버튼이 같은 크기를 갖도록 설정 */
+    padding: 10px 15px; /* 버튼 내부 여백 */
+    font-size: 12px;
+}
+
+
 /* 버튼 그룹 */
 .button-group {
     display: flex;

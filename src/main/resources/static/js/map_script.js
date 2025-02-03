@@ -1,15 +1,22 @@
 $(document).ready(function() {
     // 지도 초기화
-    var map = new Tmapv2.Map("map_div", {
-        center: new Tmapv2.LatLng(37.5665, 126.9780),
-        zoom: 11
-    });
+    var map;
 
     var markers = []; // 마커를 저장
     var polylines = []; // 경로를 저장
+    var selectedMarker = null; // 사용자가 선택한 마커를 저장
 
     const initialCenter = new Tmapv2.LatLng(37.5665, 126.9780); // 초기 중심 좌표
     const initialZoom = 11; // 초기 줌 레벨
+
+    function initTmap() {
+        map = new Tmapv2.Map("map_div", {
+            center: new Tmapv2.LatLng(37.5665, 126.9780),
+            zoom: 11
+        });
+
+        displayStations(); // 지도 생성 후 마커 표시
+    }
 
     // 초기 상태 대시보드 템플릿 정의
     const initialDashboardTemplate = `
@@ -49,9 +56,14 @@ $(document).ready(function() {
     `;
 
     function clearMap() {
-        // 기존 마커 제거
-        markers.forEach(marker => marker.setMap(null));
-        markers = []; // 배열 초기화
+        // 기존 마커 제거, selectedMarker는 유지
+        markers.forEach(marker => {
+            if (marker !== selectedMarker) {
+                marker.setMap(null);
+            }
+        });
+
+        markers = selectedMarker ? [selectedMarker] : [];
 
         // 기존 경로 제거
         polylines.forEach(polyline => polyline.setMap(null));
@@ -108,8 +120,8 @@ $(document).ready(function() {
         $("#loadingPopup").fadeOut(300);
     }
 
-    // 지도 초기화 시 역 표시
-    displayStations();
+    // 지도 초기화 실행
+    initTmap();
 
     function updateParcelRouteMap(data) {
         clearMap(); // 기존 지도 상태 초기화
@@ -646,11 +658,67 @@ $(document).ready(function() {
         });
     }
 
+    // 위치 선택 버튼 클릭 → 지도에 마커 표시
+    $(document).on("click", "#add_marker_btn", function () {
+        event.preventDefault(); // 기본 제출 방지
 
-    // // 주소 입력 필드에서 주소 검색
-    // $("#search_btn").on("click", function() {
-    //     searchAddressToLatLon();
-    // });
+        // 기존 마커 삭제
+        if (selectedMarker !== null) {
+            console.log("🔴 기존 마커 삭제:", selectedMarker);
+            selectedMarker.setMap(null);  // 기존 마커 제거
+            selectedMarker = null;
+        }
+
+        // 지도 중심에 마커 추가
+        selectedMarker = new Tmapv2.Marker({
+            position: map.getCenter(),
+            map: map,
+            draggable: true, // 드래그 가능
+            icon: "/img/map_end.png", // 사용자 선택 마커 아이콘
+            iconSize: new Tmapv2.Size(40, 40) // 사용자 마커 크기 설정
+        });
+
+        selectedMarker.setMap(map);
+        markers.push(selectedMarker); // selectedMarker도 markers 배열에 추가
+
+        console.log("🟢 새로운 마커 추가됨:", selectedMarker);
+        alert("마커를 원하는 위치로 드래그하세요!");
+    });
+
+    // 위치 확인 버튼 클릭 → 마커 위치를 입력 칸에 자동 입력
+    $(document).on("click", "#confirm_location_btn", function () {
+        event.preventDefault(); // 기본 동작(새로고침) 방지
+
+        if (!selectedMarker) {
+            alert("❗ 마커를 먼저 추가해주세요.");
+            return;
+        }
+
+        var position = selectedMarker.getPosition();
+        $("#end_lat").val(position.lat());
+        $("#end_lon").val(position.lng());
+
+        console.log(`✅ 선택한 위치: 위도 ${position.lat()}, 경도 ${position.lng()}`);
+        alert(`선택한 위치:\n위도: ${position.lat()}\n경도: ${position.lng()}`);
+    });
+
+    // 경로 비교 버튼을 클릭하면 선택된 마커 삭제 & 버튼 비활성화
+    function disableSelectionButtons() {
+        if (selectedMarker !== null) {
+            console.log("🔴 기존 선택 마커 삭제:", selectedMarker);
+            selectedMarker.setMap(null); // 기존 마커 삭제
+            selectedMarker = null;
+        }
+
+        // 배송지 선택 & 위치 확인 버튼 비활성화
+        $("#add_marker_btn").prop("disabled", true);
+        $("#confirm_location_btn").prop("disabled", true);
+    }
+
+    // 경로 계산 버튼을 클릭하면 선택된 마커 제거 & 버튼 비활성화
+    $("#default_btn, #subway_btn, #compare_routes_btn").on("click", function() {
+        disableSelectionButtons();
+    });
 
     $("#default_btn").on("click", function() {
         showLoading(); // 로딩 화면 표시
@@ -724,6 +792,10 @@ $(document).ready(function() {
         // 범례 제거
         $(".map .map-legend").remove();
         console.log("지도가 초기화되었습니다."); // 디버깅 로그
+
+        // 초기화 후 다시 선택 가능하도록 버튼 활성화
+        $("#add_marker_btn").prop("disabled", false);
+        $("#confirm_location_btn").prop("disabled", false);
     });
 
 });
