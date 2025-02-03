@@ -8,7 +8,7 @@
     <!-- 스타일 시트 -->
     <link rel="stylesheet" href="/css/headerstyles.css">
     <link rel="stylesheet" href="/css/sidebarstyles.css">
-    <link rel="stylesheet" href="/css/mapStyles.css" />
+    <link rel="stylesheet" href="/css/mapstyles.css" />
 
     <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey={{tmapKey}}"></script>
 
@@ -43,25 +43,28 @@
 
                 <!-- 배송지 위도/경도 입력 -->
                 <div class="section location-group">
-                    <div class="address-row">
-                        <label for="address_input">배송지 주소:</label>
+                    <label for="address_input">배송지 주소:</label>
+                    <div class="input-row">
                         <input id="address_input" type="text" value="서울특별시 성동구 뚝섬로 273" required>
-                        <button id="search_address_btn">검색</button>
+                        <button id="search_address_btn">🔍</button>
                     </div>
                     <div class="coordinate-row">
-                        <label for="end_lat">위도:</label>
+                        <label for="end_lat">위도</label>
                         <input type="text" id="end_lat" name="end_lat" value="37.545069" required>
-                        <label for="end_lon">경도:</label>
+                        <label for="end_lon">경도</label>
                         <input type="text" id="end_lon" name="end_lon" value="127.037653" required>
                     </div>
                 </div>
 
                 <!-- 버튼 그룹 -->
                 <div class="section button-group">
-                    <button type="button" id="default_btn">기존 택배</button>
-                    <button type="button" id="subway_btn">지하철 창고</button>
-                    <button type="button" id="compare_routes_btn">경로 비교</button>
-                    <button type="button" id="reset_btn">지도 초기화</button>
+                    <span class="button-header">경로 출력:</span>
+                    <div class="button-container">
+                        <button type="button" id="default_btn">기존 택배</button>
+                        <button type="button" id="subway_btn">지하철 창고</button>
+                        <button type="button" id="compare_routes_btn">경로 비교</button>
+                        <button type="button" id="reset_btn">지도 초기화</button>
+                    </div>
                 </div>
             </div>
         </form>
