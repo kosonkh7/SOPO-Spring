@@ -64,7 +64,7 @@
     <div class="list-group">
         {{#comments}}
             <div class="comment-box">
-                <p><span class="comment-user">{{userId}}</span>: {{content}}</p>
+                <p><span class="comment-user">{{userId}}</span>: {{{content}}}</p>
                 <form action="/comments/{{id}}/delete" method="post" style="display: inline;">
                     <input type="hidden" name="boardId" value="{{board.id}}">
                     <button type="submit" class="btn btn-sm btn-outline-danger">삭제</button>
