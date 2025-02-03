@@ -4,10 +4,12 @@ import com.ai.pj.domain.User;
 
 import com.ai.pj.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
 
 
 @Component
@@ -20,6 +22,8 @@ public class DataInitalizer {
     public void init() {
         User admin = User.builder()
                 .id("admin")
+                .email("adfasdf@asdfa.com")
+                .name("sadfasd")
                 .password(passwordEncoder.encode("1234"))
                 .build();
 
@@ -31,12 +35,13 @@ public class DataInitalizer {
 
         User user = User.builder()
                 .id("daetu01")
-                .password(passwordEncoder.encode("12341234"))
+                .password(passwordEncoder.encode("1234"))
                 .name("fasdf")
                 .email("sadfasdf@asdfanas.asdf")
                 .role(User.UserRole.HOLD)
                 .build();
 
         userRepository.save(user);
+
     }
 }

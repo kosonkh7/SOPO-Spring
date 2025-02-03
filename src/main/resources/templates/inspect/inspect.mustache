@@ -8,10 +8,11 @@
         <button type="submit">업로드</button>
     </form>
 
-    <!-- 업로드된 이미지 미리보기 -->
-    <div id="preview">
-        <h3>업로드된 이미지:</h3>
-        <img id="uploadedImage" src="" alt="Uploaded Image" style="display: none; width: 300px;">
+    <!-- 업로드된 이미지 및 탐지 결과 표시 -->
+    <div id="result">
+        <h3>탐지된 객체:</h3>
+        <ul id="detections"></ul>
+        <img id="uploadedImage" src="" alt="Uploaded Image" style="display: none; width: 400px;">
     </div>
 </div>
 <!-- CSS 추가 위치 -->

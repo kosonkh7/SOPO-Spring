@@ -10,7 +10,7 @@
     align-items: center;
     padding: 0 24px; /* 양쪽 여백 */
     border-bottom: 1px solid #ddd; /* 아래쪽 테두리 */
-    z-index: 1000; /* 다른 요소 위에 표시 */
+    z-index: 2000; /* 다른 요소 위에 표시 */
     transition: left 0.3s ease, width 0.3s ease; /* 애니메이션 추가 */
     box-shadow: 0 2px 4px rgba(0,0,0,0.15); /* 살짝 그림자 (선택사항) */
     border-radius: 3px; /*  모서리를 둥글게 */

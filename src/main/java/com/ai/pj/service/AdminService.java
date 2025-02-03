@@ -49,4 +49,7 @@ public class AdminService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
+    public void deleteByRole(String id) {userRepository.deleteByRole(id, User.UserRole.HOLD);}
+
 }

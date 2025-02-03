@@ -32,7 +32,7 @@ $(document).ready(function() {
 
             <!-- 카드 3: 비용 비교 -->
             <div class="card">
-                <h4>💰 비용 비교</h4>
+                <h4>💰 운행 비용 비교</h4>
                 <p>기존 택배: <span id="cost_original">--</span> 원</p>
                 <p>지하철 창고: <span id="cost_subway">--</span> 원</p>
                 <p>📉 절감률: <span id="cost_reduction">--</span>%</p>
@@ -67,7 +67,10 @@ $(document).ready(function() {
                 var marker = new Tmapv2.Marker({
                     position: new Tmapv2.LatLng(station.latitude, station.longitude),
                     map: map,
-                    title: station.name
+                    title: station.name,
+                    icon: "/img/h_warehouse.png",  // Spring 서버에서 제공하는 정적 경로
+                    iconSize: new Tmapv2.Size(30, 30), // 마커 크기 설정
+                    iconAnchor: new Tmapv2.Point(15, 30) // 마커 중심 조정 (선택 사항)
                 });
                 markers.push(marker);
             });
@@ -95,19 +98,32 @@ $(document).ready(function() {
         map.fitBounds(bounds);
     }
 
+    // 로딩 화면 보이기
+    function showLoading() {
+        $("#loadingPopup").fadeIn(300);
+    }
+
+    // 로딩 화면 숨기기
+    function hideLoading() {
+        $("#loadingPopup").fadeOut(300);
+    }
+
     // 지도 초기화 시 역 표시
     displayStations();
 
     function updateParcelRouteMap(data) {
         clearMap(); // 기존 지도 상태 초기화
-        $(".map .map-overlay-image").remove();
+        $(".map .map-legend").remove();
 
         // 출발 Sub 터미널과 도착 Sub 터미널이 같은 경우 처리
         if (data.start_sub_terminal.name === data.end_sub_terminal.name) {
             var subTerminalPin = new Tmapv2.Marker({
                 position: new Tmapv2.LatLng(data.start_sub_terminal.lat, data.start_sub_terminal.lon),
                 map: map,
-                title: `출발 및 도착 Sub 터미널: ${data.start_sub_terminal.name}`
+                title: `출발 및 도착 Sub 터미널: ${data.start_sub_terminal.name}`,
+                icon: "/img/h_warehouse.png",  // Spring 서버에서 제공하는 정적 경로
+                iconSize: new Tmapv2.Size(30, 30), // 마커 크기 설정
+                iconAnchor: new Tmapv2.Point(15, 30) // 마커 중심 조정 (선택 사항)
             });
             markers.push(subTerminalPin);
         } else {
@@ -115,7 +131,10 @@ $(document).ready(function() {
             var startSubPin = new Tmapv2.Marker({
                 position: new Tmapv2.LatLng(data.start_sub_terminal.lat, data.start_sub_terminal.lon),
                 map: map,
-                title: `출발 Sub 터미널: ${data.start_sub_terminal.name}`
+                title: `출발 Sub 터미널: ${data.start_sub_terminal.name}`,
+                icon: "/img/h_warehouse.png",  // Spring 서버에서 제공하는 정적 경로
+                iconSize: new Tmapv2.Size(30, 30), // 마커 크기 설정
+                iconAnchor: new Tmapv2.Point(15, 30) // 마커 중심 조정 (선택 사항)
             });
             markers.push(startSubPin);
 
@@ -123,7 +142,10 @@ $(document).ready(function() {
             var endSubPin = new Tmapv2.Marker({
                 position: new Tmapv2.LatLng(data.end_sub_terminal.lat, data.end_sub_terminal.lon),
                 map: map,
-                title: `도착 Sub 터미널: ${data.end_sub_terminal.name}`
+                title: `도착 Sub 터미널: ${data.end_sub_terminal.name}`,
+                icon: "/img/h_warehouse.png",  // Spring 서버에서 제공하는 정적 경로
+                iconSize: new Tmapv2.Size(30, 30), // 마커 크기 설정
+                iconAnchor: new Tmapv2.Point(15, 30) // 마커 중심 조정 (선택 사항)
             });
             markers.push(endSubPin);
         }
@@ -132,7 +154,10 @@ $(document).ready(function() {
         var hubPin = new Tmapv2.Marker({
             position: new Tmapv2.LatLng(data.hub_terminal.lat, data.hub_terminal.lon),
             map: map,
-            title: `Hub 터미널: ${data.hub_terminal.name}`
+            title: `Hub 터미널: ${data.hub_terminal.name}`,
+            icon: "/img/h_warehouse.png",  // Spring 서버에서 제공하는 정적 경로
+            iconSize: new Tmapv2.Size(30, 30), // 마커 크기 설정
+            iconAnchor: new Tmapv2.Point(15, 30) // 마커 중심 조정 (선택 사항)
         });
         markers.push(hubPin);
 
@@ -140,24 +165,35 @@ $(document).ready(function() {
         var deliveryPin = new Tmapv2.Marker({
             position: new Tmapv2.LatLng(data.end_lat, data.end_lon),
             map: map,
-            title: "최종 배송지"
+            title: "최종 배송지",
+            icon: "/img/map_end.png",  // Spring 서버에서 제공하는 정적 경로
+            iconSize: new Tmapv2.Size(30, 30), // 마커 크기 설정
+            iconAnchor: new Tmapv2.Point(15, 30) // 마커 중심 조정 (선택 사항)
         });
         markers.push(deliveryPin);
 
-        // 지도 왼쪽 위에 이미지 추가
+        // 지도 왼쪽 위에 범례 추가
         $(".map").append(`
-            <img 
-                class="map-overlay-image" 
-                src="/img/map_ex1.png" 
-                alt="기존 택배 경로 설명">
+            <div class="map-legend">
+                <div class="legend-item">
+                    <span class="legend-color" style="background-color: #FF5733;"></span> Sub → Hub
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color" style="background-color: #3388FF;"></span> Hub → Sub
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color" style="background-color: #28A745;"></span> Sub → 배송지
+                </div>
+            </div>
         `);
 
         // 경로 추가
         if (data.to_hub_route && data.to_hub_route.length > 0) {
             var toHubPolyline = new Tmapv2.Polyline({
                 path: data.to_hub_route.map(coord => new Tmapv2.LatLng(coord[0], coord[1])),
-                strokeColor: "#FF0000", // 빨간색
+                strokeColor: "#FF5733", // 빨간색
                 strokeWeight: 6,
+                //strokeOpacity: 0.8,  // 반투명 효과 추가
                 map: map
             });
             polylines.push(toHubPolyline);
@@ -166,8 +202,9 @@ $(document).ready(function() {
         if (data.from_hub_route && data.from_hub_route.length > 0) {
             var fromHubPolyline = new Tmapv2.Polyline({
                 path: data.from_hub_route.map(coord => new Tmapv2.LatLng(coord[0], coord[1])),
-                strokeColor: "#2E64FE", // 파란색
+                strokeColor: "#3388FF", // 파란색
                 strokeWeight: 6,
+                //strokeOpacity: 0.8,  // 반투명 효과 추가
                 map: map
             });
             polylines.push(fromHubPolyline);
@@ -176,8 +213,9 @@ $(document).ready(function() {
         if (data.to_destination_route && data.to_destination_route.length > 0) {
             var toDestinationPolyline = new Tmapv2.Polyline({
                 path: data.to_destination_route.map(coord => new Tmapv2.LatLng(coord[0], coord[1])),
-                strokeColor: "#04B431", // 초록색
+                strokeColor: "#28A745", // 초록색
                 strokeWeight: 6,
+                //strokeOpacity: 0.8,  // 반투명 효과 추가
                 map: map
             });
             polylines.push(toDestinationPolyline);
@@ -188,23 +226,46 @@ $(document).ready(function() {
 
         // 대시보드 업데이트
         $(".dashboard").empty();
-        $(".dashboard").append(`<h3>기존 택배 프로세스</h3>`);
-        $(".dashboard").append(`<p>출발 Sub 터미널: ${data.start_sub_terminal.name}</p>`);
-        $(".dashboard").append(`<p>Hub 터미널: ${data.hub_terminal.name}</p>`);
-        $(".dashboard").append(`<p>도착 Sub 터미널: ${data.end_sub_terminal.name}</p>`);
-        $(".dashboard").append(`<p>총 이동 소요 시간: ${Math.round(data.total_time / 60)}분</p>`);
+        $(".dashboard").append(`
+            <div class="process-container">
+                <h3>📦 기존 택배 프로세스</h3>
+                
+                <div class="process-card startsub-card">
+                    <h4>🚚 출발 Sub 터미널</h4>
+                    <p>${data.start_sub_terminal.name}</p>
+                </div>
+                
+                <div class="process-card hub-card">
+                    <h4>🏭 Hub 터미널</h4>
+                    <p>${data.hub_terminal.name}</p>
+                </div>
+                
+                <div class="process-card endsub-card">
+                    <h4>🚚 도착 Sub 터미널</h4>
+                    <p>${data.end_sub_terminal.name}</p>
+                </div>
+                
+                <div class="process-card time-card">
+                    <h4>⏳ 총 이동 시간</h4>
+                    <p><span class="time-highlight">${Math.round(data.total_time / 60)}</span> 분</p>
+                </div>
+            </div>
+        `);
     }
 
     function updateMap(data) {
         // 기존 마커와 경로, 이미지 제거
         clearMap();
-        $(".map .map-overlay-image").remove();
+        $(".map .map-legend").remove();
 
         // 출발지 마커 추가
         var startMarker = new Tmapv2.Marker({
             position: new Tmapv2.LatLng(data.start_lat, data.start_lon),
             map: map,
-            title: `출발지: ${data.start_station}`
+            title: `출발지: ${data.start_station}`,
+            icon: "/img/map_start.png",  // Spring 서버에서 제공하는 정적 경로
+            iconSize: new Tmapv2.Size(30, 30), // 마커 크기 설정
+            iconAnchor: new Tmapv2.Point(15, 30) // 마커 중심 조정 (선택 사항)
         });
         markers.push(startMarker); // 배열에 저장
 
@@ -212,30 +273,37 @@ $(document).ready(function() {
         var endMarker = new Tmapv2.Marker({
             position: new Tmapv2.LatLng(data.end_lat, data.end_lon),
             map: map,
-            title: "배송지"
+            title: "배송지",
+            icon: "/img/map_end.png",  // Spring 서버에서 제공하는 정적 경로
+            iconSize: new Tmapv2.Size(30, 30), // 마커 크기 설정
+            iconAnchor: new Tmapv2.Point(15, 30) // 마커 중심 조정 (선택 사항)
         });
         markers.push(endMarker); // 배열에 저장
 
-        // 지도 왼쪽 위에 이미지 추가
+        // 지도 왼쪽 위에 범례 추가
         $(".map").append(`
-            <img 
-                class="map-overlay-image" 
-                src="/img/map_ex2.png" 
-                alt="지하철 창고 경로 설명">
+            <div class="map-legend">
+                <div class="legend-item">
+                    <span class="legend-color" style="background-color: #3388FF;"></span> 지하철도 경로
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color" style="background-color: #FF5733;"></span> 주행 경로
+                </div>
+            </div>
         `);
 
         // 경로 중심 계산
-        var centerLat = (data.start_lat + data.end_lat) / 2;
-        var centerLon = (data.start_lon + data.end_lon) / 2;
-
-        // 지도 중심 이동
-        map.setCenter(new Tmapv2.LatLng(centerLat, centerLon));
+        // var centerLat = (data.start_lat + data.end_lat) / 2;
+        // var centerLon = (data.start_lon + data.end_lon) / 2;
+        //
+        // // 지도 중심 이동
+        // map.setCenter(new Tmapv2.LatLng(centerLat, centerLon));
 
         // 지하철 경로 추가
         if (data.subway_route && data.subway_route.length > 0) {
             var subwayPolyline = new Tmapv2.Polyline({
                 path: data.subway_route.map(coord => new Tmapv2.LatLng(coord[1], coord[0])),
-                strokeColor: "#2E64FE",
+                strokeColor: "#3388FF",
                 strokeWeight: 6,
                 map: map
             });
@@ -246,7 +314,7 @@ $(document).ready(function() {
         if (data.driving_route && data.driving_route.length > 0) {
             var drivingPolyline = new Tmapv2.Polyline({
                 path: data.driving_route.map(coord => new Tmapv2.LatLng(coord[0], coord[1])),
-                strokeColor: "#04B431",
+                strokeColor: "#FF5733",
                 strokeWeight: 6,
                 map: map
             });
@@ -258,36 +326,54 @@ $(document).ready(function() {
 
         // 대시보드 업데이트
         $(".dashboard").empty();
-        $(".dashboard").append(`<h3>지하철 창고 프로세스</h3>`);
 
         // 지하철 예상 소요 시간 표시 (유효하지 않은 값이면 0으로 대체)
         var subwayTime = isNaN(data.subway_total_time) || data.subway_total_time <= 0 ? 0 : Math.round(data.subway_total_time / 60);
-        $(".dashboard").append(`<p>지하철도 이동 소요 시간: ${subwayTime}분</p>`);
-
         // 자동차 예상 소요 시간 표시 (유효하지 않은 값이면 0으로 대체)
         var drivingTime = isNaN(data.driving_total_time) || data.driving_total_time <= 0 ? 0 : Math.round(data.driving_total_time / 60);
-        $(".dashboard").append(`<p>자동차 이동 소요 시간: ${drivingTime}분</p>`);
-
         // 총 예상 소요 시간
         var totalTime = subwayTime + drivingTime;
-        $(".dashboard").append(`<p>총 이동 소요 시간: ${totalTime}분</p>`);
+
+        $(".dashboard").append(`
+            <div class="process-container">
+                <h3>🚇 지하철 창고 프로세스</h3>
+                
+                <div class="process-card subway-card">
+                    <h4>🚆 지하철 이동 소요 시간</h4>
+                    <p><span class="time-highlight">${subwayTime}</span> 분</p>
+                </div>
+                
+                <div class="process-card driving-card">
+                    <h4>🏍️ 오토바이 이동 소요 시간</h4>
+                    <p><span class="time-highlight">${drivingTime}</span> 분</p>
+                </div>
+                
+                <div class="process-card total-card">
+                    <h4>⏳ 총 이동 소요 시간</h4>
+                    <p><span class="time-highlight">${totalTime}</span> 분</p>
+                </div>
+            </div>
+        `);
 
         // 비교 결과 표시
-        if (data.reason) {
-            $(".dashboard").append(`<p id="comparison_result">${data.reason}</p>`);
-        }
+        // if (data.reason) {
+        //     $(".dashboard").append(`<p id="comparison_result">${data.reason}</p>`);
+        // }
     }
 
     function updateComparisonRoutes(data) {
         clearMap(); // 기존 지도 상태 초기화
-        $(".map .map-overlay-image").remove();
+        $(".map .map-legend").remove();
 
         // 출발 Sub 터미널과 도착 Sub 터미널이 같은 경우 처리
         if (data.parcel.start_sub_terminal.name === data.parcel.end_sub_terminal.name) {
             const subTerminalPin = new Tmapv2.Marker({
                 position: new Tmapv2.LatLng(data.parcel.start_sub_terminal.lat, data.parcel.start_sub_terminal.lon),
                 map: map,
-                title: `출발 및 도착 Sub 터미널: ${data.parcel.start_sub_terminal.name}`
+                title: `출발 및 도착 Sub 터미널: ${data.parcel.start_sub_terminal.name}`,
+                icon: "/img/h_warehouse.png",  // Spring 서버에서 제공하는 정적 경로
+                iconSize: new Tmapv2.Size(30, 30), // 마커 크기 설정
+                iconAnchor: new Tmapv2.Point(15, 30) // 마커 중심 조정 (선택 사항)
             });
             markers.push(subTerminalPin);
         } else {
@@ -295,7 +381,10 @@ $(document).ready(function() {
             const startSubPin = new Tmapv2.Marker({
                 position: new Tmapv2.LatLng(data.parcel.start_sub_terminal.lat, data.parcel.start_sub_terminal.lon),
                 map: map,
-                title: `출발 Sub 터미널: ${data.parcel.start_sub_terminal.name}`
+                title: `출발 Sub 터미널: ${data.parcel.start_sub_terminal.name}`,
+                icon: "/img/h_warehouse.png",  // Spring 서버에서 제공하는 정적 경로
+                iconSize: new Tmapv2.Size(30, 30), // 마커 크기 설정
+                iconAnchor: new Tmapv2.Point(15, 30) // 마커 중심 조정 (선택 사항)
             });
             markers.push(startSubPin);
 
@@ -303,7 +392,10 @@ $(document).ready(function() {
             const endSubPin = new Tmapv2.Marker({
                 position: new Tmapv2.LatLng(data.parcel.end_sub_terminal.lat, data.parcel.end_sub_terminal.lon),
                 map: map,
-                title: `도착 Sub 터미널: ${data.parcel.end_sub_terminal.name}`
+                title: `도착 Sub 터미널: ${data.parcel.end_sub_terminal.name}`,
+                icon: "/img/h_warehouse.png",  // Spring 서버에서 제공하는 정적 경로
+                iconSize: new Tmapv2.Size(30, 30), // 마커 크기 설정
+                iconAnchor: new Tmapv2.Point(15, 30) // 마커 중심 조정 (선택 사항)
             });
             markers.push(endSubPin);
         }
@@ -312,7 +404,10 @@ $(document).ready(function() {
         const hubPin = new Tmapv2.Marker({
             position: new Tmapv2.LatLng(data.parcel.hub_terminal.lat, data.parcel.hub_terminal.lon),
             map: map,
-            title: `Hub 터미널: ${data.parcel.hub_terminal.name}`
+            title: `Hub 터미널: ${data.parcel.hub_terminal.name}`,
+            icon: "/img/h_warehouse.png",  // Spring 서버에서 제공하는 정적 경로
+            iconSize: new Tmapv2.Size(30, 30), // 마커 크기 설정
+            iconAnchor: new Tmapv2.Point(15, 30) // 마커 중심 조정 (선택 사항)
         });
         markers.push(hubPin);
 
@@ -320,7 +415,10 @@ $(document).ready(function() {
         const startMarker = new Tmapv2.Marker({
             position: new Tmapv2.LatLng(data.parcel.start_lat, data.parcel.start_lon),
             map: map,
-            title: `출발지: ${data.parcel.start_station}`
+            title: `출발지: ${data.parcel.start_station}`,
+            icon: "/img/map_start.png",  // Spring 서버에서 제공하는 정적 경로
+            iconSize: new Tmapv2.Size(30, 30), // 마커 크기 설정
+            iconAnchor: new Tmapv2.Point(15, 30) // 마커 중심 조정 (선택 사항)
         });
         markers.push(startMarker); // 배열에 저장
 
@@ -328,16 +426,23 @@ $(document).ready(function() {
         const deliveryPin = new Tmapv2.Marker({
             position: new Tmapv2.LatLng(data.parcel.end_lat, data.parcel.end_lon),
             map: map,
-            title: "배송지"
+            title: "배송지",
+            icon: "/img/map_end.png",  // Spring 서버에서 제공하는 정적 경로
+            iconSize: new Tmapv2.Size(30, 30), // 마커 크기 설정
+            iconAnchor: new Tmapv2.Point(15, 30) // 마커 중심 조정 (선택 사항)
         });
         markers.push(deliveryPin);
 
-        // 지도 왼쪽 위에 이미지 추가
+        // 지도 왼쪽 위에 범례 추가
         $(".map").append(`
-            <img 
-                class="map-overlay-image" 
-                src="/img/map_ex3.png" 
-                alt="경로 비교 설명">
+            <div class="map-legend">
+                <div class="legend-item">
+                    <span class="legend-color" style="background-color: #3388FF;"></span> 기존 경로
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color" style="background-color: #FF5733;"></span> 지하창고 경로
+                </div>
+            </div>
         `);
 
         // 지도 영역 조정
@@ -347,7 +452,7 @@ $(document).ready(function() {
         if (data.parcel.to_hub_route && data.parcel.to_hub_route.length > 0) {
             const toHubPolyline = new Tmapv2.Polyline({
                 path: data.parcel.to_hub_route.map(coord => new Tmapv2.LatLng(coord[0], coord[1])),
-                strokeColor: "#FF0000", // 빨간색 #FF0000
+                strokeColor: "#3388FF",
                 strokeWeight: 6,
                 map: map
             });
@@ -357,7 +462,7 @@ $(document).ready(function() {
         if (data.parcel.from_hub_route && data.parcel.from_hub_route.length > 0) {
             const fromHubPolyline = new Tmapv2.Polyline({
                 path: data.parcel.from_hub_route.map(coord => new Tmapv2.LatLng(coord[0], coord[1])),
-                strokeColor: "#FF0000", // 주황색 #FFA500
+                strokeColor: "#3388FF",
                 strokeWeight: 6,
                 map: map
             });
@@ -367,7 +472,7 @@ $(document).ready(function() {
         if (data.parcel.to_destination_route && data.parcel.to_destination_route.length > 0) {
             const toDestinationPolyline = new Tmapv2.Polyline({
                 path: data.parcel.to_destination_route.map(coord => new Tmapv2.LatLng(coord[0], coord[1])),
-                strokeColor: "#FF0000", // 노란색 #FFFF00
+                strokeColor: "#3388FF",
                 strokeWeight: 6,
                 map: map
             });
@@ -380,7 +485,7 @@ $(document).ready(function() {
             if (selectedRoute.subway_route && selectedRoute.subway_route.length > 0) {
                 const subwayPolyline = new Tmapv2.Polyline({
                     path: selectedRoute.subway_route.map(coord => new Tmapv2.LatLng(coord[0], coord[1])),
-                    strokeColor: "#2E64FE", // 파란색 #0000FF
+                    strokeColor: "#FF5733",
                     strokeWeight: 6,
                     map: map
                 });
@@ -391,7 +496,7 @@ $(document).ready(function() {
         if (selectedRoute.driving_route && selectedRoute.driving_route.length > 0) {
             const drivingPolyline = new Tmapv2.Polyline({
                 path: selectedRoute.driving_route.map(coord => new Tmapv2.LatLng(coord[0], coord[1])),
-                strokeColor: "#2E64FE", // 초록색
+                strokeColor: "#FF5733",
                 strokeWeight: 6,
                 map: map
             });
@@ -416,7 +521,7 @@ $(document).ready(function() {
 
         // 대시보드 업데이트
         $(".dashboard").empty();
-        $(".dashboard").append(`<h3>이동 경로 비교 결과</h3>`);
+        // $(".dashboard").append(`<h3>이동 경로 비교 결과</h3>`);
 
         // 감소율 계산 함수
         function calculateReduction(original, newValue) {
@@ -462,40 +567,40 @@ $(document).ready(function() {
         updateDashboard(comparisonData);
 
 
-        // 그래프 캔버스 추가
+        // 대시보드에 차트 추가
         $(".dashboard").append(`
             <div class="chart-container">
-                <canvas id="timeDistanceChart"></canvas>
+                <canvas id="distanceTimeChart"></canvas>
             </div>
         `);
         $(".dashboard").append(`
             <div class="chart-container">
-                <canvas id="stackedCostEmissionChart"></canvas>
+                <canvas id="costEmissionChart"></canvas>
             </div>
         `);
 
-        // 시간 및 거리 비교 (막대 차트)
-        const timeDistanceCtx = document.getElementById("timeDistanceChart").getContext("2d");
-        new Chart(timeDistanceCtx, {
+        // 이동 거리 & 시간 비교 (막대 그래프)
+        const distanceTimeCtx = document.getElementById("distanceTimeChart").getContext("2d");
+        new Chart(distanceTimeCtx, {
             type: "bar",
             data: {
                 labels: ["기존 택배", "지하철 창고"],
                 datasets: [
                     {
-                        label: "총 시간 (분)",
-                        data: [Math.round(data.parcel.time), Math.round(data.subway.time)],
-                        backgroundColor: "rgba(54, 162, 235, 0.6)",
-                    },
-                    {
                         label: "총 거리 (km)",
                         data: [data.parcel.distance.toFixed(2), data.subway.distance.toFixed(2)],
-                        backgroundColor: "rgba(255, 99, 132, 0.6)",
+                        backgroundColor: "rgba(255, 99, 132, 0.7)"
+                    },
+                    {
+                        label: "총 시간 (분)",
+                        data: [Math.round(data.parcel.time), Math.round(data.subway.time)],
+                        backgroundColor: "rgba(54, 162, 235, 0.7)"
                     }
                 ]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: true, // 가로/세로 비율 유지
+                maintainAspectRatio: true,
                 plugins: {
                     legend: { position: "top" }
                 },
@@ -507,9 +612,9 @@ $(document).ready(function() {
             }
         });
 
-        // 스택형 막대 차트: 비용 및 탄소 배출량 비교
-        const stackedCostEmissionCtx = document.getElementById("stackedCostEmissionChart").getContext("2d");
-        new Chart(stackedCostEmissionCtx, {
+        // 비용 & 탄소 배출 비교 (막대 그래프)
+        const costEmissionCtx = document.getElementById("costEmissionChart").getContext("2d");
+        new Chart(costEmissionCtx, {
             type: "bar",
             data: {
                 labels: ["기존 택배", "지하철 창고"],
@@ -517,30 +622,24 @@ $(document).ready(function() {
                     {
                         label: "비용 (₩)",
                         data: [data.parcel.cost, data.subway.cost],
-                        backgroundColor: "rgba(54, 162, 235, 0.6)"
+                        backgroundColor: "rgba(255, 206, 86, 0.7)"
                     },
                     {
                         label: "탄소 배출량 (g CO₂)",
                         data: [data.parcel.emission.toFixed(2), data.subway.emission.toFixed(2)],
-                        backgroundColor: "rgba(255, 99, 132, 0.6)"
+                        backgroundColor: "rgba(75, 192, 192, 0.7)"
                     }
                 ]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: true, // 가로/세로 비율 유지
+                maintainAspectRatio: true,
                 plugins: {
                     legend: { position: "top" }
                 },
                 scales: {
-                    x: {
-                        stacked: true // X축 스택형
-                    },
                     y: {
-                        type: "logarithmic", // 로그 스케일 적용
-                        stacked: true, // Y축 스택형
-                        beginAtZero: true,
-                        title: { display: true, text: "비용 및 배출량 (로그 스케일)" }
+                        beginAtZero: true
                     }
                 }
             }
@@ -554,6 +653,8 @@ $(document).ready(function() {
     // });
 
     $("#default_btn").on("click", function() {
+        showLoading(); // 로딩 화면 표시
+
         var formData = $("#route_form").serialize();
         $.post("/api/parcel-route", formData, function(data) {
             console.log("택배 경로 응답 데이터:", data);
@@ -561,10 +662,14 @@ $(document).ready(function() {
         }).fail(function(xhr, status, error) {
             console.error("에러:", error);
             console.error("서버 응답:", xhr.responseText);
+        }).always(function() {
+            hideLoading(); // 요청이 끝나면 로딩 화면 숨기기
         });
     });
 
     $("#subway_btn").on("click", function() {
+        showLoading(); // 로딩 화면 표시
+
         var formData = $("#route_form").serialize();
         $.post("/api/compare-routes", formData, function(data) {
             console.log("응답 데이터:", data); // 디버깅 로그
@@ -573,10 +678,13 @@ $(document).ready(function() {
             console.error("에러 상태:", status); // 에러 상태 확인
             console.error("에러 메시지:", error); // 에러 메시지 확인
             console.error("서버 응답:", xhr.responseText); // 서버에서 반환된 에러 메시지
+        }).always(function() {
+            hideLoading(); // 요청이 끝나면 로딩 화면 숨기기
         });
     });
 
     $("#compare_routes_btn").on("click", function() {
+        showLoading(); // 로딩 화면 표시
         const formData = $("#route_form").serialize(); // 폼 데이터를 가져옴
 
         // 서버로 요청 보내기
@@ -597,7 +705,9 @@ $(document).ready(function() {
                 console.error("에러 메시지:", error);
                 console.error("서버 응답:", xhr.responseText);
                 alert("서버와 통신 중 문제가 발생했습니다. 다시 시도해주세요.");
-            });
+            }).always(function() {
+            hideLoading(); // 요청이 끝나면 로딩 화면 숨기기
+        });
     });
 
     $("#reset_btn").on("click", function() {
@@ -608,11 +718,11 @@ $(document).ready(function() {
 
         // 대시보드를 초기 템플릿 상태로 복원
         $(".dashboard").empty();
-        $(".dashboard").append(`<h3>Dashboard</h3>`);
+        // $(".dashboard").append(`<h3>Dashboard</h3>`);
         $(".dashboard").append(initialDashboardTemplate);
 
-        // 이미지 제거
-        $(".map .map-overlay-image").remove();
+        // 범례 제거
+        $(".map .map-legend").remove();
         console.log("지도가 초기화되었습니다."); // 디버깅 로그
     });
 

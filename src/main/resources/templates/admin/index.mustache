@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <title>Admin Page</title>
     <!-- sidebarstyles.css 불러오기 -->
     <link rel="stylesheet" href="/css/sidebarstyles.css">
@@ -187,6 +189,8 @@
             background-color: #dc3545;
         }
 
+
+
         .dashboard-layout {
             display: grid;
             grid-template-columns: repeat(4, 1fr); /* 4열 구성 */
@@ -271,7 +275,7 @@
         }
 
         .sidebar ul li:hover {
-            background-color: #0606dd;
+            background-color: #909091;
         }
 
         .logout-button {
@@ -298,34 +302,38 @@
             width: 24px;
             height: auto;
         }
+        footer {
+
+        }
 
     </style>
 </head>
 <body>
+{{> common/footer}}
 <div class="sidebar">
     <h1><img src="/img/logo.png" alt="Keen Icon"><span>YMJ</span></h1>
     <ul>
-        <li onclick="location.href='http://localhost:8080/'" style="cursor: pointer;">
-            <img src="/img/home.svg" alt="Home Icon">home
+        <li onclick="location.href='/" style="cursor: pointer;">
+            <img src="/img/home.svg" alt="Home Icon">홈
         </li>
-        <li onclick="location.href='http://localhost:8080/map/'" style="cursor: pointer;">
-            <img src="/img/dashboard.svg" alt="Dashboard Icon">경로 시뮬레이션
+        <li onclick="location.href='/stock'" style="cursor: pointer;">
+            <img src="/img/stock.svg" alt="Admin Icon">재고 관리
         </li>
-        <li onclick="location.href='http://localhost:8080/stock/'" style="cursor: pointer;">
-            <img src="/img/admin.svg" alt="Admin Icon">재고관리
+        <li onclick="location.href='inspect/'" style="cursor: pointer;">
+            <img src="/img/check.svg" alt="Admin Icon">상품 검수
         </li>
-        <li onclick="location.href='http://localhost:8080/inspect/'" style="cursor: pointer;">
-            <img src="/img/admin.svg" alt="Admin Icon">상품검수
+        <li onclick="location.href='/map'" style="cursor: pointer;">
+            <img src="/img/dashboard.svg" alt="Dashboard Icon">배송 시뮬레이션
         </li>
-        <li onclick="location.href='http://localhost:8080/board/'" style="cursor: pointer;">
+        <li onclick="location.href='/board'" style="cursor: pointer;">
             <img src="/img/community.svg" alt="커뮤니티 Icon">커뮤니티
         </li>
-        <li onclick="location.href='http://localhost:8080/admin/'" style="cursor: pointer;">
+        <li onclick="location.href='/admin'" style="cursor: pointer;">
             <img src="/img/admin.svg" alt="Admin Icon">admin
         </li>
 
     </ul>
-    <button class="logout-button" onclick="location.href='http://localhost:8080/public/login/'">
+    <button class="logout-button" onclick="logout()">
         <img src="/img/logout.svg" alt="logout-Icon">
     </button>
 </div>
@@ -380,7 +388,7 @@
                         <td>{{email}}</td>
                         <td>
                             <button class="approve-btn">승인</button>
-                            <button class="reject">거부</button>
+                            <button class="reject-btn">거부</button>
                         </td>
                     </tr>
                 {{/userList}}
@@ -409,10 +417,10 @@
         <!-- 3,4,7,8번: 시간대별 방문자 수 -->
         <div class="visitors">
             <h2>시간대별 방문자 수</h2>
-            <p>여기에 시간대별 방문자 수 데이터를 표시합니다.</p>
+            <canvas id="visitorChart"></canvas> <!-- 방문자 차트 추가 -->
         </div>
 
-        <!-- 11,12번: 현재 접속중인 로그 -->
+        <!-- 접속 로그 -->
         <div class="logs">
             <h2>현재 접속중인 로그</h2>
             <p>여기에 현재 접속중인 로그 데이터를 표시합니다.</p>
@@ -431,6 +439,7 @@
     setInterval(updateTime, 1000);
 
     const appBtns = document.querySelectorAll('.approve-btn');
+    const rejectBtns = document.querySelectorAll('.reject-btn');
     appBtns.forEach((btn) => {
         btn.addEventListener('click', async (event) => {
             event.preventDefault();
@@ -453,6 +462,101 @@
             }
         });
     });
+
+
+    rejectBtns.forEach((btn) => {
+        btn.addEventListener('click', async (event) => {
+            event.preventDefault();
+
+            //
+
+            // 클릭된 버튼의 부모 요소에서 id 값 추출
+            const id = event.target.closest('.userList-tr').querySelector('td').textContent.trim();
+            console.log(id);
+
+            const response = await fetch(`/admin/${id}/reject`, {
+                method: 'GET',
+            });
+
+            const data = await response.text();
+            const responseData = JSON.parse(data);
+
+            if ( responseData.status == "OK") {
+                btn.parentNode.parentNode.remove();
+            }
+
+
+        }) // async Enbd
+    }); // rejectBtns End
+
+    async function logout() {
+    try {
+        const response = await fetch('/api/v1/auth/logout', {
+            method: 'GET',
+            credentials: 'include' // 쿠키를 함께 전송
+        });
+
+        if (response.ok) {
+            alert('로그아웃 되었습니다.');
+            location.href = '/public/login';
+        } else {
+            alert('로그아웃에 실패했습니다. 다시 시도해주세요.');
+        }
+    } catch (error) {
+        console.error('Error during logout:', error);
+        alert('로그아웃 중 오류가 발생했습니다.');
+    }
+}
+
+
+    // 방문자 수 가져오기
+    async function fetchVisitorData() {
+        try {
+            const response = await fetch('/admin/api/visitor-data');
+            const data = await response.json();
+
+            console.log(data);
+            const labels = Object.keys(data).map(label => `${data[label].time}시`);
+            for (const name in labels) {
+                console.log(name);
+            }
+            const counts = Object.keys(data).map(label => data[label].count);
+
+            renderVisitorChart(labels, counts);
+        } catch (error) {
+            console.error('Error fetching visitor data:', error);
+        }
+    }
+
+    // 방문자 수 차트 렌더링
+    function renderVisitorChart(labels, counts) {
+        const ctx = document.getElementById('visitorChart').getContext('2d');
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '방문자 수',
+                    data: counts,
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    fetchVisitorData();
+
 
 </script>
 </body>

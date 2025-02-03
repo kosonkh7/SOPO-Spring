@@ -38,6 +38,7 @@ public class ResponseDTO<T> {
         this.status = status;
     }
 
+
     public ResponseDTO(int updateRows, HttpStatus status) {
         this.updateRows = updateRows;
         this.status = status;

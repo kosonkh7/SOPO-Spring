@@ -9,11 +9,13 @@ import com.ai.pj.repository.BoardRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.print.Pageable;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -21,7 +23,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,12 +63,12 @@ public class BoardService {
         String userId = post.getUserId();
 
         // 유효한 사용자 검증
-        User user = userService.findById(userId)
+        User user = userService.findUserById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("no User Here" + userId));
 
         Board board = Board.builder()
                 .title(post.getTitle())
-                .content(post.getContent())
+                .content(post.getContent().replace("\n", "<br>")) // 줄바꿈 적용
                 .user(user)
                 .imageUrl(imageUrl) // 이미지 URL 설정
                 .build();
@@ -82,7 +83,7 @@ public class BoardService {
                 .orElseThrow(() -> new EntityNotFoundException("게시글이 존재하지 않습니다: " + id));
 
         board.setTitle(updatedPost.getTitle());
-        board.setContent(updatedPost.getContent());
+        board.setContent(updatedPost.getContent().replace("\n", "<br>"));
 
         // 새로운 이미지가 업로드된 경우 업데이트
         if (imageUrl != null) {
@@ -103,7 +104,7 @@ public class BoardService {
     // 게시글 목록 조회
     @Transactional(readOnly = true)
     public List<BoardDTO.Get> getAllBoards() {
-        return boardRepository.findAll().stream()
+        return boardRepository.findAllByOrderByCreatedDateDesc().stream()
                 .map(board -> new BoardDTO.Get(
                         board.getId(),
                         board.getTitle(),
