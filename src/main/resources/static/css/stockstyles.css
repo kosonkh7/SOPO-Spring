@@ -1,0 +1,151 @@
+/* 📌 기본 스타일 */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+/* 📌 컨테이너: 전체 콘텐츠의 최대 크기 설정 */
+.container {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    margin-left: 240px;
+}
+
+/* 📌 지도 스타일 */
+#map {
+    width: 400px;
+    height: 500px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* 📌 검색 폼 & 결과 영역 스타일 */
+.form-container, .result-container {
+    width: 400px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background: white;
+}
+
+/* 📌 제목 스타일 */
+h1, h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* 📌 입력 폼 스타일 */
+form {
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold;
+}
+
+select, input[type="date"] {
+    display: block;
+    width: 100%;
+    margin: 10px 0 20px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+button {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+
+
+/* 📌 예측 결과 스타일 */
+.data {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+.data:last-child {
+    border-bottom: none;
+}
+
+/* 🚛 로딩 애니메이션 스타일 */
+#loading-container {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-size: 18px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    width: 280px;
+    height: 200px;
+}
+
+#loading-text {
+    margin-top: 0px;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.9); /* ✅ 하얀 네모 배경 */
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* ✅ 살짝 그림자 추가 */
+}
+
+#loading-truck {
+    width: 200px;
+    height: auto;
+    position: relative;
+    top: 30%;
+    left: 10%;
+    transform: translate(0%, -50%);
+    animation: moveTruck 2s infinite linear;
+}
+
+/* 🚛 트럭 애니메이션 */
+@keyframes moveTruck {
+    0% { left: -50px; opacity: 1; }
+    50% { left: 50px; opacity: 0.8; }
+    100% { left: 150px; opacity: 1; }
+}
+
+/* 📌 반응형: 화면이 좁아질 때 레이아웃 조정 */
+@media screen and (max-width: 1024px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+        margin-left: 220; /* ✅ 작은 화면에서는 사이드바 영향 X */
+    }
+    #map, .form-container, .result-container {
+        width: 100%;
+    }
+}
