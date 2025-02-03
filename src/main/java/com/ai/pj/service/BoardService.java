@@ -102,7 +102,7 @@ public class BoardService {
     // 게시글 목록 조회
     @Transactional(readOnly = true)
     public List<BoardDTO.Get> getAllBoards() {
-        return boardRepository.findAll().stream()
+        return boardRepository.findAllByOrderByCreatedDateDesc().stream()
                 .map(board -> new BoardDTO.Get(
                         board.getId(),
                         board.getTitle(),
