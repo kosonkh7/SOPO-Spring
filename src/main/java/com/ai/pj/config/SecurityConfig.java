@@ -37,7 +37,7 @@ public class SecurityConfig {
     private final JwtUtil jwtUtil;
 
     private static final String[] AUTH_WHITELIST = {
-            "/api/v1/auth/**", "/img/**", "/css/**", "/js/**", "/favicon.ico", "/public/login"
+            "/api/v1/auth/**", "/img/**", "/css/**", "/js/**", "/favicon.ico", "/public/**"
     };
 
     @Bean
