@@ -85,6 +85,7 @@ spring:
       dialect: org.hibernate.dialect.MySQL8InnoDBDialect
 
  #MySql
+  # PORT 수정.
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/transSys?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
