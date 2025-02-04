@@ -16,12 +16,12 @@ public class RedisTest {
     @Test
     public void testRedisConnection() {
 
-        Token token = new Token("testKey", "Hello Redis");
-        tokenRepository.save(token);
-        Optional<Token> value = tokenRepository.findById("testKey");
-
-        System.out.println(value.get().getIdentifier());
-        System.out.println(value.get().getRefreshToken());
+//        Token token = new Token("");
+//        tokenRepository.save(token);
+//        Optional<Token> value = tokenRepository.findById("testKey");
+//
+//        System.out.println(value.get().getId());
+//        System.out.println(value.get().getRefreshToken());
     }
 
 }

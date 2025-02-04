@@ -61,7 +61,7 @@ public class VisitCounterService {
 
 
     private static final List<String> viewEndpoints = List.of(
-            "/board/"
+            "/board/", "/map","/stock","/inspect"
     );
 
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH");
