@@ -10,15 +10,15 @@ body {
 .container {
     display: flex;
     justify-content: space-between;
-    max-width: 1200px;
+    width: calc(100% - 220px);
     margin: 0 auto;
     padding: 20px;
-    margin-left: 240px;
+    margin-left: 220px;
 }
 
 /* 📌 지도 스타일 */
 #map {
-    width: 400px;
+    width: 450px;
     height: 500px;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -26,7 +26,7 @@ body {
 
 /* 📌 검색 폼 & 결과 영역 스타일 */
 .form-container, .result-container {
-    width: 400px;
+    width: 450px;
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 8px;
