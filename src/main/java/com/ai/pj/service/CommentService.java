@@ -53,7 +53,7 @@ public class CommentService {
                 .map(comment -> new CommentDTO.Get(
                         comment.getId(),
                         comment.getUser().getId(),
-                        comment.getContent(),
+                        comment.getContent().replace("\n", "<br>"), // 줄바꿈 적용,
                         comment.getCreatedDate()
                 ))
                 .collect(Collectors.toList());

@@ -7,7 +7,7 @@
 body {
     font-family: Arial, sans-serif;
     display: flex;
-    height: auto; /* 스크롤이 가능하도록 */
+    flex-direction: column; /* 세로로 정렬 */
     min-height: 100vh; /* 최소 높이를 화면 전체로 유지 */
     overflow-y: auto; /* 브라우저 스크롤 활성화 */
 }
@@ -19,82 +19,308 @@ main {
         "map dashboard"
         "controls dashboard";
     grid-template-columns: 2fr 1fr;
-    grid-template-rows: 1fr auto;
+    grid-template-rows: auto 1fr; /* 비율 조정 */
     align-items: stretch; /* 같은 높이로 확장 */
-    gap: 10px;
+    gap: 12px;
     padding: 10px;
+    padding-top: 75px;
     width: calc(100% - 220px); /* 전체 폭에서 사이드바 폭 제외 */
-    height: 100vh; /* 전체 높이를 화면에 맞춤 */
-    overflow: hidden; /* 내부 요소가 넘치지 않도록 */
+    min-height: calc(100vh - 75px); /* 헤더를 제외한 화면 높이 */
 }
 
 .map {
     grid-area: map;
     background-color: #e0e0e0;
-    height: calc(100vh - 240px); /* 컨트롤 패널과 대시보드 높이를 고려한 지도 높이 */
-    min-height: 500px;
+    min-height: 450px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    overflow: hidden; /* 지도 영역이 넘치지 않도록 설정 */
-    position: relative; /* 자식 요소 위치 기준을 이 요소로 설정 */
+    position: relative;
 }
 
-.map-overlay-image {
-    position: absolute; /* 지도 위에 고정 */
-    top: 10px; /* 상단에서 10px */
-    left: 10px; /* 왼쪽에서 10px */
-    width: 150px; /* 이미지 크기 */
-    z-index: 1000; /* 지도 위에 표시되도록 z-index를 높임 */
-    pointer-events: none; /* 클릭이 지도에 전달되도록 설정 */
+.map-legend {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(255, 255, 255, 0.85); /* 반투명 배경 */
+    padding: 10px 15px;
+    border-radius: 10px; /* 둥근 모서리 */
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
+    font-size: 12px;
+    font-family: 'Arial', sans-serif;
+    z-index: 1000;
 }
 
-.controls {
-    grid-area: controls;
-    background-color: #fff;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+.legend-item {
     display: flex;
-    grid-template-areas: "start location buttons";
-    grid-template-columns: 1fr 1fr 1fr; /* 출발 창고, 배송지, 버튼 비율 설정 */
-    gap: 10px;
-    align-items: start;
-    height: auto; /* 높이 자동 조정 */
-    min-height: 80px; /* 컨트롤 패널 높이를 대시보드와 동일하게 유지 */
+    align-items: center;
+    margin-bottom: 5px;
 }
 
-.controls .start-section,
-.controls .location-section,
-.controls .button-section {
+.legend-color {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%; /* 원형 색상칩 */
+    display: inline-block;
+    margin-right: 8px;
+    border: 1px solid #ccc;
+}
+
+/* 컨트롤 패널 전체 정리 */
+.controls {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    background-color: #fff;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    align-items: center;
+    flex-wrap: wrap; /* 창이 줄어들면 줄 바꿈 */
+}
+
+/* 각 섹션(출발 창고, 배송지 입력, 버튼 그룹) */
+.section {
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 10px;
+    min-width: 200px; /* 최소 크기 설정 */
 }
 
-.controls .button-section div {
-    display: grid; /* 그리드 레이아웃 사용 */
-    grid-template-columns: repeat(2, 1fr); /* 2개의 열로 나누기 */
-    gap: 10px; /* 버튼 간격 */
+/* 섹션 사이 구분선 */
+.section:not(:last-child) {
+    border-right: 1px solid #ddd;
+    padding-right: 20px;
+}
+
+.start-group label {
+    font-size: 12px; /* 글씨 크기 조정 */
+}
+
+/* 출발 창고 */
+.start-group select {
+    font-size: 12px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%; /* 가로폭 맞춤 */
+    height: 35px;
+}
+
+/* 주소 입력 */
+.input-row {
+    display: flex;
+    align-items: center; /* 요소들을 수직 가운데 정렬 */
+    gap: 5px;
+}
+
+.location-group label {
+    font-size: 12px; /* 글씨 크기 조정 */
+}
+
+.input-row label {
+    font-size: 12px; /* 글씨 크기 조정 */
+}
+
+.input-row input {
+    flex: 1;
+    padding: 8px; /* 크기 키우기 */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%; /* 반응형 적용 */
+    min-width: 210px;
+    height: 35px; /* 검색 버튼과 동일한 높이 맞추기 */
+    font-size: 12px;
+    line-height: normal; /* 기본 라인 높이로 맞추기 */
+    box-sizing: border-box;
+}
+
+.input-row button {
+    width: 35px;
+    height: 35px; /* 입력창과 같은 높이 */
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #ccc; /* 버튼 테두리 추가 */
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    box-sizing: border-box; /* 패딩 포함 높이 유지 */
+    display: flex;
+    align-items: center; /* 텍스트 중앙 정렬 */
+    justify-content: center;
+    padding: 0;
+    line-height: normal; /* 기본 라인 높이로 맞추기 */
+}
+
+.input-row button:hover {
+    background-color: #e0e0e0; /* 마우스 오버 시 색상 변경 */
+}
+
+.input-row button:active {
+    background-color: #d0d0d0;
+    transform: scale(0.95);
+}
+
+/* 위도/경도 입력, 한 줄 배치 */
+.coordinate-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.coordinate-row label {
+    font-size: 12px; /* 글씨 크기 줄이기 */
+    font-weight: bold;
+}
+
+.coordinate-row input {
+    padding: 8px;
+    width: 100px;
+    font-size: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    height: 35px;
+}
+
+.c-button-group {
+    display: flex; /* 버튼을 가로로 배치 */
+    gap: 10px; /* 버튼 사이 여백 */
+    justify-content: center; /* 중앙 정렬 */
+    margin-top: 10px; /* 버튼 그룹 위쪽 여백 */
+}
+
+.c-button-group button {
+    flex: 1; /* 버튼이 같은 크기를 갖도록 설정 */
+    padding: 10px 15px; /* 버튼 내부 여백 */
+    font-size: 12px;
+}
+
+
+/* 버튼 그룹 */
+.button-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* 왼쪽 정렬 */
+    text-align: left; /* 텍스트 왼쪽 정렬 */
+}
+
+/* '경로 출력' 텍스트 추가 */
+.button-header {
+    font-size: 13px;
+    font-weight: bold;
+    text-align: left; /* 왼쪽 정렬 */
+    margin-bottom: 5px;
+    color: #333;
+}
+
+/* 버튼 컨테이너 */
+.button-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2열 배치 */
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+}
+
+/* 버튼 스타일 */
+.button-container button {
+    padding: 10px;
+    font-size: 12px;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+/* 버튼 색상 */
+#default_btn, #subway_btn, #compare_routes_btn, #reset_btn {
+    background-color: #007aff;
+    color: white;
+}
+
+#default_btn:hover, #subway_btn:hover, #compare_routes_btn:hover, #reset_btn:hover {
+    background-color: #005ecb;
+}
+
+#default_btn:active, #subway_btn:active, #compare_routes_btn:active, #reset_btn:active {
+    background-color: #0047a3;
+    transform: scale(0.95);
+}
+
+/* 버튼 호버 & 클릭 효과 */
+.button-group button:hover {
+    opacity: 0.9;
 }
 
 .dashboard {
     grid-area: dashboard;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
     background-color: #fff;
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    height: 100%; /* `main` 내에서 자동으로 확장 */
     overflow-y: auto; /* 내부 스크롤 활성화 */
-    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* `main` 내에서 자동으로 확장 */
 }
+
+/*--택배 대시보드--*/
+
+.process-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.process-card {
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 8px;
+    border-left: 5px solid #007bff;
+    display: flex;
+    flex-direction: column;
+}
+
+.process-card h4 {
+    font-size: 16px;
+    margin: 0;
+    color: #333;
+}
+
+.process-card p {
+    font-size: 14px;
+    color: #555;
+    margin-top: 5px;
+}
+
+.time-highlight {
+    font-size: 18px;
+    font-weight: bold;
+    color: #d9534f;
+}
+
+.startsub-card { border-left: 5px solid #FF5733; } /* 츌발서브터미널 - 빨간색 */
+.hub-card { border-left: 5px solid #007bff; }  /* 허브 - 파란색 */
+.endsub-card { border-left: 5px solid #28a745; }   /* 도착서브터미널 - 초록색 */
+.time-card { border-left: 5px solid #6c757d; }  /* 총 이동 시간 - 회색 */
+
+.subway-card { border-left: 5px solid #007bff; }  /* 지하철 - 파란색 */
+.driving-card { border-left: 5px solid #FF5733; } /* 자동차 - 빨간색 */
+.total-card { border-left: 5px solid #6c757d;; }   /* 총 이동 시간 - 초록색 */
+
+/*--*/
 
 .cards-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* 반응형 카드 */
-    gap: 20px; /* 카드 간 간격 */
+    gap: 15px; /* 카드 간 간격 */
 }
 
 .card {
@@ -112,7 +338,7 @@ main {
 }
 
 .card p {
-    font-size: 14px;
+    font-size: 13px;
     margin: 5px 0;
 }
 
@@ -173,6 +399,39 @@ button:hover {
     background-color: #0056b3;
 }
 
+/* 로딩 팝업 스타일 */
+.loading-popup {
+    display: none; /* 기본적으로 숨김 */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.7); /* 반투명 배경 */
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    z-index: 1000;
+}
+
+/* 로딩 스피너 */
+.spinner {
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid #fff;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 /* 반응형 디자인: 화면 너비가 줄어들면 레이아웃 조정 */
 @media screen and (max-width: 768px) {
     main {
@@ -194,11 +453,31 @@ button:hover {
     }
 
     .controls {
-        grid-template-columns: 1fr; /* 컨트롤 섹션도 단일 열로 전환 */
-        gap: 15px;
+        flex-direction: column;
+        align-items: center;
     }
 
-    .controls .button-section div {
-        grid-template-columns: 1fr; /* 버튼도 단일 열로 배치 */
+    .section:not(:last-child) {
+        border-right: none;
+        padding-right: 0;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 15px;
+    }
+
+    .button-container {
+        grid-template-columns: 1fr; /* 작은 화면에서는 한 줄로 표시 */
+        width: 100%;
+    }
+
+    .input-row input {
+        min-width: auto; /* 작은 화면에서 유동적으로 조절 */
+    }
+
+    .coordinate-row {
+        flex-wrap: wrap;
+    }
+
+    .map-legend {
+        font-size: 12px;
     }
 }

@@ -8,7 +8,7 @@
     <!-- 스타일 시트 -->
     <link rel="stylesheet" href="/css/headerstyles.css">
     <link rel="stylesheet" href="/css/sidebarstyles.css">
-    <link rel="stylesheet" href="/css/mapStyles.css" />
+    <link rel="stylesheet" href="/css/mapstyles.css" />
 
     <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey={{tmapKey}}"></script>
 
@@ -33,40 +33,58 @@
         <!-- 지도 표시 -->
     </div>
 
-    <form id="route_form">
-        <div class="controls">
-            <div class="start-section">
-                <label for="start_station">출발 창고:</label>
-                <select id="start_station" name="start_station">
-                    <!-- JS로 /api/stations 호출 후 option 추가 -->
-                </select>
-                <div class="address-section">
-                    <label for="address_input">주소 입력:</label>
-                    <input id="address_input" type="text" value="서울특별시 성동구 뚝섬로 273" required>
-                    <button id="search_address_btn">주소 검색</button>
-                </div>
-            </div>
-            <div class="location-section">
-                <label for="end_lat">배송지 위도:</label>
-                <input type="text" id="end_lat" name="end_lat" value="37.545069" required>
-                <label for="end_lon">배송지 경도:</label>
-                <input type="text" id="end_lon" name="end_lon" value="127.037653" required>
-            </div>
-            <div class="button-section">
-                <label for="button-section">경로 출력:</label>
-                <div>
-                    <button type="button" id="default_btn">기존 택배</button>
-                    <button type="button" id="subway_btn">지하철 창고</button>
-                    <button type="button" id="compare_routes_btn">경로 비교</button>
-                    <button type="button" id="reset_btn">지도 초기화</button>
-                </div>
-            </div>
+    <!-- 로딩 팝업 -->
+    <div id="loadingPopup" class="loading-popup">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <p>경로 계산 중...</p>
         </div>
-    </form>
+    </div>
+
+    <form id="route_form">
+            <div class="controls">
+                <!-- 출발 창고 및 주소 입력 -->
+                <div class="section start-group">
+                    <label for="start_station">출발 창고:</label>
+                    <select id="start_station" name="start_station"></select>
+                </div>
+
+                <!-- 배송지 위도/경도 입력 -->
+                <div class="section location-group">
+                    <label for="address_input">배송지 주소:</label>
+                    <div class="input-row">
+                        <input id="address_input" type="text" value="서울특별시 성동구 뚝섬로 273" required>
+<!--                        <button id="search_address_btn">🔍</button>-->
+                    </div>
+                    <div class="coordinate-row">
+                        <label for="end_lat">위도</label>
+                        <input type="text" id="end_lat" name="end_lat" value="37.545069" required>
+                        <label for="end_lon">경도</label>
+                        <input type="text" id="end_lon" name="end_lon" value="127.037653" required>
+                    </div>
+                    <div class="c-button-group">
+                        <button id="add_marker_btn" type="button">배송지 선택</button>
+                        <button id="confirm_location_btn" type="button">위치 확인</button>
+                    </div>
+                </div>
+
+
+                <!-- 버튼 그룹 -->
+                <div class="section button-group">
+                    <span class="button-header">경로 출력:</span>
+                    <div class="button-container">
+                        <button type="button" id="default_btn">기존 택배</button>
+                        <button type="button" id="subway_btn">지하철 창고</button>
+                        <button type="button" id="compare_routes_btn">경로 비교</button>
+                        <button type="button" id="reset_btn">지도 초기화</button>
+                    </div>
+                </div>
+            </div>
+        </form>
 
 
     <div class="dashboard">
-        <h3>Dashboard</h3>
+<!--        <h3>Dashboard</h3>-->
         <p id="comparison_result"></p>
 
         <div class="cards-container">
@@ -88,7 +106,7 @@
 
             <!-- 카드 3: 비용 비교 -->
             <div class="card">
-                <h4>💰 비용 비교</h4>
+                <h4>💰 운행 비용 비교</h4>
                 <p>기존 택배: <span id="cost_original">--</span> 원</p>
                 <p>지하철 창고: <span id="cost_subway">--</span> 원</p>
                 <p>📉 절감률: <span id="cost_reduction">--</span>%</p>

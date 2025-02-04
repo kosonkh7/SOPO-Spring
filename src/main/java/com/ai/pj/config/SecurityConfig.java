@@ -45,6 +45,7 @@ public class SecurityConfig {
     // admin 권한 가진 사람 허용 주소.
     private static final String[] AUTH_ADMINLIST = {
             "/admin/**",
+
     };
 
     @Bean
