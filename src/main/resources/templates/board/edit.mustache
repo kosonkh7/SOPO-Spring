@@ -1,13 +1,90 @@
-<h1>게시글 수정</h1>
-<form action="/board/edit/{{board.id}}" method="post">
-    <div>
-        <label for="title">제목:</label>
-        <input type="text" id="title" name="title" value="{{board.title}}" required>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>글 수정</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input, textarea, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+        }
+        textarea {
+            height: 150px;
+            resize: vertical;
+        }
+        button {
+            background-color: rgba(17, 48, 237, 0.9);
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #081da3;
+        }
+        .btn-cancel {
+            background-color: #fff;
+            color: #6c757d;
+            border: 1px solid #6c757d;
+            cursor: pointer;
+        }
+        .btn-cancel:hover {
+            background-color: #e9ecef;
+            color: #343a40;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+<h1>글 수정</h1>
+<form action="/board/edit/{{board.id}}" method="POST" enctype="multipart/form-data">
+    <!-- 제목 -->
+    <label for="title">제목</label>
+    <input type="text" id="title" name="title" value="{{board.title}}" required>
+
+    <!-- 작성자 -->
+    <label for="userId">작성자</label>
+    <input type="text" id="userId" name="userId" value="{{board.userId}}" required readonly>
+
+    <!-- 내용 -->
+    <label for="content">내용</label>
+    <textarea id="content" name="content" required>{{board.content}}</textarea>
+
+    <!-- 기존 이미지 미리보기 -->
+    {{#board.imageUrl}}
+        <label>현재 이미지</label>
+        <div>
+            <img src="{{board.imageUrl}}" alt="현재 이미지" style="max-width: 100%; height: auto; border-radius: 5px; margin-bottom: 10px;">
+        </div>
+    {{/board.imageUrl}}
+
+    <!-- 이미지 변경 업로드 -->
+    <label for="imageFile">이미지 변경</label>
+    <input type="file" id="imageFile" name="imageFile" accept="image/*">
+
+    <!-- 버튼 그룹 -->
+    <div class="button-group" style="margin-top: 20px;">
+        <button type="submit">수정하기</button>
+<!--        <a href="/board/{{board.id}}" class="btn-cancel">취소</a>-->
     </div>
-    <div>
-        <label for="content">내용:</label>
-        <textarea id="content" name="content" required>{{board.content}}</textarea>
-    </div>
-    <button type="submit">수정</button>
-    <a href="/board">취소</a>
 </form>
+</body>
+</html>

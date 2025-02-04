@@ -1,5 +1,7 @@
 package com.ai.pj.controller;
 
+import com.ai.pj.config.TmapConfig;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,13 +10,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class MapController {
 
-    @Value("${tmap.api.key:}")
-    private String tmapKey;
+    private final TmapConfig tmapConfig;
+
+    @Autowired
+    public MapController(TmapConfig tmapConfig) {
+        this.tmapConfig = tmapConfig;
+    }
+
+//    @Value("${tmap.api.key:}")
+//    private String tmapKey;
 
     // 브라우저에서 http://localhost:8080/map 로 접속하면,
     // "map"이라는 이름의 Mustache 템플릿 반환 (즉 mapView.mustache)
     @GetMapping("/map")
     public String showMapPage(Model model) {
+        // TmapConfig에서 API 키 가져오기
+        String tmapKey = tmapConfig.getTmapApiKey();
+
         // 모델에 tmapKey를 담아서 Mustache 템플릿이 사용할 수 있게 함
         model.addAttribute("tmapKey", tmapKey);
 

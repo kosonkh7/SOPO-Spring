@@ -53,9 +53,10 @@ public class StockController {
 
             // 응답 데이터를 모델에 추가. stock.mustache 템플릿에 전달
             if (responseDTO != null) {
-                model.addAttribute("predictedValue", responseDTO.getPredictedValue());
-                model.addAttribute("safetyStock", responseDTO.getSafetyStock());
-                model.addAttribute("properStock", responseDTO.getProperStock());
+                model.addAttribute("predictedValue", Math.round(responseDTO.getPredictedValue()));
+                model.addAttribute("safetyStock", Math.round(responseDTO.getSafetyStock()));
+                model.addAttribute("properStock", Math.round(responseDTO.getProperStock()));
+                model.addAttribute("precautionComment", responseDTO.getPrecautionComment());
             }
         }
 

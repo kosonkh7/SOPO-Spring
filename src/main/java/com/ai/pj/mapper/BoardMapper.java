@@ -14,7 +14,7 @@ public class BoardMapper {
     public static Board PostToEntity(BoardDTO.Post post, User user) {
         return Board.builder()
                 .title(post.getTitle())
-                .content(post.getContent())
+                .content(post.getContent() != null ? post.getContent().replaceAll("(\r\n|\r|\n)", "<br>") : "")
                 .user(user)
                 .build();
     }

@@ -5,9 +5,12 @@ package com.ai.pj.restcontroller;
 import com.ai.pj.dto.BoardDTO;
 import com.ai.pj.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/board")
@@ -32,9 +35,12 @@ public class BoardRestController {
 
             // 게시글 저장
             BoardDTO.Get board = boardService.save(post, imageUrl);
+            Long boardId = board.getId();
 
             // HTTP 201 Created 반환
-            return ResponseEntity.status(201).body(board);
+            return ResponseEntity.status(HttpStatus.FOUND)
+                    .location(URI.create("/board/" + boardId)) // 게시판으로 리다이렉트
+                    .build();
         } catch (Exception e) {
             // 오류 발생 시 서버 오류 반환
             return ResponseEntity.status(500).build();
