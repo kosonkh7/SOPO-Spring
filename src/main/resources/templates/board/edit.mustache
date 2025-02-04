@@ -3,22 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>글 수정</title>
+    <title>글 작성</title>
+    <link rel="stylesheet" href="/css/sidebarstyles.css">
+    <link rel="stylesheet" href="/css/headerstyles.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+        .content-container {
+            margin-left: 260px;
+            height: calc(100% - 30px);
+            padding: 20px;
+            width: calc(100% - 260px);
+            margin-top: 30px;
         }
-        form {
+        .form-container {
             max-width: 600px;
             margin: 0 auto;
+            margin-top: 60px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         label {
-            display: block;
-            margin-top: 10px;
             font-weight: bold;
         }
-        input, textarea, button {
+        input, textarea, button[type="submit"] {
             width: 100%;
             padding: 10px;
             margin-top: 5px;
@@ -37,54 +45,50 @@
         button:hover {
             background-color: #081da3;
         }
-        .btn-cancel {
-            background-color: #fff;
-            color: #6c757d;
-            border: 1px solid #6c757d;
-            cursor: pointer;
-        }
-        .btn-cancel:hover {
-            background-color: #e9ecef;
-            color: #343a40;
-        }
-        .button-group {
-            display: flex;
-            gap: 10px;
-        }
     </style>
 </head>
 <body>
+{{> common/header}}
+{{> common/sidebar}}
+{{> common/footer}}
 <h1>글 수정</h1>
-<form action="/board/edit/{{board.id}}" method="POST" enctype="multipart/form-data">
-    <!-- 제목 -->
-    <label for="title">제목</label>
-    <input type="text" id="title" name="title" value="{{board.title}}" required>
+<div class="content-container">
+    <div class="form-container">
+        <h2>글 수정</h2>
+        <br>
+        <form action="/board/edit/{{board.id}}" method="POST" enctype="multipart/form-data">
+            <!-- 제목 -->
+            <label for="title">제목</label>
+            <input type="text" id="title" name="title" value="{{board.title}}" required>
+            <br>
+            <!-- 작성자 -->
+            <label for="userId">작성자</label>
+            <input type="text" id="userId" name="userId" value="{{board.userId}}" required readonly>
+            <br>
+            <!-- 내용 -->
+            <label for="content">내용</label>
+            <textarea id="content" name="content" required>{{board.content}}</textarea>
 
-    <!-- 작성자 -->
-    <label for="userId">작성자</label>
-    <input type="text" id="userId" name="userId" value="{{board.userId}}" required readonly>
+            <!-- 기존 이미지 미리보기 -->
+            {{#board.imageUrl}}
+                <label>현재 이미지</label>
+                <div>
+                    <img src="{{board.imageUrl}}" alt="현재 이미지" style="max-width: 100%; height: auto; border-radius: 5px; margin-bottom: 10px;">
+                </div>
+            {{/board.imageUrl}}
+            <br>
+            <!-- 이미지 변경 업로드 -->
+            <label for="imageFile">이미지 변경</label>
+            <input type="file" id="imageFile" name="imageFile" accept="image/*">
 
-    <!-- 내용 -->
-    <label for="content">내용</label>
-    <textarea id="content" name="content" required>{{board.content}}</textarea>
-
-    <!-- 기존 이미지 미리보기 -->
-    {{#board.imageUrl}}
-        <label>현재 이미지</label>
-        <div>
-            <img src="{{board.imageUrl}}" alt="현재 이미지" style="max-width: 100%; height: auto; border-radius: 5px; margin-bottom: 10px;">
-        </div>
-    {{/board.imageUrl}}
-
-    <!-- 이미지 변경 업로드 -->
-    <label for="imageFile">이미지 변경</label>
-    <input type="file" id="imageFile" name="imageFile" accept="image/*">
-
-    <!-- 버튼 그룹 -->
-    <div class="button-group" style="margin-top: 20px;">
-        <button type="submit">수정하기</button>
-<!--        <a href="/board/{{board.id}}" class="btn-cancel">취소</a>-->
+            <!-- 버튼 그룹 -->
+            <div class="button-group" style="margin-top: 20px;">
+                <button type="submit">수정하기</button>
+                <!--        <a href="/board/{{board.id}}" class="btn-cancel">취소</a>-->
+            </div>
+        </form>
     </div>
-</form>
+</div>
+
 </body>
 </html>
