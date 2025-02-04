@@ -102,7 +102,7 @@ public class BoardService {
     }
 
     // 게시글 목록 조회
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = false)
     public List<BoardDTO.Get> getAllBoards() {
         return boardRepository.findAllByOrderByCreatedDateDesc().stream()
                 .map(board -> new BoardDTO.Get(
@@ -118,7 +118,7 @@ public class BoardService {
     }
 
     // 게시글 상세 조회
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = false)
     public BoardDTO.Get getBoardById(Long id) {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("게시글이 존재하지 않습니다: " + id));

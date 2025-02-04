@@ -36,8 +36,16 @@ public class SecurityConfig {
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
     private final JwtUtil jwtUtil;
 
+
+    // 허용할 주소?
     private static final String[] AUTH_WHITELIST = {
             "/api/v1/auth/**", "/img/**", "/css/**", "/js/**", "/favicon.ico", "/public/**"
+    };
+
+    // admin 권한 가진 사람 허용 주소.
+    private static final String[] AUTH_ADMINLIST = {
+            "/admin/**",
+
     };
 
     @Bean
@@ -84,7 +92,6 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authManager(HttpSecurity http) throws Exception {
-        System.out.println(1010);
         return http.getSharedObject(AuthenticationManagerBuilder.class)
                 .authenticationProvider(new RoleBasedAuthenticationProvider(userService, passwordEncoder))
                 .build();
