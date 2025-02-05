@@ -1,0 +1,11 @@
+chatbot:
+  api:
+    host: http://127.0.0.1:8000
+
+stock:
+  api:
+    host: https://team4-stock-eyhmh9b6d0dyhncm.koreacentral-01.azurewebsites.net
+
+map:
+  api:
+    host: https://team4-map-e5anbcavgkaabbha.koreacentral-01.azurewebsites.net
