@@ -4,11 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시글 상세</title>
+    <link rel="stylesheet" href="/css/sidebarstyles.css">
+    <link rel="stylesheet" href="/css/headerstyles.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <style>
-        .container {
-            max-width: 800px;
-            margin-top: 30px;
+        .content-container {
+            margin-left: 220px;
+            margin-top: 60px;
+            padding: 20px;
+            width: calc(100% - 260px);
+            height: calc(100% - 60px);
+            display: flex;
+            gap: 20px;
+        }
+        .post-content {
+            flex: 2;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            overflow: auto;
+        }
+        .comment-section {
+            flex: 1;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            overflow: auto;
         }
         .post-image {
             max-width: 100%;
@@ -17,10 +40,11 @@
             border-radius: 5px;
         }
         .comment-box {
-            background: #f8f9fa;
+            background: white;
             padding: 15px;
             border-radius: 5px;
             margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         .comment-user {
             font-weight: bold;
@@ -29,73 +53,70 @@
         .button-group {
             display: flex;
             justify-content: space-between;
-        }
-        .delete-btn {
-            color: red;
-            cursor: pointer;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="card shadow-sm">
-        <div class="card-body">
-            <h2 class="card-title">{{board.title}}</h2>
-            <p class="text-muted">
-                <strong>작성자:</strong> {{board.userId}} &nbsp; | &nbsp;
-                <strong>작성일:</strong> <span class="createdDate">{{#board.createdDate}}{{board.createdDate}}{{/board.createdDate}}{{^board.createdDate}}N/A{{/board.createdDate}}</span> &nbsp; | &nbsp;
-                <strong>조회수:</strong> {{board.viewCount}}
-            </p>
+{{> common/header}}
+{{> common/sidebar}}
+{{> common/footer}}
+<div class="content-container">
+    <!-- 왼쪽: 게시글 본문 -->
+    <div class="post-content">
+        <h2 class="card-title">{{board.title}}</h2>
+        <p class="text-muted">
+            <strong>작성자:</strong> {{board.userId}} &nbsp; | &nbsp;
+            <strong>작성일:</strong> <span class="createdDate">{{#board.createdDate}}{{board.createdDate}}{{/board.createdDate}}{{^board.createdDate}}N/A{{/board.createdDate}}</span> &nbsp; | &nbsp;
+            <strong>조회수:</strong> {{board.viewCount}}
+        </p>
 
-            <!-- 이미지 표시 -->
-            {{#board.imageUrl}}
-                <img src="{{board.imageUrl}}" alt="게시글 이미지" class="post-image">
-            {{/board.imageUrl}}
+        <!-- 이미지 표시 -->
+        {{#board.imageUrl}}
+            <img src="{{board.imageUrl}}" alt="게시글 이미지" class="post-image">
+        {{/board.imageUrl}}
 
-            <!-- 게시글 내용 -->
-            <p class="card-text">{{{board.content}}}</p>
-        </div>
+        <!-- 게시글 내용 -->
+        <p class="card-text">{{{board.content}}}</p>
     </div>
 
-    <hr>
+    <!-- 오른쪽: 댓글 목록 + 댓글 작성 + 버튼 -->
+    <div class="comment-section">
+        <h3>댓글</h3>
+        <div class="list-group">
+            {{#comments}}
+                <div class="comment-box">
+                    <p><span class="comment-user">{{userId}}</span>: {{{content}}}</p>
+                    <form action="/comments/{{id}}/delete" method="post" style="display: inline;">
+                        <input type="hidden" name="boardId" value="{{board.id}}">
+                        <button type="submit" class="btn btn-sm btn-outline-danger">삭제</button>
+                    </form>
+                </div>
+            {{/comments}}
+            {{^comments}}
+                <p class="text-muted">등록된 댓글이 없습니다.</p>
+            {{/comments}}
+        </div>
 
-    <!-- 댓글 목록 -->
-    <h3>댓글</h3>
-    <div class="list-group">
-        {{#comments}}
-            <div class="comment-box">
-                <p><span class="comment-user">{{userId}}</span>: {{{content}}}</p>
-                <form action="/comments/{{id}}/delete" method="post" style="display: inline;">
-                    <input type="hidden" name="boardId" value="{{board.id}}">
-                    <button type="submit" class="btn btn-sm btn-outline-danger">삭제</button>
+        <!-- 댓글 작성 -->
+        <h4 class="mt-4">댓글 작성</h4>
+        <form action="/comments" method="post">
+            <input type="hidden" name="boardId" value="{{board.id}}">
+            <div class="mb-3">
+                <textarea name="content" class="form-control" rows="3" placeholder="댓글을 입력하세요" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">댓글 작성</button>
+        </form>
+
+        <!-- 버튼 그룹 -->
+        <div class="button-group">
+            <a href="/board/" class="btn btn-secondary">목록으로</a>
+            <div>
+                <a href="/board/edit/{{board.id}}" class="btn btn-warning">수정</a>
+                <form action="/board/delete/{{board.id}}" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
                 </form>
             </div>
-        {{/comments}}
-        {{^comments}}
-            <p class="text-muted">등록된 댓글이 없습니다.</p>
-        {{/comments}}
-    </div>
-
-    <!-- 댓글 작성 -->
-    <h4 class="mt-4">댓글 작성</h4>
-    <form action="/comments" method="post">
-        <input type="hidden" name="boardId" value="{{board.id}}">
-        <div class="mb-3">
-            <textarea name="content" class="form-control" rows="3" placeholder="댓글을 입력하세요" required></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">댓글 작성</button>
-    </form>
-
-    <hr>
-
-    <!-- 버튼 그룹 -->
-    <div class="button-group">
-        <a href="/board/" class="btn btn-secondary">목록으로</a>
-        <div>
-            <a href="/board/edit/{{board.id}}" class="btn btn-warning">수정</a>
-            <form action="/board/delete/{{board.id}}" method="post" style="display: inline;">
-                <button type="submit" class="btn btn-danger" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
-            </form>
         </div>
     </div>
 </div>
@@ -116,7 +137,7 @@
     });
 </script>
 
-<!-- 부트스트랩 JS (필요할 경우) -->
+<!-- 부트스트랩 JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

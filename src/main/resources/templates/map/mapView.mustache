@@ -10,7 +10,11 @@
     <link rel="stylesheet" href="/css/sidebarstyles.css">
     <link rel="stylesheet" href="/css/mapstyles.css" />
 
+    <!-- Tmap API 로드 -->
     <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey={{tmapKey}}"></script>
+
+    <!-- Tmap API 키를 HTML에서 JavaScript로 전달 -->
+    <script id="tmap-script" data-tmap-key="{{tmapKey}}"></script>
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -53,7 +57,7 @@
                 <div class="section location-group">
                     <label for="address_input">배송지 주소:</label>
                     <div class="input-row">
-                        <input id="address_input" type="text" value="서울특별시 성동구 뚝섬로 273" required>
+                        <input id="address_input" type="text" value="서울특별시 성동구 뚝섬로 273" required disabled>
 <!--                        <button id="search_address_btn">🔍</button>-->
                     </div>
                     <div class="coordinate-row">
@@ -62,6 +66,9 @@
                         <label for="end_lon">경도</label>
                         <input type="text" id="end_lon" name="end_lon" value="127.037653" required>
                     </div>
+                    <p style="font-size: 12px; color: gray;">
+                        ✅ 배송지 선택 후 위치를 확인하세요.
+                    </p>
                     <div class="c-button-group">
                         <button id="add_marker_btn" type="button">배송지 선택</button>
                         <button id="confirm_location_btn" type="button">위치 확인</button>
@@ -106,7 +113,7 @@
 
             <!-- 카드 3: 비용 비교 -->
             <div class="card">
-                <h4>💰 운행 비용 비교</h4>
+                <h4>💰 비용 비교</h4>
                 <p>기존 택배: <span id="cost_original">--</span> 원</p>
                 <p>지하철 창고: <span id="cost_subway">--</span> 원</p>
                 <p>📉 절감률: <span id="cost_reduction">--</span>%</p>
