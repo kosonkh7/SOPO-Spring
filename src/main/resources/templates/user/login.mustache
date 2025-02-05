@@ -12,14 +12,37 @@
             height: 100vh;
             background-color: #f8f9fa;
             font-family: 'Noto Sans KR', sans-serif;
+            padding: 0; /* ✅ 기본 패딩 제거 */
+            margin: 0;  /* ✅ 기본 마진 제거 */
         }
         .login-container .info-section {
+            width: 25%;
             background-color: #e9ecef;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            justify-content: flex-start;
+            align-items: flex-start;
+
+            position: relative; /* 🔥 기준점 설정 */
+            padding: 130px 30px; /* 사이드바 글자 위치 조정 */
+
+        }
+
+        .login-container .info-section::before,
+        .login-container .info-section::after {
+            content: "";
+            position: absolute;
+            width: 80%; /* 🔥 선의 길이 */
+            height: 1px; /* 🔥 선의 두께 */
+            background-color: #bbb; /* 🔥 선 색상 */
+        }
+
+        .login-container .info-section::before {
+            top: 100px; /* 🔥 위쪽 선 위치 */
+        }
+
+        .login-container .info-section::after {
+            bottom: 420px; /* 🔥 아래쪽 선 위치 */
         }
         .login-container .info-section svg {
             width: 60px;
@@ -29,8 +52,9 @@
         .login-container .info-section h1 {
             font-size: 1.5rem;
             font-weight: 700;
-            margin-bottom: 10px;
-            text-align: center;
+            margin-bottom: 20px;
+            text-align: left;
+            line-height: 1.6;
         }
         .login-container .info-section button {
             background-color: #fff;
@@ -51,11 +75,11 @@
             color: #adb5bd;
         }
         .login-container .btn-primary {
-            background-color: #6f42c1;
+            background-color: #1f39ba;
             border: none;
         }
         .login-container .btn-primary:hover {
-            background-color: #5936a3;
+            background-color: #0d2085;
         }
         .login-container .email-login {
             background-color: #f8f9fa;
@@ -69,33 +93,87 @@
             text-decoration: none;
             color: #6f42c1;
         }
+        .login-container .info-section .logo-img {
+            width: 60px;  /* 이미지 크기 (기존 SVG 크기와 동일) */
+            height: auto; /* 가로 비율 유지하면서 자동 조정 */
+            margin-bottom: 20px; /* 아래 텍스트와 간격 조절 */
+            background: none; /* 혹시 배경이 있을 경우 제거 */
+
+        }
+        .input-group {
+            position: relative;
+
+        }
+
+        .input-group .input-icon {
+            position: absolute;
+            left: 10px; /* 아이콘의 좌측 여백 조절 */
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            pointer-events: none; /* 클릭 방해 방지 */
+            z-index: 10;
+        }
+
+        .input-group input {
+            padding-left: 40px; /* 아이콘이 입력란 내부에 있으므로 왼쪽 패딩 추가 */
+
+        }
+        .input-group .form-control {
+            border-radius: 8px !important; /* 모서리 둥글게 */
+            height: 51px
+        }
+        .btn-primary {
+            height: 55px; /* ✅ 로그인 버튼 높이 증가 */
+        }
+
+        .text-center {
+            text-align: center; /* 텍스트 중앙 정렬 */
+            width: 100%;
+        }
+        h2, p.text-muted {
+            text-align: center; /* 텍스트 가운데 정렬 */
+            width: 100%; /* 전체 너비 적용 */
+        }
+        h2 {
+            font-size: 2rem; /* 원하는 크기로 조절 */
+            font-weight: bold; /* 굵기 조절 가능 */
+        }
+
+
+
     </style>
 </head>
 <body>
 <div class="container-fluid login-container">
     <!-- 좌측 정보 섹션 -->
     <div class="col-md-4 info-section">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
-            <circle cx="12" cy="12" r="10" stroke="black" stroke-width="2" fill="#ffffff"/>
-            <rect x="9" y="6" width="6" height="12" fill="#6f42c1"/>
-            <rect x="10" y="8" width="4" height="8" fill="#ffffff"/>
-        </svg>
-        <h1>회원이 되시면<br>무제한으로 사용하실 수 있어요.</h1>
-        <button class="btn">로그인</button>
+        <img src="/img/wichi.png" alt="로고" class="logo-img">
+        <h1>회원이 되시면 모든 기능을<br> 자유롭게 이용할 수 있어요!</h1>
+        <button class="btn" id="signupBtn">회원가입</button>
     </div>
     <!-- 우측 로그인 폼 -->
     <div class="col-md-8 form-section">
         <form id="form1" method="POST">
             <h2 class="mb-4">로그인</h2>
+            <p class="text-muted mb-4">계정 정보를 입력하여 로그인하세요.</p>
             <div class="mb-3">
-                <label for="email" class="form-label">이메일</label>
-                <input type="text" class="form-control" id="username" name="id" placeholder="업무용 아이디를 입력해주세요" required>
-                <input type="password" class="form-control" id="password" name="password" placeholder="패스워드를 입력해주세요" required>
+
+                <div class="input-group mb-3">
+                    <img src="/img/login_id.svg" alt="아이디 아이콘" class="input-icon">
+                    <input type="text" class="form-control" id="username" name="id" placeholder="아이디를 입력해주세요" required>
+                </div>
+                <div class="input-group mb-3">
+                    <img src="/img/login_pw.svg" alt="비밀번호 아이콘" class="input-icon">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="비밀번호를 입력해주세요" required>
+                </div>
             </div>
-            <button id="submitBtn" type="submit" class="btn btn-primary w-100 mb-3">로그인</button>
-            <button type="button" class="btn email-login w-100">이메일 로그인</button>
+            <button id="submitBtn" type="submit" class="btn btn-primary w-100 mb-3">Login In</button>
+        <!--    <button type="button" class="btn email-login w-100">이메일 로그인</button>-->
             <div class="text-center mt-2">
-                <a href="/public/signUp">회원가입하기</a>
+                <span class="text-muted">계정이 없으신가요?</span>
+                <a href="/public/signUp">회원가입</a>
             </div>
         </form>
     </div>
@@ -103,6 +181,9 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 <script>
+    document.getElementById('signupBtn').addEventListener('click', function() {
+        window.location.href = '/public/signUp';
+    });
     const form1 = document.getElementById('form1');
 
  form1.addEventListener('submit', async (event) => {
@@ -126,10 +207,11 @@
 
         if (response.ok) {
             const token = await response.text();
-            location.href='/board/';
+            location.href='/';
         }
 
 
  });
+
 </script>
 </html>
