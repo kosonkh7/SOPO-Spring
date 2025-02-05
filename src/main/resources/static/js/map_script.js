@@ -676,6 +676,7 @@ $(document).ready(function() {
             },
             options: {
                 responsive: true,
+                responsive: true,
                 maintainAspectRatio: true,
                 plugins: {
                     legend: { position: "top" }
