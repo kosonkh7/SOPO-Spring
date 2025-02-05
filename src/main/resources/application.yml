@@ -8,7 +8,6 @@ server:
       enabled: true
   forward-headers-strategy: native
 
-
 jwt:
   access_token_expiration_time: 900 #15분초
   refresh_token_expiration_time: 604800
@@ -28,26 +27,20 @@ management:
       probability: 1.0  # 100% 요청 추적
 
 spring:
-  application:
-
-#  jwt:
-#    access-secret: l$Nn8x3f@9Z*P1o&uK4R6^T#mGwQ%7Yv
-#    refresh-secret: mA*9R6T#yP2Z$L&Nn3vG^X1Kw%8oG7Qf
-#    access-expiration: 600000  # 10 min: 10 * 60 * 1000 milliseconds
-#    refresh-expiration: 10800000
-
   profiles:
     active: local
-
   mustache:
     charset: UTF-8
   mvc:
     static-path-pattern: "/**" #모든 정적 자원 서빙 가능
     view:
       encoding: UTF-8
-
-
-
+  application:
+  #  jwt:
+  #    access-secret: l$Nn8x3f@9Z*P1o&uK4R6^T#mGwQ%7Yv
+  #    refresh-secret: mA*9R6T#yP2Z$L&Nn3vG^X1Kw%8oG7Qf
+  #    access-expiration: 600000  # 10 min: 10 * 60 * 1000 milliseconds
+  #    refresh-expiration: 10800000
   # h2 세팅
 #  h2:
 #    console:
@@ -58,20 +51,16 @@ spring:
 #    url: jdbc:h2:mem:db;MODE=MYSQL
 #    username: sa
 #    password:
-
   http:
     encoding:
       charset: UTF-8
       enabled: true
       force: true
-
    # 3 hours: 3 * 60 * 60 * 1000 milliseconds
-
   data:
     redis:
       host: localhost # 로컬에서 테스트 할 때는 localhost로 사용 redis
       port: 6379
-
   jpa:
     open-in-view: true
     hibernate:
@@ -83,7 +72,6 @@ spring:
     properties:
       hibernate.format_sql: true
       dialect: org.hibernate.dialect.MySQL8InnoDBDialect
-
  #MySql
   # PORT 수정.
   datasource:
@@ -91,8 +79,6 @@ spring:
     url: jdbc:mysql://localhost:3306/transSys?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
     password: aivle202406
-
-
 
   # sqlite
     #    database-platform: org.hibernate.community.dialect.SQLiteDialect
@@ -103,9 +89,3 @@ spring:
 #    driver-class-name: org.sqlite.JDBC
 #    username: ""
 #    password: ""
-
-
-# Python API 서버..
-#hospital:
-#  api:
-#    host: http://127.0.0.1:8000
