@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    var tmapKey = $("#tmap-script").attr("data-tmap-key"); // HTML에서 API 키 가져오기
+
     // 지도 초기화
     var map;
 
@@ -16,6 +18,29 @@ $(document).ready(function() {
         });
 
         displayStations(); // 지도 생성 후 마커 표시
+    }
+
+    // 리버스 지오코딩 함수 (Tmap API 활용)
+    function reverseGeocode(lat, lon) {
+        var apiUrl = `https://apis.openapi.sk.com/tmap/geo/reversegeocoding?version=1&lat=${lat}&lon=${lon}&coordType=WGS84GEO&addressType=road&appKey=${tmapKey}`;
+
+        $.getJSON(apiUrl, function (data) {
+            if (data && data.addressInfo) {
+                var address = data.addressInfo.fullAddress;
+                $("#address_input").val(address); // 주소 입력칸에 표시
+                console.log("리버스 지오코딩 주소:", address);
+            } else {
+                console.warn("⚠️ 주소 정보를 가져올 수 없음");
+            }
+        }).fail(function () {
+            console.error("❌ 리버스 지오코딩 요청 실패");
+        });
+    }
+
+    var initialLat = parseFloat($("#end_lat").val());
+    var initialLon = parseFloat($("#end_lon").val());
+    if (!isNaN(initialLat) && !isNaN(initialLon)) {
+        reverseGeocode(initialLat, initialLon); // ✅ 초기 값 리버스 지오코딩 실행
     }
 
     // 초기 상태 대시보드 템플릿 정의
@@ -39,7 +64,7 @@ $(document).ready(function() {
 
             <!-- 카드 3: 비용 비교 -->
             <div class="card">
-                <h4>💰 운행 비용 비교</h4>
+                <h4>💰 비용 비교</h4>
                 <p>기존 택배: <span id="cost_original">--</span> 원</p>
                 <p>지하철 창고: <span id="cost_subway">--</span> 원</p>
                 <p>📉 절감률: <span id="cost_reduction">--</span>%</p>
@@ -578,6 +603,12 @@ $(document).ready(function() {
         // 업데이트 호출
         updateDashboard(comparisonData);
 
+        $(".dashboard").append(`
+            <p style="color: gray; font-size: 12px; margin-top: 10px;">
+                ℹ️ <strong>안내:</strong> 해당 데이터는 <strong>운행 시간</strong>과 <strong>운행 비용</strong>만 고려된 값입니다.<br>
+                ⚠️ <strong>참고 사항:</strong> 본 정보는 단순 참고용이며, 실제 운행 시 비용이 달라질 수 있습니다.
+            </p>
+        `);
 
         // 대시보드에 차트 추가
         $(".dashboard").append(`
@@ -659,7 +690,7 @@ $(document).ready(function() {
     }
 
     // 위치 선택 버튼 클릭 → 지도에 마커 표시
-    $(document).on("click", "#add_marker_btn", function () {
+    $(document).on("click", "#add_marker_btn", function (event) {
         event.preventDefault(); // 기본 제출 방지
 
         // 기존 마커 삭제
@@ -686,7 +717,7 @@ $(document).ready(function() {
     });
 
     // 위치 확인 버튼 클릭 → 마커 위치를 입력 칸에 자동 입력
-    $(document).on("click", "#confirm_location_btn", function () {
+    $(document).on("click", "#confirm_location_btn", function (event) {
         event.preventDefault(); // 기본 동작(새로고침) 방지
 
         if (!selectedMarker) {
@@ -697,6 +728,9 @@ $(document).ready(function() {
         var position = selectedMarker.getPosition();
         $("#end_lat").val(position.lat());
         $("#end_lon").val(position.lng());
+
+        // 리버스 지오코딩 실행
+        reverseGeocode(parseFloat(position.lat()), parseFloat(position.lng()));
 
         console.log(`✅ 선택한 위치: 위도 ${position.lat()}, 경도 ${position.lng()}`);
         alert(`선택한 위치:\n위도: ${position.lat()}\n경도: ${position.lng()}`);
