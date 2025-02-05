@@ -179,12 +179,23 @@
             <td>2025년 게시판 신설</td>
             <td>YMJ</td>
             <td>2024-12-26</td>
+            <td>100</td>
         </tr>
+        {{#boardList}}
+            <tr>
+                <td>{{id}}</td>
+                <td><a href="/board/{{id}}" class="text-decoration-none" style="color: inherit;">{{title}}</a></td>
+                <td>{{userId}}</td>
+                <td class="createdDate">{{createdDate}}</td>
+                <td>{{viewCount}}</td>
+            </tr>
+        {{/boardList}}
         <tr>
             <td>3</td>
             <td><img src="/img/lock.svg" alt="Lock Icon" class="lock-icon"> [문의] 문의드립니다.</td>
             <td>익명</td>
             <td>2024-12-25</td>
+            <td>15</td>
         </tr>
         <tr>
             <td>2</td>
@@ -193,6 +204,7 @@
             <td><img src="/img/lock.svg" alt="Lock Icon" class="lock-icon"> [문의] 문의드립니다.</td>
             <td>익명</td>
             <td>2024-12-24</td>
+            <td>35</td>
         </tr>
         <tr>
             <td>1</td>
@@ -201,15 +213,8 @@
             <td><img src="/img/lock.svg" alt="Lock Icon" class="lock-icon"> [문의] 문의드립니다.</td>
             <td>익명</td>
             <td>2024-12-23</td>
+            <td>50</td>
         </tr>
-        {{#boardList}}
-            <tr>
-                <td>{{id}}</td>
-                <td><a href="/board/{{id}}" class="text-decoration-none" style="color: inherit;">{{title}}</a></td>
-                <td>{{userId}}</td>
-                <td class="createdDate">{{createdDate}}</td>
-            </tr>
-        {{/boardList}}
         </tbody>
     </table>
 
@@ -280,6 +285,16 @@
     function refreshBoard() {
         location.reload();  // 현재 페이지 새로고침
     }
+
+
+
+<!--    document.addEventListener("DOMContentLoaded", function () {-->
+<!--        const rows = document.querySelectorAll("tbody tr");-->
+<!--        rows.forEach((row, index) => {-->
+<!--            row.querySelector("td:first-child").innerText = rows.length - index; // 최신 글이 1번-->
+<!--        });-->
+<!--    });      자동 정렬 기능-->
+
 
 </script>
 </html>

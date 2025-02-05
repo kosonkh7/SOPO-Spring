@@ -1,5 +1,6 @@
 package com.ai.pj.restcontroller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
@@ -14,6 +15,9 @@ import java.util.Map;
 @RequestMapping("/api")  // 모든 경로에 /api prefix
 public class MapRestController {
 
+    @Value("${map.api.host}")
+    private String mapUrl;
+
     private final RestTemplate restTemplate;
 
     public MapRestController() {
@@ -25,7 +29,7 @@ public class MapRestController {
     @GetMapping("/stations")
     public ResponseEntity<?> getStationsFromFlask() {
         try {
-            String flaskUrl = "http://localhost:5000/stations"; // Flask 서버 주소
+            String flaskUrl = mapUrl + "/stations"; // Flask 서버 주소
 
             ResponseEntity<List> response = restTemplate.getForEntity(flaskUrl, List.class);
             if (response.getStatusCode().is2xxSuccessful()) {
@@ -44,7 +48,7 @@ public class MapRestController {
                                          @RequestParam double end_lat,
                                          @RequestParam double end_lon) {
         try {
-            String flaskUrl = "http://localhost:5000/parcel_route";
+            String flaskUrl = mapUrl + "/parcel_route";
 
             // Form-Data로 전송할 경우
             MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
@@ -70,7 +74,7 @@ public class MapRestController {
                                            @RequestParam double end_lat,
                                            @RequestParam double end_lon) {
         try {
-            String flaskUrl = "http://localhost:5000/compare_routes";
+            String flaskUrl = mapUrl + "/compare_routes";
 
             MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
             params.add("start_station", start_station);
@@ -94,7 +98,7 @@ public class MapRestController {
                                                  @RequestParam double end_lat,
                                                  @RequestParam double end_lon) {
         try {
-            String flaskUrl = "http://localhost:5000/compare_route_details";
+            String flaskUrl = mapUrl + "/compare_route_details";
 
             MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
             params.add("start_station", start_station);

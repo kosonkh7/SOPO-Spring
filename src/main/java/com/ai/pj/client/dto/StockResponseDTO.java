@@ -15,4 +15,6 @@ public class StockResponseDTO {
     private Double safetyStock;
     @JsonProperty("proper_stock")
     private Double properStock;
+    @JsonProperty("precaution_comment")
+    private String precautionComment;
 }
