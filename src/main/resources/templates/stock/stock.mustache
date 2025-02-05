@@ -4,87 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stock Predictions</title>
+
+    <!-- 스타일 시트 -->
     <link rel="stylesheet" href="/css/sidebarstyles.css">
     <link rel="stylesheet" href="/css/headerstyles.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            line-height: 1.6;
-        }
-        .container {
-            display: flex;
-            justify-content: space-between;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        #map {
-            width: 400px;
-            height: 500px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        .form-container {
-            width: 400px;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        .result-container {
-            width: 400px;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        h1, h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        form {
-            margin-bottom: 20px;
-        }
-        label {
-            font-weight: bold;
-        }
-        select, input[type="date"] {
-            display: block;
-            width: 100%;
-            margin: 10px 0 20px;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .data {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #ddd;
-        }
-        .data:last-child {
-            border-bottom: none;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/stockstyles.css">
+
+    <!-- 지도 출력 -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+    <!-- 🚛 로딩 애니메이션 -->
+    <div id="loading-container">
+        <img id="loading-truck" src="/img/prediction.png" alt="Loading Truck">
+        <div id="loading-text">AI 모델이 적정재고량을 예측 중입니다...</div>
+    </div>
+
 </head>
 <body>
 {{> common/header}}
 {{> common/sidebar}}
 {{> common/footer}}
+
 
 <div class="container">
     <!-- 지도 -->
@@ -112,7 +52,7 @@
                 {{/categories}}
             </select>
 
-            <button type="submit">예측값 불러오기</button>
+            <button type="submit"><strong>실시간 적정 재고 예측하기</strong></button>
         </form>
     </div>
 
@@ -125,16 +65,19 @@
             <p><strong>선택된 품목:</strong> {{inputCategory}}</p>
             <hr>
             <div class="data">
-                <div class="label">예측 재고량:</div>
-                <div>{{predictedValue}}</div>
+                <div class="label"><strong>예측 수요량:</strong></div>
+                <div>{{predictedValue}} 개</div>
             </div>
             <div class="data">
-                <div class="label">안전 재고량:</div>
-                <div>{{safetyStock}}</div>
+                <div class="label"><strong>안전 재고량:</strong></div>
+                <div>{{safetyStock}} 개</div>
             </div>
             <div class="data">
-                <div class="label">적정 재고량:</div>
-                <div>{{properStock}}</div>
+                <div class="label"><strong>적정 재고량:</strong></div>
+                <div>{{properStock}} 개</div>
+            </div>
+            <div class="precaution">
+                <strong>⚠️ 주의사항:</strong> <span>{{precautionComment}}</span>
             </div>
         {{/predictedValue}}
     </div>
@@ -192,6 +135,27 @@
         marker.on('click', function() {
             document.getElementById('location').value = station.name;
         });
+    });
+
+    document.querySelector("form").addEventListener("submit", function() {
+        document.getElementById("loading-container").style.display = "block"; // 로딩 표시
+    });
+
+    // 오늘 날짜를 yyyy-MM-dd 형식으로 변환하는 함수
+    function getTodayDate() {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0'); // 월 (01~12)
+        const dd = String(today.getDate()).padStart(2, '0'); // 일 (01~31)
+        return `${yyyy}-${mm}-${dd}`;
+    }
+
+    // 페이지가 로드될 때 기본 날짜를 오늘 날짜로 설정
+    document.addEventListener("DOMContentLoaded", function() {
+        const dateInput = document.getElementById("date");
+        if (dateInput) {
+            dateInput.value = getTodayDate();
+        }
     });
 </script>
 

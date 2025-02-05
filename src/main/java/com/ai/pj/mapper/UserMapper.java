@@ -17,4 +17,13 @@ public class UserMapper {
                 .role(user.getRole())
                 .build();
     }
+
+    public UserDTO.TokenUserInfo EntityToTokenUserInfo(User user) {
+        return UserDTO.TokenUserInfo.builder()
+                .identifier(user.getIdentifier())
+                .userid(user.getId())
+                .email(user.getEmail())
+                .role(user.getRole())
+                .build();
+    }
 }

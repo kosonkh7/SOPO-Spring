@@ -3,6 +3,7 @@ package com.ai.pj.controller;
 
 import com.ai.pj.dto.BoardDTO;
 import com.ai.pj.dto.CommentDTO;
+import com.ai.pj.security.details.CustomUserDetails;
 import com.ai.pj.service.BoardService;
 import com.ai.pj.service.CommentService;
 import jakarta.persistence.EntityNotFoundException;
@@ -33,11 +34,14 @@ public class BoardController {
     }
 
     @GetMapping("/")
-    public String reqBoard(Model model) {
+    public String reqBoard(Model model, Authentication authentication) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userId = authentication.getName();
-        model.addAttribute("userId", userId) ;
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+        System.out.println(customUserDetails.getTokenUserInfo().getUserid());
+        System.out.println(customUserDetails.getTokenUserInfo().getIdentifier());
+        System.out.println(customUserDetails.getTokenUserInfo().getRole());
+        System.out.println(customUserDetails.getTokenUserInfo().getEmail());
+        model.addAttribute("userId", customUserDetails.getTokenUserInfo().getIdentifier()) ;
 
         List<BoardDTO.Get> boardList = boardService.getAllBoards();
         model.addAttribute("boardList", boardList);
