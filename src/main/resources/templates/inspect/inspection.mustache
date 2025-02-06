@@ -1,21 +1,175 @@
-<form id="uploadForm" enctype="multipart/form-data">
-    <input type="file" id="fileInput" required>
-    <button type="submit">검수 시작</button>
-</form>
+{{> common/header}}
+<link rel="stylesheet" href="/css/sidebarstyles.css">
+<link rel="stylesheet" href="/css/headerstyles.css">
 
-<div id="resultContainer" style="display: none;">
-    <h3>검수 결과</h3>
-    <div style="display: flex; gap: 20px;">
-        <div>
-            <h4>입력 이미지</h4>
-            <img id="originalImage" src="" alt="Original Image" style="width: 300px;">
+<style>
+    /* ✅ 중앙 정렬 */
+    .container {
+        display: flex;
+        flex-direction: column; /* 이미지 검수, 과정 박스 정렬 세로 */
+        /*margin-left: -500px; */
+        justify-content: center;  /* 화면 중앙 정렬 */
+
+    }
+
+    .content {
+        flex: 1;
+        padding: 20px;
+        text-align: center;
+    }
+
+    /* ✅ 여백 추가 */
+    #uploadForm {
+        margin-bottom: 20px;
+    }
+
+    /* ✅ 결과 영역 스타일 */
+    #resultContainer {
+        display: none;
+        margin-top: 20px;
+    }
+
+    .image-container {
+        display: flex;
+        justify-content: center;
+        gap: 50px;
+    }
+
+    h3 {
+        font-size: 1.8rem;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 16px; /* ✅ 아래 여백 추가 */
+        display: inline-block;
+        color: rgba(40, 40, 43, 0.78);
+    }
+
+
+    .icon-container { /* 과정 박스 아이콘 전체 */
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        padding: 12px 80px; /* ✅ 상하, 좌우 여백 */
+        background-color: #f8f9fa; /*  배경 색상 */
+        border-radius: 12px; /* 둥근 모서리 */
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 효과 */
+        margin-top: -150px; /* 과정박스, 이미지 검수 같이. 내려고 */
+        margin-bottom: 230px; /* 아이콘과 이미지 검수 사이 간격. 내려고*/
+        margin-left: 170px;
+
+    }
+
+    .icon-box img {
+        width: 65px; /* 과정 아이콘 크기 */
+        height: 65px;
+        margin-left: 47px;
+        margin-right: 47px;
+    }
+    .icon-box-yolo img {
+        width: 150px; /* 과정 아이콘 크기 */
+        height: auto;
+    }
+    .icon-box-shift img {
+        width: 40px; /* 이동 아이콘 크기 */
+        height: auto;
+    }
+    .icon-box-shift-star img {
+        width: 40px; /* 이동 아이콘 크기 */
+        height: auto;
+    }
+
+
+    .icon-box p, .icon-box-yolo p {
+        margin-top: 10px;
+        font-size: 16px;
+
+
+    }
+
+    @keyframes blink {
+        0% { opacity: 1; }
+        50% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+
+    /* 기본 상태에서는 깜박이지 않음 */
+    .icon-box-shift-star img {
+        width: 40px; /* 이동 아이콘 크기 */
+        height: auto;
+    }
+
+    /* .blink 클래스가 추가되면 깜박이는 애니메이션 적용 */
+    .icon-box-shift-star.blink img {
+        animation: blink 1s infinite; /* 1초 간격으로 무한 반복 */
+    }
+
+
+
+</style>
+
+<div class="container">
+    {{> common/sidebar}}
+
+    <div class="icon-container">
+        <div class="icon-box">
+            <img src="/img/cctv-icon.png" alt="CCTV">
+            <p>CCTV</p>
         </div>
-        <div>
-            <h4>검출된 이미지</h4>
-            <img id="detectedImage" src="" alt="Detected Image" style="width: 300px;">
+        <div class="icon-box-shift">
+            <img src="/img/right-icon.png" alt="이동중">
+        </div>
+        <div class="icon-box">
+            <img src="/img/frame-icon.png" alt="프레임 분리">
+            <p>프레임 분리</p>
+        </div>
+        <div class="icon-box-shift">
+            <img src="/img/right-icon.png" alt="이동중">
+        </div>
+        <div class="icon-box-yolo">
+            <img src="/img/yolo-icon.png" alt="YOLO">
+            <p>YOLO</p>
+        </div>
+        <div class="icon-box-shift">
+            <img src="/img/right-icon.png" alt="이동중">
+        </div>
+        <div class="icon-box">
+            <img src="/img/tuning-icon.png" alt="모델 튜닝">
+            <p>모델 튜닝</p>
+        </div>
+        <div class="icon-box-shift-star">
+            <img src="/img/right-icon.png" alt="이동중">
+        </div>
+        <div class="icon-box">
+            <img src="/img/classification-icon.png" alt="물품 분류">
+            <p>물품 분류</p>
+        </div>
+    </div>
+
+    <div class="content">
+        <h2>이미지 검수</h2>
+
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type="file" id="fileInput" required>
+            <button type="submit">검수 시작</button>
+        </form>
+
+        <div id="resultContainer">
+            <h3>Fine-tuning the YOLO V11 model on goods & food data</h3>
+            <div class="image-container">
+                <div class="image-wrapper">
+                    <img id="originalImage" src="" alt="Original Image">
+                    <h4>Default Image</h4>
+                </div>
+                <div class="image-wrapper">
+                    <img id="detectedImage" src="" alt="Detected Image">
+                    <h4>Detected Image</h4>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+{{> common/footer}}
 
 <script>
     document.getElementById("uploadForm").onsubmit = async function(event) {
@@ -25,18 +179,29 @@
         const formData = new FormData();
         formData.append("file", fileInput);
 
-        const response = await fetch("/inspection/inspect", {
-            method: "POST",
-            body: formData
-        });
+        // 깜박이게 만들기
+        document.querySelector(".icon-box-shift-star").classList.add("blink");
 
-        if (response.ok) {
-            const result = await response.json();
-            document.getElementById("originalImage").src = "data:image/jpeg;base64," + result.original_image;
-            document.getElementById("detectedImage").src = "data:image/jpeg;base64," + result.detected_image;
-            document.getElementById("resultContainer").style.display = "block";
-        } else {
-            alert("검수 실패!");
+        try {
+            const response = await fetch("/inspection/inspect", {
+                method: "POST",
+                body: formData
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                document.getElementById("originalImage").src = "data:image/jpeg;base64," + result.original_image;
+                document.getElementById("detectedImage").src = "data:image/jpeg;base64," + result.detected_image;
+                document.getElementById("resultContainer").style.display = "block";
+            } else {
+                alert("검수 실패!");
+            }
+        } catch (error) {
+            alert("오류 발생!");
+        } finally {
+            // 로딩 완료 후 깜박임 멈추기
+            document.querySelector(".icon-box-shift-star").classList.remove("blink");
         }
+
     };
 </script>
