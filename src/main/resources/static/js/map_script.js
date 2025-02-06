@@ -400,17 +400,9 @@ $(document).ready(function() {
 
         $(".dashboard").append(`
             <p style="color: gray; font-size: 12px; margin-top: 10px;">
-                🚇 <strong>출발 지하 창고:</strong> 사용자가 선택한 지하 창고에서 출발합니다.<br>
-                📍 <strong>도착 지하 창고:</strong> 배송지와 가장 가까운 지하 창고를 자동으로 선택합니다.<br>
-                ℹ️ 동일한 지하 창고일 경우 해당 정보는 생략됩니다.
-            </p>
-        `);
-
-        $(".dashboard").append(`
-            <p style="color: gray; font-size: 12px; margin-top: 10px;">
-                🏍️ <strong>주행 경로 출력 기준:</strong><br>
-                🔹 출발 지하 창고와 도착 지하 창고가 동일할 경우, <strong>별도 경로 없이 주행 경로만 출력</strong>됩니다.<br>
-                ⏳ 주행 시간이 <strong>20분 이내</strong>로 차이가 없다면, <strong>주행 경로만 출력</strong>됩니다.
+                🚆 <strong>도착 지하 창고:</strong> 배송지와 가장 가까운 지하 창고를 자동으로 선택합니다. 동일한 지하 창고일 경우 해당 정보는 생략됩니다.<br>
+                🏍️ 출발 지하 창고와 도착 지하 창고가 동일할 경우, <strong>별도 경로 없이 주행 경로만 출력</strong>됩니다.<br>
+                ℹ️ 주행 시간이 <strong>20분 이내</strong>로 차이가 없다면, <strong>주행 경로만 출력</strong>됩니다.
             </p>
         `);
 
