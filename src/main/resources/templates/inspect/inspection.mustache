@@ -9,13 +9,24 @@
         flex-direction: column; /* 이미지 검수, 과정 박스 정렬 세로 */
         /*margin-left: -500px; */
         justify-content: center;  /* 화면 중앙 정렬 */
-
     }
 
     .content {
         flex: 1;
         padding: 20px;
         text-align: center;
+        width: calc(100% - 220px); /* 사이드바 너비 제외 */
+        margin-left: 220px; /* 사이드바 크기만큼 왼쪽에서 이동 */
+        overflow: hidden; /* 넘치는 부분을 숨김 */
+    }
+
+    /* 이미지 크기 조정 */
+    .image-wrapper img {
+        width: auto;
+        max-width: 100%; /* 화면 크기를 초과하지 않도록 제한 */
+        height: auto;
+        border: 2px solid #ccc;
+        margin-top: 10px;
     }
 
     /* ✅ 여백 추가 */
@@ -53,9 +64,9 @@
         background-color: #f8f9fa; /*  배경 색상 */
         border-radius: 12px; /* 둥근 모서리 */
         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 효과 */
-        margin-top: -150px; /* 과정박스, 이미지 검수 같이. 내려고 */
-        margin-bottom: 230px; /* 아이콘과 이미지 검수 사이 간격. 내려고*/
-        margin-left: 170px;
+        margin-top: -100px; /* 과정박스, 이미지 검수 같이. 내려고 */
+        margin-bottom: 240px; /* 아이콘과 이미지 검수 사이 간격. 내려고*/
+        margin-left: 225px;
 
     }
 
@@ -86,24 +97,26 @@
 
     }
 
-    @keyframes blink {
-        0% { opacity: 1; }
-        50% { opacity: 0; }
-        100% { opacity: 1; }
+    @keyframes moveBlink {
+        0% { opacity: 1; transform: translateX(0); }
+        50% { opacity: 0; transform: translateX(20px); }
+        100% { opacity: 1; transform: translateX(0); }
     }
 
     /* 기본 상태에서는 깜박이지 않음 */
     .icon-box-shift-star img {
         width: 40px; /* 이동 아이콘 크기 */
         height: auto;
+        display: block; /* 기본적으로 보이게 설정 */
     }
 
-    /* .blink 클래스가 추가되면 깜박이는 애니메이션 적용 */
-    .icon-box-shift-star.blink img {
-        animation: blink 1s infinite; /* 1초 간격으로 무한 반복 */
+    /* 깜박이는 아이콘 (초기에는 숨김) */
+    .blink-shift {
+        width: 40px;
+        height: auto;
+        display: none; /* 기본적으로 숨김 */
+        animation: moveBlink 1s infinite;
     }
-
-
 
 </style>
 
@@ -129,15 +142,9 @@
             <img src="/img/yolo-icon.png" alt="YOLO">
             <p>YOLO</p>
         </div>
-        <div class="icon-box-shift">
-            <img src="/img/right-icon.png" alt="이동중">
-        </div>
-        <div class="icon-box">
-            <img src="/img/tuning-icon.png" alt="모델 튜닝">
-            <p>모델 튜닝</p>
-        </div>
         <div class="icon-box-shift-star">
             <img src="/img/right-icon.png" alt="이동중">
+            <img id="loadingIcon" class="blink-shift" src="/img/right_shift.png" alt="로딩중" style="display: none;">
         </div>
         <div class="icon-box">
             <img src="/img/classification-icon.png" alt="물품 분류">
@@ -154,7 +161,7 @@
         </form>
 
         <div id="resultContainer">
-            <h3>Fine-tuning the YOLO V11 model on goods & food data</h3>
+<!--          <h3>Fine-tuning the YOLO V11 model on goods & food data</h3>  -->
             <div class="image-container">
                 <div class="image-wrapper">
                     <img id="originalImage" src="" alt="Original Image">
@@ -179,8 +186,14 @@
         const formData = new FormData();
         formData.append("file", fileInput);
 
-        // 깜박이게 만들기
-        document.querySelector(".icon-box-shift-star").classList.add("blink");
+        const defaultIcon = document.getElementById("defaultIcon");
+        const loadingIcon = document.getElementById("loadingIcon");
+
+        // 기존 아이콘 숨기고 새 아이콘 표시
+        if (defaultIcon && loadingIcon) {
+            defaultIcon.style.display = "none"; // 기존 아이콘 숨기기
+            loadingIcon.style.display = "block"; // 새 아이콘 보이기 (애니메이션 포함)
+        }
 
         try {
             const response = await fetch("/inspection/inspect", {
@@ -199,8 +212,11 @@
         } catch (error) {
             alert("오류 발생!");
         } finally {
-            // 로딩 완료 후 깜박임 멈추기
-            document.querySelector(".icon-box-shift-star").classList.remove("blink");
+            // 기존 아이콘 다시 보이고, 새 아이콘 숨기기
+            if (defaultIcon && loadingIcon) {
+                defaultIcon.style.display = "block"; // 기존 아이콘 다시 보이기
+                loadingIcon.style.display = "none"; // 로딩 아이콘 숨기기
+            }
         }
 
     };
