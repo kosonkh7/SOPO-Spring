@@ -105,9 +105,9 @@ $(document).ready(function() {
                     position: new Tmapv2.LatLng(station.latitude, station.longitude),
                     map: map,
                     title: station.name,
-                    icon: "/img/h_warehouse.png",  // Spring 서버에서 제공하는 정적 경로
-                    iconSize: new Tmapv2.Size(30, 30), // 마커 크기 설정
-                    iconAnchor: new Tmapv2.Point(15, 30) // 마커 중심 조정 (선택 사항)
+                    icon: "/img/h_marker.png",  // Spring 서버에서 제공하는 정적 경로
+                    iconSize: new Tmapv2.Size(35, 35), // 마커 크기 설정
+                    iconAnchor: new Tmapv2.Point(17, 35) // 마커 중심 조정 (선택 사항)
                 });
                 markers.push(marker);
             });
