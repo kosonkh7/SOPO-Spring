@@ -12,18 +12,17 @@ map:
 
 inspection:
   api:
-    host: http://127.0.0.1:8003
+    host: https://team4-inspection-gsfvc9hkh6exhgfb.koreacentral-01.azurewebsites.net
 
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/transSys?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8 # 수정필요
+    url: jdbc:mysql://localhost:3308/transSys?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true # 수정필요
     username: root
     password: aivle202406
-  data:
-    redis:
-      host: localhost # 수정필요. 로컬에서 테스트 할 때는 localhost로 사용 redis
-      port: 6379
+  redis:
+    host: team4-redis.redis.cache.windows.net # password: <Azure Redis 접속 키>
+    port: 6380
   jpa:
     open-in-view: true
     hibernate:
