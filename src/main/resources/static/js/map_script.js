@@ -22,18 +22,37 @@ $(document).ready(function() {
 
     // 리버스 지오코딩 함수 (Tmap API 활용)
     function reverseGeocode(lat, lon) {
-        var apiUrl = `https://apis.openapi.sk.com/tmap/geo/reversegeocoding?version=1&lat=${lat}&lon=${lon}&coordType=WGS84GEO&addressType=road&appKey=${tmapKey}`;
+        // 위도, 경도를 소수점 6자리로 제한
+        lat = parseFloat(lat.toFixed(6));
+        lon = parseFloat(lon.toFixed(6));
 
-        $.getJSON(apiUrl, function (data) {
-            if (data && data.addressInfo) {
-                var address = data.addressInfo.fullAddress;
-                $("#address_input").val(address); // 주소 입력칸에 표시
-                console.log("리버스 지오코딩 주소:", address);
-            } else {
-                console.warn("⚠️ 주소 정보를 가져올 수 없음");
+        var apiUrl = "https://apis.openapi.sk.com/tmap/geo/reversegeocoding";
+
+        $.ajax({
+            method: "GET",
+            url: apiUrl,
+            data: {
+                version: "1",
+                format: "json",  // JSON 형식 지정
+                lat: lat,
+                lon: lon,
+                coordType: "WGS84GEO",
+                addressType: "A10",  // 모든 주소 유형 반환
+                appKey: tmapKey
+            },
+            success: function(response) {
+                console.log("📍 리버스 지오코딩 응답:", response);
+                if (response && response.addressInfo) {
+                    var address = response.addressInfo.fullAddress;
+                    $("#address_input").val(address);
+                    console.log("리버스 지오코딩 주소:", address);
+                } else {
+                    console.warn("⚠️ 주소 정보를 가져올 수 없음");
+                }
+            },
+            error: function(request, status, error) {
+                console.error(`❌ 리버스 지오코딩 요청 실패: ${status}`, request, error);
             }
-        }).fail(function () {
-            console.error("❌ 리버스 지오코딩 요청 실패");
         });
     }
 
@@ -105,9 +124,9 @@ $(document).ready(function() {
                     position: new Tmapv2.LatLng(station.latitude, station.longitude),
                     map: map,
                     title: station.name,
-                    icon: "/img/h_warehouse.png",  // Spring 서버에서 제공하는 정적 경로
-                    iconSize: new Tmapv2.Size(30, 30), // 마커 크기 설정
-                    iconAnchor: new Tmapv2.Point(15, 30) // 마커 중심 조정 (선택 사항)
+                    icon: "/img/h_marker.png",  // Spring 서버에서 제공하는 정적 경로
+                    iconSize: new Tmapv2.Size(35, 35), // 마커 크기 설정
+                    iconAnchor: new Tmapv2.Point(17, 35) // 마커 중심 조정 (선택 사항)
                 });
                 markers.push(marker);
             });
@@ -288,6 +307,12 @@ $(document).ready(function() {
                 </div>
             </div>
         `);
+        $(".dashboard").append(`
+            <p style="color: gray; font-size: 12px; margin-top: 10px;">
+                🚚 <strong>Sub 터미널 선택:</strong> 각각 선택한 출발 창고, 배송지와 가장 가까운 Sub 터미널을 자동으로 선택합니다.<br>
+                ℹ️ <strong>등록된 터미널:</strong> CJ 대한통운 Sub 터미널 중 서울 지역 내 터미널을 기준으로 경로를 계산합니다.
+            </p>
+        `);
     }
 
     function updateMap(data) {
@@ -390,6 +415,14 @@ $(document).ready(function() {
                     <p><span class="time-highlight">${totalTime}</span> 분</p>
                 </div>
             </div>
+        `);
+
+        $(".dashboard").append(`
+            <p style="color: gray; font-size: 12px; margin-top: 10px;">
+                🚆 <strong>도착 지하 창고:</strong> 배송지와 가장 가까운 지하 창고를 자동으로 선택합니다. 동일한 지하 창고일 경우 해당 정보는 생략됩니다.<br>
+                🏍️ 출발 지하 창고와 도착 지하 창고가 동일할 경우, <strong>별도 경로 없이 주행 경로만 출력</strong>됩니다.<br>
+                ℹ️ 주행 시간이 <strong>20분 이내</strong>로 차이가 없다면, <strong>주행 경로만 출력</strong>됩니다.
+            </p>
         `);
 
         // 비교 결과 표시

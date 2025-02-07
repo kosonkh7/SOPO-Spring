@@ -9,6 +9,10 @@ spring:
     username: aivle
     password: Team04BigProject
 
+  redis:
+    host: team4-redis.redis.cache.windows.net # password: <Azure Redis 접속 키>
+    port: 6380
+
   jpa:
     open-in-view: true
     hibernate:
@@ -33,4 +37,6 @@ map:
   api:
     host: https://team4-map-e5anbcavgkaabbha.koreacentral-01.azurewebsites.net
 
-
+inspection:
+  api:
+    host: https://team4-inspection-gsfvc9hkh6exhgfb.koreacentral-01.azurewebsites.nets
