@@ -9,3 +9,7 @@ stock:
 map:
   api:
     host: http://localhost:5000
+
+inspection:
+  api:
+    host: http://127.0.0.1:8003
