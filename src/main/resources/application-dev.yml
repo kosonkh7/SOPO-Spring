@@ -1,6 +1,29 @@
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://bigprojectteam04.mysql.database.azure.com:3306/bigproject?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+    username: aivle
+    password: Team04BigProject
+
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      use-new-id-generator-mappings: false
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+      dialect: org.hibernate.dialect.MySQL8InnoDBDialect
+
 chatbot:
   api:
-    host: http://127.0.0.1:8000
+    host: https://team04chatbot-hbhadad9g5drbyck.koreacentral-01.azurewebsites.net
 
 stock:
   api:
@@ -9,3 +32,5 @@ stock:
 map:
   api:
     host: https://team4-map-e5anbcavgkaabbha.koreacentral-01.azurewebsites.net
+
+
