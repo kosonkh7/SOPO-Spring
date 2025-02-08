@@ -84,7 +84,7 @@
         width: 40px; /* 이동 아이콘 크기 */
         height: auto;
     }
-    .icon-box-shift-star img {
+    .icon-box-shift-start img {
         width: 40px; /* 이동 아이콘 크기 */
         height: auto;
     }
@@ -97,14 +97,13 @@
 
     }
 
-    @keyframes moveBlink {
-        0% { opacity: 1; transform: translateX(0); }
-        50% { opacity: 0; transform: translateX(20px); }
-        100% { opacity: 1; transform: translateX(0); }
+    @keyframes wipeEffect { /* 아이콘 깜빡 */
+        0% { clip-path: inset(0% 100% 0% 0%); opacity: 1; }
+        100% { clip-path: inset(0% 0% 0% 0%); opacity: 1;  }
     }
 
     /* 기본 상태에서는 깜박이지 않음 */
-    .icon-box-shift-star img {
+    .icon-box-shift-start img {
         width: 40px; /* 이동 아이콘 크기 */
         height: auto;
         display: block; /* 기본적으로 보이게 설정 */
@@ -112,10 +111,10 @@
 
     /* 깜박이는 아이콘 (초기에는 숨김) */
     .blink-shift {
-        width: 40px;
+        width: 90px !important;
         height: auto;
         display: none; /* 기본적으로 숨김 */
-        animation: moveBlink 1s infinite;
+        animation: wipeEffect 0.5s infinite; /* 1초마다 무한 반복 */
     }
 
 </style>
@@ -142,8 +141,8 @@
             <img src="/img/yolo-icon.png" alt="YOLO">
             <p>YOLO</p>
         </div>
-        <div class="icon-box-shift-star">
-            <img src="/img/right-icon.png" alt="이동중">
+        <div class="icon-box-shift-start">
+            <img id="defaultIcon" src="/img/right-icon.png" alt="이동중">
             <img id="loadingIcon" class="blink-shift" src="/img/right_shift.png" alt="로딩중" style="display: none;">
         </div>
         <div class="icon-box">
