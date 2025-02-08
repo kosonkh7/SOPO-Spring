@@ -22,18 +22,37 @@ $(document).ready(function() {
 
     // 리버스 지오코딩 함수 (Tmap API 활용)
     function reverseGeocode(lat, lon) {
-        var apiUrl = `https://apis.openapi.sk.com/tmap/geo/reversegeocoding?version=1&lat=${lat}&lon=${lon}&coordType=WGS84GEO&addressType=road&appKey=${tmapKey}`;
+        // 위도, 경도를 소수점 6자리로 제한
+        lat = parseFloat(lat.toFixed(6));
+        lon = parseFloat(lon.toFixed(6));
 
-        $.getJSON(apiUrl, function (data) {
-            if (data && data.addressInfo) {
-                var address = data.addressInfo.fullAddress;
-                $("#address_input").val(address); // 주소 입력칸에 표시
-                console.log("리버스 지오코딩 주소:", address);
-            } else {
-                console.warn("⚠️ 주소 정보를 가져올 수 없음");
+        var apiUrl = "https://apis.openapi.sk.com/tmap/geo/reversegeocoding";
+
+        $.ajax({
+            method: "GET",
+            url: apiUrl,
+            data: {
+                version: "1",
+                format: "json",  // JSON 형식 지정
+                lat: lat,
+                lon: lon,
+                coordType: "WGS84GEO",
+                addressType: "A10",  // 모든 주소 유형 반환
+                appKey: tmapKey
+            },
+            success: function(response) {
+                console.log("📍 리버스 지오코딩 응답:", response);
+                if (response && response.addressInfo) {
+                    var address = response.addressInfo.fullAddress;
+                    $("#address_input").val(address);
+                    console.log("리버스 지오코딩 주소:", address);
+                } else {
+                    console.warn("⚠️ 주소 정보를 가져올 수 없음");
+                }
+            },
+            error: function(request, status, error) {
+                console.error(`❌ 리버스 지오코딩 요청 실패: ${status}`, request, error);
             }
-        }).fail(function () {
-            console.error("❌ 리버스 지오코딩 요청 실패");
         });
     }
 
