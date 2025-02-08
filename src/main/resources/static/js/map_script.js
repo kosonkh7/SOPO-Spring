@@ -551,17 +551,6 @@ $(document).ready(function() {
 
         // 선택된 경로
         const selectedRoute = data.subway;
-        if (selectedRoute.type === "지하철도+주행 경로") {
-            if (selectedRoute.subway_route && selectedRoute.subway_route.length > 0) {
-                const subwayPolyline = new Tmapv2.Polyline({
-                    path: selectedRoute.subway_route.map(coord => new Tmapv2.LatLng(coord[0], coord[1])),
-                    strokeColor: "#FF5733",
-                    strokeWeight: 6,
-                    map: map
-                });
-                polylines.push(subwayPolyline);
-            }
-        }
 
         if (selectedRoute.driving_route && selectedRoute.driving_route.length > 0) {
             const drivingPolyline = new Tmapv2.Polyline({
@@ -571,6 +560,18 @@ $(document).ready(function() {
                 map: map
             });
             polylines.push(drivingPolyline);
+        }
+
+        if (selectedRoute.type === "지하철도+주행 경로" && selectedRoute.subway_route && selectedRoute.subway_route.length > 0) {
+            if (selectedRoute.subway_route && selectedRoute.subway_route.length > 0) {
+                const subwayPolyline = new Tmapv2.Polyline({
+                    path: selectedRoute.subway_route.map(coord => new Tmapv2.LatLng(coord[0], coord[1])),
+                    strokeColor: "#FF5733",
+                    strokeWeight: 6,
+                    map: map
+                });
+                polylines.push(subwayPolyline);
+            }
         }
 
         // 지도 영역 조정
