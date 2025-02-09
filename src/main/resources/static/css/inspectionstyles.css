@@ -1,0 +1,230 @@
+/* ✅ 중앙 정렬 */
+.container {
+    padding-top: 30px;
+    display: flex;
+    flex-direction: column; /* 이미지 검수, 과정 박스 정렬 세로 */
+    /*margin-left: -500px; */
+    justify-content: center;  /* 화면 중앙 정렬 */
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+    text-align: center;
+    width: calc(100% - 220px); /* 사이드바 너비 제외 */
+    margin-left: 220px; /* 사이드바 크기만큼 왼쪽에서 이동 */
+    overflow: hidden; /* 넘치는 부분을 숨김 */
+}
+
+.image-wrapper h4 {
+    margin-top: 9px;
+    color: rgba(97, 95, 97, 0.92); /* 글자 색상을 흰색으로 변경 */
+}
+
+/* 이미지 크기 조정 */
+.image-wrapper img {
+    width: auto;
+    max-width: 100%; /* 화면 크기를 초과하지 않도록 제한 */
+    height: auto;
+    margin-top: 10px;
+}
+
+/* ✅ 여백 추가 */
+#uploadForm {
+    margin-bottom: 20px;
+}
+
+/* ✅ 결과 영역 스타일 */
+#resultContainer {
+    display: none;
+    margin-top: 20px;
+}
+
+.image-container {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    margin-top: -90px;
+}
+
+/* 🔥 이미지가 들어갈 박스 (고정 크기) */
+.image-box {
+    width: 550px;  /* 박스 너비 */
+    height: 450px; /* 박스 높이 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* 이미지 크기를 넘어가지 않게 */
+}
+
+/* 🔥 이미지가 박스 안에 맞게 들어가도록 조절 */
+.image-box img {
+    width: 100%;
+    height: 70%;
+    object-fit: contain; /* 이미지가 잘리지 않고 맞춰짐 */
+}
+
+h3 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 16px; /* ✅ 아래 여백 추가 */
+    display: inline-block;
+    color: rgba(40, 40, 43, 0.78);
+}
+
+
+.icon-container { /* 과정 박스 아이콘 전체 */
+    position: sticky;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 12px 80px; /* ✅ 상하, 좌우 여백 */
+    background-color: #f8f9fa; /*  배경 색상 */
+    border-radius: 12px; /* 둥근 모서리 */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 효과 */
+    margin-top: 82px; /* 과정박스, 이미지 검수 같이. 내려고 */
+    margin-bottom: 90px; /* 아이콘과 이미지 검수 사이 간격. 내려고*/
+    margin-left: 225px;
+
+}
+
+.icon-box img, .icon-box-frame img {
+    width: 65px; /* 과정 아이콘 크기 */
+    height: 65px;
+    margin-left: 47px;
+    margin-right: 47px;
+}
+.icon-box-yolo img {
+    width: 150px; /* 과정 아이콘 크기 */
+    height: auto;
+    margin-top: 10px;
+}
+.icon-box-shift img {
+    width: 40px; /* 이동 아이콘 크기 */
+    height: auto;
+}
+.icon-box-shift-start img {
+    width: 40px; /* 이동 아이콘 크기 */
+    height: auto;
+}
+.icon-box p { /* 아이콘 글자 */
+    margin-top: 10px;
+    margin-left : 42px;
+    font-size: 16px;
+}
+
+.icon-box-frame p { /* 아이콘 글자 */
+    margin-top: 10px;
+    margin-left : 35px;
+    font-size: 16px;
+}
+
+.icon-box-yolo p { /* yolo 아이콘 글자 */
+    margin-top: 14px;
+    margin-left : 50px;
+    font-size: 16px;
+}
+
+@keyframes wipeEffect { /* 아이콘 깜빡 */
+    0% { clip-path: inset(0% 100% 0% 0%); opacity: 1; }
+    100% { clip-path: inset(0% 0% 0% 0%); opacity: 1;  }
+}
+
+/* 기본 상태에서는 깜박이지 않음 */
+.icon-box-shift-start img {
+    width: 40px; /* 이동 아이콘 크기 */
+    height: auto;
+    display: block; /* 기본적으로 보이게 설정 */
+}
+
+/* 깜박이는 아이콘 (초기에는 숨김) */
+.blink-shift {
+    width: 85px !important;
+    height: auto;
+    display: none; /* 기본적으로 숨김 */
+    animation: wipeEffect 0.5s infinite; /* 1초마다 무한 반복 */
+}
+/* ✅ 파일 업로드 드래그 앤 드롭 박스 */
+.drop-zone {
+    width: 500px;  /* 기존보다 더 넓게 조절 */
+    height: 230px; /* 높이 조절 */
+    border: 2px dashed #ccc; /* 점선 스타일 적용 */
+    border-radius: 0px; /* 모서리 둥글게 */
+    background-color: #f9f9f9; /* 배경 색상 */
+    text-align: center;
+    display: flex;
+    flex-direction: column; /* 텍스트와 아이콘을 세로 정렬 */
+    align-items: center; /* 가로 중앙 정렬 */
+    justify-content: center; /* 세로 중앙 정렬 */
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+
+    margin-left: 200px;
+}
+
+/* ✅ 파일 드래그 상태일 때 효과 */
+.drop-zone.dragover {
+    border-color: #007bff;
+    background-color: #eef5ff;
+    animation: glowBorder 0.7s infinite alternate;
+}
+
+@keyframes glowBorder {
+    0% {
+        box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.5);
+    }
+    100% {
+        box-shadow: 0px 0px 15px rgba(0, 123, 255, 0.8);
+    }
+}
+
+/* ✅ 아이콘 크기 조정 */
+.drop-zone img {
+    width: 40px;
+    height: auto;
+    margin-bottom: 13px;
+}
+
+/* ✅ 버튼 스타일 */
+.upload-btn {
+    margin-top: 10px;
+    padding: 10px 20px;
+    border: none;
+    background-color: rgba(0, 34, 255, 0.78);
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 20px;
+    margin-bottom: 100px;
+    margin-left: 310px;
+}
+
+.upload-btn:hover {
+    background-color: #0056b3;
+}
+
+.change-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: none;
+    background-color: #001fec;
+    color: #efefef;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.change-btn:hover {
+    background-color: #00189c;
+}
+
+#dropZoneText {
+    line-height: 1.5; /* 줄 간격을 늘려 위아래 간격 확보 */
+}
+
+.file-info {
+    font-size: 14px; /* 글자 크기 조절 */
+    color: rgb(124, 124, 124); /* 파란색 계열 */
+}
