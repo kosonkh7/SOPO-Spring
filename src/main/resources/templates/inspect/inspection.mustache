@@ -1,237 +1,7 @@
 {{> common/header}}
 <link rel="stylesheet" href="/css/sidebarstyles.css">
 <link rel="stylesheet" href="/css/headerstyles.css">
-
-<style>
-    /* ✅ 중앙 정렬 */
-    .container {
-        display: flex;
-        flex-direction: column; /* 이미지 검수, 과정 박스 정렬 세로 */
-        /*margin-left: -500px; */
-        justify-content: center;  /* 화면 중앙 정렬 */
-    }
-
-    .content {
-        flex: 1;
-        padding: 20px;
-        text-align: center;
-        width: calc(100% - 220px); /* 사이드바 너비 제외 */
-        margin-left: 220px; /* 사이드바 크기만큼 왼쪽에서 이동 */
-        overflow: hidden; /* 넘치는 부분을 숨김 */
-    }
-
-    .image-wrapper h4 {
-        margin-top: 9px;
-        color: #615f61; /* 글자 색상을 흰색으로 변경 */
-    }
-
-    /* 이미지 크기 조정 */
-    .image-wrapper img {
-        width: auto;
-        max-width: 100%; /* 화면 크기를 초과하지 않도록 제한 */
-        height: auto;
-        border: 2px solid #ccc;
-        margin-top: 10px;
-    }
-
-    /* ✅ 여백 추가 */
-    #uploadForm {
-        margin-bottom: 20px;
-    }
-
-    /* ✅ 결과 영역 스타일 */
-    #resultContainer {
-        display: none;
-        margin-top: 20px;
-    }
-
-    .image-container {
-        display: flex;
-        justify-content: center;
-        gap: 50px;
-    }
-
-    /* 🔥 이미지가 들어갈 박스 (고정 크기) */
-    .image-box {
-        width: 300px;  /* 박스 너비 */
-        height: 300px; /* 박스 높이 */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 2px solid #ddd; /* 테두리 추가 */
-        background-color: #f8f8f8; /* 배경 추가 */
-        border-radius: 8px; /* 둥근 테두리 */
-        overflow: hidden; /* 이미지 크기를 넘어가지 않게 */
-    }
-
-    /* 🔥 이미지가 박스 안에 맞게 들어가도록 조절 */
-    .image-box img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain; /* 이미지가 잘리지 않고 맞춰짐 */
-    }
-
-
-    h3 {
-        font-size: 1.8rem;
-        font-weight: bold;
-        text-align: center;
-        margin-bottom: 16px; /* ✅ 아래 여백 추가 */
-        display: inline-block;
-        color: rgba(40, 40, 43, 0.78);
-    }
-
-
-    .icon-container { /* 과정 박스 아이콘 전체 */
-        position: sticky;
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-        padding: 12px 80px; /* ✅ 상하, 좌우 여백 */
-        background-color: #f8f9fa; /*  배경 색상 */
-        border-radius: 12px; /* 둥근 모서리 */
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 효과 */
-        margin-top: 82px; /* 과정박스, 이미지 검수 같이. 내려고 */
-        margin-bottom: 90px; /* 아이콘과 이미지 검수 사이 간격. 내려고*/
-        margin-left: 225px;
-
-    }
-
-    .icon-box img, .icon-box-frame img {
-        width: 65px; /* 과정 아이콘 크기 */
-        height: 65px;
-        margin-left: 47px;
-        margin-right: 47px;
-    }
-    .icon-box-yolo img {
-        width: 150px; /* 과정 아이콘 크기 */
-        height: auto;
-        margin-top: 10px;
-    }
-    .icon-box-shift img {
-        width: 40px; /* 이동 아이콘 크기 */
-        height: auto;
-    }
-    .icon-box-shift-start img {
-        width: 40px; /* 이동 아이콘 크기 */
-        height: auto;
-    }
-    .icon-box p { /* 아이콘 글자 */
-        margin-top: 10px;
-        margin-left : 42px;
-        font-size: 16px;
-    }
-
-    .icon-box-frame p { /* 아이콘 글자 */
-        margin-top: 10px;
-        margin-left : 35px;
-        font-size: 16px;
-    }
-
-    .icon-box-yolo p { /* yolo 아이콘 글자 */
-        margin-top: 14px;
-        margin-left : 50px;
-        font-size: 16px;
-    }
-
-    @keyframes wipeEffect { /* 아이콘 깜빡 */
-        0% { clip-path: inset(0% 100% 0% 0%); opacity: 1; }
-        100% { clip-path: inset(0% 0% 0% 0%); opacity: 1;  }
-    }
-
-    /* 기본 상태에서는 깜박이지 않음 */
-    .icon-box-shift-start img {
-        width: 40px; /* 이동 아이콘 크기 */
-        height: auto;
-        display: block; /* 기본적으로 보이게 설정 */
-    }
-
-    /* 깜박이는 아이콘 (초기에는 숨김) */
-    .blink-shift {
-        width: 89px !important;
-        height: auto;
-        display: none; /* 기본적으로 숨김 */
-        animation: wipeEffect 0.5s infinite; /* 1초마다 무한 반복 */
-    }
-    /* ✅ 파일 업로드 드래그 앤 드롭 박스 */
-    .drop-zone {
-        width: 500px;  /* 기존보다 더 넓게 조절 */
-        height: 230px; /* 높이 조절 */
-        border: 2px dashed #ccc; /* 점선 스타일 적용 */
-        border-radius: 0px; /* 모서리 둥글게 */
-        background-color: #f9f9f9; /* 배경 색상 */
-        text-align: center;
-        display: flex;
-        flex-direction: column; /* 텍스트와 아이콘을 세로 정렬 */
-        align-items: center; /* 가로 중앙 정렬 */
-        justify-content: center; /* 세로 중앙 정렬 */
-        cursor: pointer;
-        transition: all 0.3s ease-in-out;
-
-        margin-left: 200px;
-    }
-
-    /* ✅ 파일 드래그 상태일 때 효과 */
-    .drop-zone.dragover {
-        border-color: #007bff;
-        background-color: #eef5ff;
-        animation: glowBorder 0.7s infinite alternate;
-    }
-
-    @keyframes glowBorder {
-        0% {
-            box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.5);
-        }
-        100% {
-            box-shadow: 0px 0px 15px rgba(0, 123, 255, 0.8);
-        }
-    }
-
-    /* ✅ 아이콘 크기 조정 */
-    .drop-zone img {
-        width: 40px;
-        height: auto;
-        margin-bottom: 13px;
-    }
-
-    /* ✅ 버튼 스타일 */
-    .upload-btn {
-        margin-top: 10px;
-        padding: 10px 20px;
-        border: none;
-        background-color: rgba(0, 34, 255, 0.78);
-        color: white;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 14px;
-        margin-top: 20px;
-        margin-bottom: 100px;
-        margin-left: 310px;
-    }
-
-    .upload-btn:hover {
-        background-color: #0056b3;
-    }
-
-    .change-btn {
-        margin-top: 20px;
-        padding: 10px 20px;
-        border: none;
-        background-color: #001fec;
-        color: #efefef;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 14px;
-    }
-
-    .change-btn:hover {
-        background-color: #00189c;
-    }
-
-
-
-
-</style>
+<link rel="stylesheet" href="/css/inspectionstyles.css">
 
 <div class="container">
     {{> common/sidebar}}
@@ -267,12 +37,13 @@
 
     <div class="content">
 <!--        <h2>이미지 검수</h2>-->
-
         <form id="uploadForm" enctype="multipart/form-data">
             <!-- ✅ 드래그 앤 드롭 박스 -->
             <label class="drop-zone" id="dropZone">
                 <img src="/img/upload-icon.png" alt="Upload Icon">
-                <p id="dropZoneText">여기로 파일을 끌어오거나 클릭하여 선택하세요</p>
+                <p id="dropZoneText">Choose a file or drag & drop it here
+                    <span class="file-info"><br>JPG formats, up to 1MB</span>
+                </p>
             </label>
             <!-- ✅ 숨겨진 파일 선택 input -->
             <input type="file" id="fileInput" accept="image/*" style="display: none;">
@@ -282,13 +53,17 @@
         <div id="resultContainer">
 <!--          <h3>Fine-tuning the YOLO V11 model on goods & food data</h3>  -->
             <div class="image-container">
-                <div class="image-wrapper">
-                    <img id="originalImage" src="" alt="Original Image">
-                    <h4>Default Image</h4>
+                <div class="image-box">
+                    <div class="image-wrapper">
+                        <img id="originalImage" src="" alt="Original Image">
+                        <h4>Default Image</h4>
+                    </div>
                 </div>
-                <div class="image-wrapper">
-                    <img id="detectedImage" src="" alt="Detected Image">
-                    <h4>Detected Image</h4>
+                <div class="image-box">
+                    <div class="image-wrapper">
+                        <img id="detectedImage" src="" alt="Detected Image">
+                        <h4>Detected Image</h4>
+                    </div>
                 </div>
             </div>
             <button id="changeButton" class="change-btn">다른 이미지 선택</button>
@@ -298,133 +73,4 @@
 
 {{> common/footer}}
 
-<script>
-    const dropZone = document.getElementById("dropZone");
-    const fileInput = document.getElementById("fileInput");
-    const dropZoneText = document.getElementById("dropZoneText");
-    const uploadButton = document.getElementById("uploadButton");
-
-    //  파일 드래그 앤 드롭 기능 (파일 선택만 수행)
-    dropZone.addEventListener("dragover", (event) => {
-        event.preventDefault();
-        dropZone.classList.add("dragover");
-    });
-
-    dropZone.addEventListener("dragleave", () => {
-        dropZone.classList.remove("dragover");
-    });
-
-    dropZone.addEventListener("drop", (event) => {
-        event.preventDefault();
-        dropZone.classList.remove("dragover");
-
-        if (event.dataTransfer.files.length) {
-            fileInput.files = event.dataTransfer.files; // 파일 저장
-            displayFileName(fileInput.files[0]); // 파일 이름 표시
-        }
-    });
-
-    dropZone.addEventListener("click", () => {
-        fileInput.click();
-    });
-
-    fileInput.addEventListener("change", () => {
-        if (fileInput.files.length > 0) {
-            displayFileName(fileInput.files[0]); // 파일 이름 표시
-        }
-    });
-
-    // 파일 이름을 네모 박스에 표시
-    function displayFileName(file) {
-        dropZoneText.textContent = file.name; // 파일 이름 표시
-        uploadButton.disabled = false; // 버튼 활성화
-    }
-
-    // ✅ 업로드 처리
-    document.getElementById("uploadForm").onsubmit = async function(event) {
-        event.preventDefault();
-
-        // 🔥 파일이 선택되지 않았으면 실행 중단
-        if (!fileInput.files.length) {
-            alert("파일을 선택해주세요!");
-            return;
-        }
-
-        // 업로드 폼과 검수 버튼 숨기기
-        document.getElementById("uploadForm").style.display = "none";
-        document.getElementById("uploadButton").style.display = "none";
-
-        // 🔥 기존 이미지 숨기기 (검수 시작 전에 비우기)
-        document.getElementById("originalImage").style.display = "none";
-        document.getElementById("detectedImage").style.display = "none";
-
-        // 아이콘과 결과 이미지 사이의 간격 줄이기
-        document.getElementById("resultContainer").style.marginTop = "-40px";
-
-        // 검수 중 애니메이션 효과 (선택 사항)
-        document.getElementById("resultContainer").style.display = "block";
-
-        const fileInputData = document.getElementById("fileInput").files[0];
-        const formData = new FormData();
-        formData.append("file", fileInputData);
-
-        const defaultIcon = document.getElementById("defaultIcon");
-        const loadingIcon = document.getElementById("loadingIcon");
-
-        // 기존 아이콘 숨기고 새 아이콘 표시
-        if (defaultIcon && loadingIcon) {
-            defaultIcon.style.display = "none"; // 기존 아이콘 숨기기
-            loadingIcon.style.display = "block"; // 새 아이콘 보이기 (애니메이션 포함)
-        }
-
-        try {
-            const response = await fetch("/inspection/inspect", {
-                method: "POST",
-                body: formData
-            });
-
-            if (response.ok) {
-                const result = await response.json();
-
-                // 🔥 새로운 이미지가 들어왔을 때만 표시
-                document.getElementById("originalImage").src = "data:image/jpeg;base64," + result.original_image;
-                document.getElementById("detectedImage").src = "data:image/jpeg;base64," + result.detected_image;
-
-                document.getElementById("originalImage").style.display = "block";
-                document.getElementById("detectedImage").style.display = "block";
-
-                document.getElementById("resultContainer").style.display = "block";
-            } else {
-                alert("검수 실패!");
-            }
-        } catch (error) {
-            alert("오류 발생!");
-        } finally {
-            // 기존 아이콘 다시 보이고, 새 아이콘 숨기기
-            if (defaultIcon && loadingIcon) {
-                defaultIcon.style.display = "block"; // 기존 아이콘 다시 보이기
-                loadingIcon.style.display = "none"; // 로딩 아이콘 숨기기
-            }
-        }
-    };
-
-    document.getElementById("changeButton").addEventListener("click", function() {
-        // 결과 영역 숨기기
-        document.getElementById("resultContainer").style.display = "none";
-
-        // 업로드 폼 보이기
-        document.getElementById("uploadForm").style.display = "block";
-
-        // 업로드 버튼 다시 활성화
-        document.getElementById("uploadButton").style.display = "inline-block";
-
-        // 🔥 파일 입력 초기화
-        fileInput.value = ""; // 파일 선택 필드 초기화
-        dropZoneText.textContent = "여기로 파일을 끌어오거나 클릭하여 선택하세요"; // 기존 파일명 지우고 기본 메시지로 변경
-
-        // 🔥 기존 이미지 초기화
-        document.getElementById("originalImage").src = "";
-        document.getElementById("detectedImage").src = "";
-    });
-
-</script>
+<script src="/js/inspection_script.js"></script>
