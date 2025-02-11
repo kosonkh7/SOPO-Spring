@@ -8,6 +8,7 @@ import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
 import io.micrometer.core.instrument.search.MeterNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +19,19 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+
 public class VisitCounterService {
 
     private final VisitCountRepository visitCountRepository;
+
+    @Qualifier("redisTemplate_token")
     private final RedisTemplate<String, String> redisTemplate;
+
     private final MeterRegistry meterRegistry;
+
     private final ObjectMapper objectMapper;
+
+
 
 
     // 방문자수 조회

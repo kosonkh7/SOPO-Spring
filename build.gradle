@@ -41,6 +41,8 @@ dependencies {
 	implementation 'io.micrometer:micrometer-registry-prometheus'
 
 
+
+
 	// Sprint Security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	testImplementation 'org.springframework.security:spring-security-test'
@@ -51,6 +53,8 @@ dependencies {
 
 	// Redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+
 
 	// JWT
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
