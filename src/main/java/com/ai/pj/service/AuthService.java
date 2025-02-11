@@ -52,7 +52,7 @@ public class AuthService {
         System.out.println(user.getRole());
         if (user.getRole().toString().equals("HOLD")) {
             System.out.println("들어옴");
-            throw new CustomAuthDeniedHandler("권한이 없습니다. 관리자에게 문의하세요");
+            throw new CustomAuthDeniedHandler("회원가입을 요청 중입니다. 잠시만 기다려 주세요!");
         }
 
         UserDTO.TokenUserInfo info = userMapper.EntityToTokenUserInfo(user);
