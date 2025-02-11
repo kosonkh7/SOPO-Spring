@@ -8,4 +8,6 @@ spring:
 
 chatbot:
   api:
+    # host : 에저 기본 도메인 
     host: http://127.0.0.1:8000
+

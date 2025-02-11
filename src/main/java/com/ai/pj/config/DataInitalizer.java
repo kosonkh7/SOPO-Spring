@@ -29,7 +29,7 @@ public class DataInitalizer {
 
         admin.setRole();
 
-        if (userRepository.findById("admin").isEmpty()) {
+        if (userRepository.findUserById("admin").isEmpty()) {
             userRepository.save(admin);
         }
 
@@ -41,7 +41,11 @@ public class DataInitalizer {
                 .role(User.UserRole.HOLD)
                 .build();
 
-        userRepository.save(user);
+        if (userRepository.findUserById("daetu01").isEmpty()) {
+            userRepository.save(user);
+        }
+
+
 
     }
 }

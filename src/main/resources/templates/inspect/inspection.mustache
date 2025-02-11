@@ -1,0 +1,76 @@
+{{> common/header}}
+<link rel="stylesheet" href="/css/sidebarstyles.css">
+<link rel="stylesheet" href="/css/headerstyles.css">
+<link rel="stylesheet" href="/css/inspectionstyles.css">
+
+<div class="container">
+    {{> common/sidebar}}
+
+    <div class="icon-container">
+        <div class="icon-box">
+            <img src="/img/cctv-icon.png" alt="CCTV">
+            <p>CCTV</p>
+        </div>
+        <div class="icon-box-shift">
+            <img src="/img/right-icon.png" alt="이동중">
+        </div>
+        <div class="icon-box-frame">
+            <img src="/img/frame-icon.png" alt="프레임 분리">
+            <p>프레임 분리</p>
+        </div>
+        <div class="icon-box-shift">
+            <img src="/img/right-icon.png" alt="이동중">
+        </div>
+        <div class="icon-box-yolo">
+            <img src="/img/yolo-icon.png" alt="YOLO">
+            <p>YOLO</p>
+        </div>
+        <div class="icon-box-shift-start">
+            <img id="defaultIcon" src="/img/right-icon.png" alt="이동중">
+            <img id="loadingIcon" class="blink-shift" src="/img/right_shift.png" alt="로딩중" style="display: none;">
+        </div>
+        <div class="icon-box">
+            <img src="/img/classification-icon.png" alt="물품 분류">
+            <p>물품 분류</p>
+        </div>
+    </div>
+
+    <div class="content">
+<!--        <h2>이미지 검수</h2>-->
+        <form id="uploadForm" enctype="multipart/form-data">
+            <!-- ✅ 드래그 앤 드롭 박스 -->
+            <label class="drop-zone" id="dropZone">
+                <img src="/img/upload-icon.png" alt="Upload Icon">
+                <p id="dropZoneText">Choose a file or drag & drop it here
+                    <span class="file-info"><br>JPG formats, up to 1MB</span>
+                </p>
+            </label>
+            <!-- ✅ 숨겨진 파일 선택 input -->
+            <input type="file" id="fileInput" accept="image/*" style="display: none;">
+            <button type="submit" class="upload-btn" id="uploadButton" disabled>검수 시작</button>
+        </form>
+
+        <div id="resultContainer">
+<!--          <h3>Fine-tuning the YOLO V11 model on goods & food data</h3>  -->
+            <div class="image-container">
+                <div class="image-box">
+                    <div class="image-wrapper">
+                        <img id="originalImage" src="" alt="Original Image">
+                        <h4>Default Image</h4>
+                    </div>
+                </div>
+                <div class="image-box">
+                    <div class="image-wrapper">
+                        <img id="detectedImage" src="" alt="Detected Image">
+                        <h4>Detected Image</h4>
+                    </div>
+                </div>
+            </div>
+            <button id="changeButton" class="change-btn">다른 이미지 선택</button>
+        </div>
+    </div>
+</div>
+
+{{> common/footer}}
+
+<script src="/js/inspection_script.js"></script>

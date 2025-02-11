@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    var tmapKey = $("#tmap-script").attr("data-tmap-key"); // HTML에서 API 키 가져오기
+
     // 지도 초기화
     var map;
 
@@ -16,6 +18,48 @@ $(document).ready(function() {
         });
 
         displayStations(); // 지도 생성 후 마커 표시
+    }
+
+    // 리버스 지오코딩 함수 (Tmap API 활용)
+    function reverseGeocode(lat, lon) {
+        // 위도, 경도를 소수점 6자리로 제한
+        lat = parseFloat(lat.toFixed(6));
+        lon = parseFloat(lon.toFixed(6));
+
+        var apiUrl = "https://apis.openapi.sk.com/tmap/geo/reversegeocoding";
+
+        $.ajax({
+            method: "GET",
+            url: apiUrl,
+            data: {
+                version: "1",
+                format: "json",  // JSON 형식 지정
+                lat: lat,
+                lon: lon,
+                coordType: "WGS84GEO",
+                addressType: "A10",  // 모든 주소 유형 반환
+                appKey: tmapKey
+            },
+            success: function(response) {
+                console.log("📍 리버스 지오코딩 응답:", response);
+                if (response && response.addressInfo) {
+                    var address = response.addressInfo.fullAddress;
+                    $("#address_input").val(address);
+                    console.log("리버스 지오코딩 주소:", address);
+                } else {
+                    console.warn("⚠️ 주소 정보를 가져올 수 없음");
+                }
+            },
+            error: function(request, status, error) {
+                console.error(`❌ 리버스 지오코딩 요청 실패: ${status}`, request, error);
+            }
+        });
+    }
+
+    var initialLat = parseFloat($("#end_lat").val());
+    var initialLon = parseFloat($("#end_lon").val());
+    if (!isNaN(initialLat) && !isNaN(initialLon)) {
+        reverseGeocode(initialLat, initialLon); // ✅ 초기 값 리버스 지오코딩 실행
     }
 
     // 초기 상태 대시보드 템플릿 정의
@@ -39,7 +83,7 @@ $(document).ready(function() {
 
             <!-- 카드 3: 비용 비교 -->
             <div class="card">
-                <h4>💰 운행 비용 비교</h4>
+                <h4>💰 비용 비교</h4>
                 <p>기존 택배: <span id="cost_original">--</span> 원</p>
                 <p>지하철 창고: <span id="cost_subway">--</span> 원</p>
                 <p>📉 절감률: <span id="cost_reduction">--</span>%</p>
@@ -80,9 +124,9 @@ $(document).ready(function() {
                     position: new Tmapv2.LatLng(station.latitude, station.longitude),
                     map: map,
                     title: station.name,
-                    icon: "/img/h_warehouse.png",  // Spring 서버에서 제공하는 정적 경로
-                    iconSize: new Tmapv2.Size(30, 30), // 마커 크기 설정
-                    iconAnchor: new Tmapv2.Point(15, 30) // 마커 중심 조정 (선택 사항)
+                    icon: "/img/h_marker.png",  // Spring 서버에서 제공하는 정적 경로
+                    iconSize: new Tmapv2.Size(35, 35), // 마커 크기 설정
+                    iconAnchor: new Tmapv2.Point(17, 35) // 마커 중심 조정 (선택 사항)
                 });
                 markers.push(marker);
             });
@@ -263,6 +307,12 @@ $(document).ready(function() {
                 </div>
             </div>
         `);
+        $(".dashboard").append(`
+            <p style="color: gray; font-size: 12px; margin-top: 10px;">
+                🚚 <strong>Sub 터미널 선택:</strong> 각각 선택한 출발 창고, 배송지와 가장 가까운 Sub 터미널을 자동으로 선택합니다.<br>
+                ℹ️ <strong>등록된 터미널:</strong> CJ 대한통운 Sub 터미널 중 서울 지역 내 터미널을 기준으로 경로를 계산합니다.
+            </p>
+        `);
     }
 
     function updateMap(data) {
@@ -365,6 +415,14 @@ $(document).ready(function() {
                     <p><span class="time-highlight">${totalTime}</span> 분</p>
                 </div>
             </div>
+        `);
+
+        $(".dashboard").append(`
+            <p style="color: gray; font-size: 12px; margin-top: 10px;">
+                🚆 <strong>도착 지하 창고:</strong> 배송지와 가장 가까운 지하 창고를 자동으로 선택합니다. 동일한 지하 창고일 경우 해당 정보는 생략됩니다.<br>
+                🏍️ 출발 지하 창고와 도착 지하 창고가 동일할 경우, <strong>별도 경로 없이 주행 경로만 출력</strong>됩니다.<br>
+                ℹ️ 주행 시간이 <strong>20분 이내</strong>로 차이가 없다면, <strong>주행 경로만 출력</strong>됩니다.
+            </p>
         `);
 
         // 비교 결과 표시
@@ -493,17 +551,6 @@ $(document).ready(function() {
 
         // 선택된 경로
         const selectedRoute = data.subway;
-        if (selectedRoute.type === "지하철도+주행 경로") {
-            if (selectedRoute.subway_route && selectedRoute.subway_route.length > 0) {
-                const subwayPolyline = new Tmapv2.Polyline({
-                    path: selectedRoute.subway_route.map(coord => new Tmapv2.LatLng(coord[0], coord[1])),
-                    strokeColor: "#FF5733",
-                    strokeWeight: 6,
-                    map: map
-                });
-                polylines.push(subwayPolyline);
-            }
-        }
 
         if (selectedRoute.driving_route && selectedRoute.driving_route.length > 0) {
             const drivingPolyline = new Tmapv2.Polyline({
@@ -513,6 +560,18 @@ $(document).ready(function() {
                 map: map
             });
             polylines.push(drivingPolyline);
+        }
+
+        if (selectedRoute.type === "지하철도+주행 경로" && selectedRoute.subway_route && selectedRoute.subway_route.length > 0) {
+            if (selectedRoute.subway_route && selectedRoute.subway_route.length > 0) {
+                const subwayPolyline = new Tmapv2.Polyline({
+                    path: selectedRoute.subway_route.map(coord => new Tmapv2.LatLng(coord[0], coord[1])),
+                    strokeColor: "#FF5733",
+                    strokeWeight: 6,
+                    map: map
+                });
+                polylines.push(subwayPolyline);
+            }
         }
 
         // 지도 영역 조정
@@ -578,6 +637,12 @@ $(document).ready(function() {
         // 업데이트 호출
         updateDashboard(comparisonData);
 
+        $(".dashboard").append(`
+            <p style="color: gray; font-size: 12px; margin-top: 10px;">
+                ℹ️ <strong>안내:</strong> 해당 데이터는 <strong>운행 시간</strong>과 <strong>운행 비용</strong>만 고려된 값입니다.<br>
+                ⚠️ <strong>참고 사항:</strong> 본 정보는 단순 참고용이며, 실제 운행 시 비용이 달라질 수 있습니다.
+            </p>
+        `);
 
         // 대시보드에 차트 추가
         $(".dashboard").append(`
@@ -645,6 +710,7 @@ $(document).ready(function() {
             },
             options: {
                 responsive: true,
+                responsive: true,
                 maintainAspectRatio: true,
                 plugins: {
                     legend: { position: "top" }
@@ -659,7 +725,7 @@ $(document).ready(function() {
     }
 
     // 위치 선택 버튼 클릭 → 지도에 마커 표시
-    $(document).on("click", "#add_marker_btn", function () {
+    $(document).on("click", "#add_marker_btn", function (event) {
         event.preventDefault(); // 기본 제출 방지
 
         // 기존 마커 삭제
@@ -686,7 +752,7 @@ $(document).ready(function() {
     });
 
     // 위치 확인 버튼 클릭 → 마커 위치를 입력 칸에 자동 입력
-    $(document).on("click", "#confirm_location_btn", function () {
+    $(document).on("click", "#confirm_location_btn", function (event) {
         event.preventDefault(); // 기본 동작(새로고침) 방지
 
         if (!selectedMarker) {
@@ -697,6 +763,9 @@ $(document).ready(function() {
         var position = selectedMarker.getPosition();
         $("#end_lat").val(position.lat());
         $("#end_lon").val(position.lng());
+
+        // 리버스 지오코딩 실행
+        reverseGeocode(parseFloat(position.lat()), parseFloat(position.lng()));
 
         console.log(`✅ 선택한 위치: 위도 ${position.lat()}, 경도 ${position.lng()}`);
         alert(`선택한 위치:\n위도: ${position.lat()}\n경도: ${position.lng()}`);
