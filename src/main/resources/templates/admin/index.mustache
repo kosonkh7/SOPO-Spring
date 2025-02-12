@@ -14,7 +14,7 @@
             margin: 0;
             font-family: Arial, sans-serif;
             background-color: #f5f5f5;
-            overflow: hidden;
+            overflow: auto;
         }
 
         /* 메인 컨텐츠 스타일 */
@@ -30,6 +30,7 @@
             background-color: #ffffff;
             padding: 10px 20px;
             border-bottom: 1px solid #ddd;
+            margin-top: -52px;
         }
 
         .header .user {
@@ -45,7 +46,6 @@
         }
 
         /* 카드 및 대시보드 레이아웃 */
-
         .card {
             background-color: white;
             padding: 10px 20px;   /* 내부 여백 조정 */
@@ -93,13 +93,13 @@
         }
 
         .approval {
-            margin-top: -96px; /* 위쪽 간격 */
+            margin-top: -76px; /* 위쪽 간격 */
             padding: 28px; /* 내부 여백 줄임 */
             background-color: white;
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             width: 190%; /* 너비 조정 (예: 80%) */
-            height: 237%; /* 높이는 내용에 맞춤 */
+            height: 267%; /* 높이는 내용에 맞춤 */
             overflow-y: auto;
             margin-left: auto; /* 가로 가운데 정렬 */
             margin-right: auto; /* 가로 가운데 정렬 */
@@ -311,9 +311,9 @@
 <body>
 {{> common/footer}}
 <div class="sidebar">
-    <h1><img src="/img/logo.png" alt="Keen Icon"><span>YMJ</span></h1>
+    <h1><img src="/img/logo.png" alt="Keen Icon"><span>SOPO</span></h1>
     <ul>
-        <li onclick="location.href='/" style="cursor: pointer;">
+        <li onclick="location.href='/'" style="cursor: pointer;">
             <img src="/img/home.svg" alt="Home Icon">홈
         </li>
         <li onclick="location.href='/stock'" style="cursor: pointer;">
