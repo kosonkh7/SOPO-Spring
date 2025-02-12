@@ -1,8 +1,15 @@
+server:
+  compression:
+    enabled: false # Content-Length mismatch 문제 방지
+
 logging:
   level:
     org.hibernate.SQL: DEBUG
 
 spring:
+  main:
+    lazy-initialization: true # 시작 속도 최적화
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://bigprojectteam04.mysql.database.azure.com:3306/bigproject?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
@@ -30,10 +37,7 @@ spring:
       hibernate.format_sql: true
       dialect: org.hibernate.dialect.MySQL8InnoDBDialect
 
-#chatbot:
-#  api:
-#    host: https://team04chatbot-hbhadad9g5drbyck.koreacentral-01.azurewebsites.net
-chatbot:
+chat-bot:
   api:
     host: https://bigprojectchatbot-eqcgcad6g2hxbqc0.koreacentral-01.azurewebsites.net
 

@@ -67,9 +67,10 @@ public class SecurityConfig {
                         .accessDeniedHandler(accessDeniedHandler))
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(AUTH_WHITELIST).permitAll()
-                        .requestMatchers(PathRequest.toH2Console()).permitAll()
+//                        .requestMatchers(PathRequest.toH2Console()).permitAll()
 //                       .anyRequest().permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("prometheus","prometheus","metrics").hasRole("ADMIN")
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .anyRequest().fullyAuthenticated()
                         // 권한에 따른 로그인 다 잡기

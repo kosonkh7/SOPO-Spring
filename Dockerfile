@@ -11,4 +11,4 @@ COPY build/libs/pj-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
 
 # 'dev','dockerdb' 프로파일을 활성화하여 애플리케이션 실행
-ENTRYPOINT ["java", "-Dspring.profiles.active=Dev", "-Dlogging.level.org.springframework=DEBUG", "-jar", "/app.jar"]
+ENTRYPOINT ["java", "-Dspring.profiles.active=dev", "-Dlogging.level.org.springframework=DEBUG", "-jar", "/app.jar"]
