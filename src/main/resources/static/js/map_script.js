@@ -640,7 +640,7 @@ $(document).ready(function() {
         $(".dashboard").append(`
             <p style="color: gray; font-size: 12px; margin-top: 10px;">
                 ℹ️ <strong>안내:</strong> 해당 데이터는 <strong>운행 시간</strong>과 <strong>운행 비용</strong>만 고려된 값입니다.<br>
-                ⚠️ <strong>참고 사항:</strong> 본 정보는 단순 참고용이며, 실제 운행 시 비용이 달라질 수 있습니다.
+                ⚠️ <strong>참고 사항:</strong> 본 정보는 단순 참고용이며, 실제 운행 시 달라질 수 있습니다.
             </p>
         `);
 
