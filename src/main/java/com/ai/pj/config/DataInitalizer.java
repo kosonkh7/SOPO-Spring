@@ -22,8 +22,8 @@ public class DataInitalizer {
     public void init() {
         User admin = User.builder()
                 .id("admin")
-                .email("adfasdf@asdfa.com")
-                .name("sadfasd")
+                .email("admin@naver.com")
+                .name("관리자")
                 .password(passwordEncoder.encode("1234"))
                 .build();
 
@@ -36,8 +36,8 @@ public class DataInitalizer {
         User user = User.builder()
                 .id("daetu01")
                 .password(passwordEncoder.encode("1234"))
-                .name("fasdf")
-                .email("sadfasdf@asdfanas.asdf")
+                .name("원대안")
+                .email("daetu01@naver.com")
                 .role(User.UserRole.HOLD)
                 .build();
 
