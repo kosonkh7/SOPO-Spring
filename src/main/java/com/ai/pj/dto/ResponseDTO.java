@@ -19,6 +19,8 @@ public class ResponseDTO<T> {
     private String message; // 메시지 (선택적)
     private Map<String, String> errors; // 에러 상세 정보.
     private User users;
+    private int updateRows;
+
 
 
     public ResponseDTO(Map<String,String> errorMap, HttpStatus status) {
@@ -33,6 +35,12 @@ public class ResponseDTO<T> {
 
     public ResponseDTO(User user, HttpStatus status) {
         this.users = user;
+        this.status = status;
+    }
+
+
+    public ResponseDTO(int updateRows, HttpStatus status) {
+        this.updateRows = updateRows;
         this.status = status;
     }
 }

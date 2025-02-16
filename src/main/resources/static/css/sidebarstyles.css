@@ -1,0 +1,149 @@
+.sidebar {
+    top: 0;          /* 상단에 위치 */
+    left: 0;         /* 왼쪽에 위치 */
+    width: 220px;
+    height: 100vh;
+    background-color: #1e2a44;
+    color: white;
+    position: fixed;
+    padding-top: 20px;
+    transition: width 0.3s ease;
+    overflow: hidden; /* 접힐 때 내용 숨기기 */
+}
+
+.sidebar h1 {
+    margin-top: 15px; /* 원하는 만큼 내려주기 */
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-bottom: 20px;
+    font-size: 29px;
+    border-bottom: 0.45px dashed rgba(255, 255, 255, 0.38);
+    padding-bottom: 14px;
+}
+
+.sidebar h1 img {
+    width: 36px;
+    height: auto;
+    margin-right: 10px;
+    margin-top: -22px;
+}
+
+.sidebar h1 span {
+    position: relative;
+    top: -10px; /* 원하는 만큼 위로 올리기 (음수값) */
+    font-family: "Arial Black";
+}
+
+.sidebar.collapsed {
+    width: 60px; /* 접힌 상태의 너비 */
+}
+.sidebar.collapsed h1 {
+    display: none;
+}
+
+/* 접힌 상태 */
+.sidebar.collapsed ul {
+    margin-top: 45px; /* 원하는 높이만큼 내려주기 */
+}
+
+.sidebar.collapsed ul li img {
+    margin-right: 0; /* 접힐 때 아이콘만 보이도록 */
+}
+.sidebar.collapsed ul li span {
+    display: none; /* 텍스트 숨기기 */
+}
+
+.sidebar.collapsed ul li {
+    justify-content: center; /* 텍스트를 숨기고 아이콘만 가운데 정렬 */
+}
+
+
+/* 사이드바 토글 버튼 스타일 */
+.toggle-button {
+    position: absolute;
+    top: 22px;
+    right: 7px;
+    width: 34px;
+    height: 34px;
+    background-color: #1e2a44;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    z-index: 1001;
+    border-radius: 8px; /* 네모 모양 */
+}
+/* 마우스를 올리면 배경색 변경 */
+.toggle-button:hover {
+    background-color: #43505c;
+}
+
+.toggle-button img {
+    width: 20px;
+    height: auto;
+    transition: transform 0.3s ease;
+}
+
+.sidebar.collapsed .toggle-button img {
+    transform: rotate(180deg); /* 접힐 때 아이콘 회전 */
+}
+
+.sidebar.collapsed ~ .header {
+    left: 60px;
+    width: calc(100% - 60px);
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 7px;
+}
+
+.sidebar ul li {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.sidebar ul li img {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.sidebar ul li:hover {
+    background-color: #909091;
+}
+
+
+
+.logout-button {
+    position: absolute;
+    bottom: 17px;
+    width: 90%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px;
+    background-color: #9b9ba5;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 16px;
+}
+
+.logout-button:hover {
+    background-color: #a30d0d;
+
+}
+.logout-button img {
+    width: 24px;
+    height: auto;
+}

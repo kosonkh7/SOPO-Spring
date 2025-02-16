@@ -3,8 +3,10 @@ package com.ai.pj.controller;
 
 import com.ai.pj.dto.BoardDTO;
 import com.ai.pj.dto.CommentDTO;
+import com.ai.pj.security.details.CustomUserDetails;
 import com.ai.pj.service.BoardService;
 import com.ai.pj.service.CommentService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.swing.text.html.parser.Entity;
 import java.util.List;
 
 @Controller
@@ -24,12 +27,21 @@ public class BoardController {
     private final BoardService boardService;
     private final CommentService commentService;
 
-    @GetMapping("/")
-    public String reqBoard(Model model) {
+    // /board 요청을 /board/로 리다이렉트
+    @GetMapping
+    public String redirectToSlash() {
+        return "redirect:/board/";
+    }
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userId = authentication.getName();
-        model.addAttribute("userId", userId) ;
+    @GetMapping("/")
+    public String reqBoard(Model model, Authentication authentication) {
+
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+        System.out.println(customUserDetails.getTokenUserInfo().getUserid());
+        System.out.println(customUserDetails.getTokenUserInfo().getIdentifier());
+        System.out.println(customUserDetails.getTokenUserInfo().getRole());
+        System.out.println(customUserDetails.getTokenUserInfo().getEmail());
+        model.addAttribute("userId", customUserDetails.getTokenUserInfo().getIdentifier()) ;
 
         List<BoardDTO.Get> boardList = boardService.getAllBoards();
         model.addAttribute("boardList", boardList);
@@ -69,17 +81,28 @@ public class BoardController {
     }
 
 
-    @GetMapping("/delete")
-    public String reqDelete(@RequestParam Long reqNum, Model model) {
+//    @GetMapping("/delete")
+//    public String reqDelete(@RequestParam Long reqNum, Model model) {
+//
+//        // 삭제
+//        if (boardService.delete(reqNum)) {
+//            model.addAttribute("response", "삭제성공");
+//        } else {
+//            model.addAttribute("response", "삭제실패");
+//        };
+//
+//        return "/board/";
+//    }
 
-        // 삭제
-        if (boardService.delete(reqNum)) {
-            model.addAttribute("response", "삭제성공");
-        } else {
-            model.addAttribute("response", "삭제실패");
-        };
-
-        return "/board/";
+    @PostMapping("/delete/{id}")
+    public String deleteBoard(@PathVariable Long id, RedirectAttributes redirectAttributes){
+        try {
+            boardService.delete(id);
+            redirectAttributes.addFlashAttribute("message", "게시글이 성공적으로 삭제되었습니다.");
+        } catch (EntityNotFoundException e){
+            redirectAttributes.addFlashAttribute("error", "해당 게시글을 찾을 수 없습니다.");
+        }
+        return "redirect:/board/";
     }
 
     @GetMapping("/{id}")

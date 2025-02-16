@@ -7,154 +7,259 @@
     <title>Chatbot Toggle</title>
     <style>
         * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-          font-family: Arial, sans-serif;
-          background: #f5f5f5;
-          height: 100vh;
-          display: flex;
-          align-items: center;
-          justify-content: center;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /* Chatbot Toggle Button */
         .toggle-chatbot {
-          position: fixed;
-          bottom: 20px;
-          right: 20px;
-          background: #7b358c;
-          color: white;
-          border: none;
-          padding: 15px 20px;
-          font-size: 16px;
-          border-radius: 30px;
-          cursor: pointer;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-          transition: background 0.3s ease;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(5, 29, 175, 0.9);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            font-size: 16px;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: background 0.3s ease;
         }
 
         .toggle-chatbot:hover {
-          background: #5a2571;
+            background: #3a4167;
         }
 
         /* Chatbot Container */
         .chatbot-container {
-          width: 400px;
-          height: 600px;
-          background: white;
-          border-radius: 10px;
-          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-          display: flex;
-          flex-direction: column;
-          overflow: hidden;
-          position: fixed;
-          bottom: 100px;
-          right: 20px;
-          display: none; /* Initially hidden */
+            width: 370px;
+            height: 520px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            display: none; /* Initially hidden */
         }
 
         .chat-header {
-          background: linear-gradient(90deg, #7b358c, #b437cc);
-          color: white;
-          padding: 15px;
-          text-align: center;
-          font-size: 18px;
-          font-weight: bold;
+            background: linear-gradient(90deg, #061ca1, #061ca1);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
         }
 
         .chat-body {
-          flex: 1;
-          padding: 10px;
-          overflow-y: auto;
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-          background: #f9f9f9;
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: #f9f9f9;
         }
 
         .message {
-          max-width: 70%;
-          padding: 10px;
-          border-radius: 10px;
-          font-size: 14px;
-          line-height: 1.4;
+            max-width: 70%;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 14px;
+            line-height: 1.4;
         }
 
         .message.bot {
-          background: #e5e5e5;
-          align-self: flex-start;
+            background: #e5e5e5;
+            align-self: flex-start;
         }
 
         .message.user {
-          background: #7b358c;
-          color: white;
-          align-self: flex-end;
+            background: #DCE8FA;
+            color: rgba(10, 10, 10, 0.97);
+            align-self: flex-end;
         }
 
         .chat-footer {
-          padding: 10px;
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          background: #f1f1f1;
-          border-top: 1px solid #ddd;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f1f1f1;
+            border-top: 1px solid #ddd;
         }
 
         .chat-input {
-          flex: 1;
-          padding: 10px;
-          font-size: 14px;
-          border: 1px solid #ccc;
-          border-radius: 5px;
-          outline: none;
-          transition: border-color 0.3s;
+            flex: 1;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+            transition: border-color 0.3s;
         }
 
         .chat-input:focus {
-          border-color: #7b358c;
+            border-color: #7b358c;
         }
 
         .send-button {
-          background: #7b358c;
-          color: white;
-          border: none;
-          padding: 10px 15px;
-          font-size: 14px;
-          border-radius: 5px;
-          cursor: pointer;
-          transition: background 0.3s ease;
+            background: rgba(0, 123, 255, 0.96);
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
         }
 
         .send-button:hover {
-          background: #5a2571;
+            background: #0123d3;
         }
+        .toggle-chatbot img {
+            width: 25px; /* 버튼 크기에 맞게 조정 */
+            height: auto;
+        }
+
+        footer {
+            width: 100%;
+            background: #061ca1;
+            color: white;
+            text-align: center;
+            padding: 10px 10px;
+            font-size: 14px;
+            margin-top: auto; /* ✅ 컨텐츠가 적어도 footer가 하단 고정 */
+        }
+        /* 챗봇 소개 아이콘 & 메시지 */
+        .chatbot-intro {
+            text-align: center;
+            padding: 15px;
+        }
+
+        .chatbot-icon {
+            width: 50px;
+            height: auto;
+            margin-bottom: 4px;
+        }
+
+        .chatbot-intro-text {
+            font-size: 14px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        /* 메시지 컨테이너: 챗봇 응답에 아이콘을 함께 배치 */
+        .message-container {
+            display: flex;
+            align-items: center; /* 세로 정렬 */
+            gap: 5px; /* 아이콘과 메시지 간격 */
+        }
+
+        .message-container.user {
+            display: flex;
+            justify-content: flex-end; /* 사용자 메시지를 오른쪽 정렬 */
+            align-items: center;
+        }
+
+        /* ✅ 메시지 박스 (메시지 + 시간) */
+        .message-box {
+            display: flex;
+            align-items: center; /* 수평 정렬 */
+            gap: 3px; /* 메시지와 시간 간격 */
+        }
+        /* ✅ 사용자 메시지 시간 정렬 */
+        .message-container.user .message-time {
+            margin-right: 1px;
+        }
+
+        .message-time-fix {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: -59px;
+            white-space: nowrap;
+        }
+
+        .message-time{
+            font-size: 12px;
+            color: #888;
+            margin-left: 0;
+            margin-top: 23px;
+            float: left; /* 우측 정렬 */
+        }
+
+        /* 챗봇 아이콘 스타일 */
+        .bot-icon {
+            width: 32px;
+            height: 32px;
+            padding: 2px;
+        }
+
+        /* 챗봇 메시지 스타일 */
+        .message.bot {
+            background: #e5e5e5;
+            align-self: flex-start;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 14px;
+            line-height: 1.4;
+            max-width: 70%;
+        }
+
     </style>
 </head>
 <body>
 <!-- Toggle Button -->
-<button class="toggle-chatbot">Chat</button>
+<button class="toggle-chatbot">
+    <img src="/img/ai_button.svg" alt="AI Button" />
+</button>
+
 
 <!-- Chatbot Container -->
 <div class="chatbot-container" id="chatbot">
     <!-- Chat Header -->
     <div class="chat-header">
-        Chatbot
+        Chatbot:: AI Cloud
     </div>
 
     <!-- Chat Body -->
     <div class="chat-body">
+        <!-- 챗봇 소개 아이콘 & 메시지 -->
+        <div class="chatbot-intro">
+            <img src="/img/chatbot_welcome.png" alt="Chatbot Icon" class="chatbot-icon" />
+            <p class="chatbot-intro-text">물류 어시스턴트 챗봇입니다. <br> 데이터 기반으로 필요한 정보와 솔루션을 <br>제공합니다.</p>
+        </div>
+
         <!-- Bot Message -->
-        <div class="message bot">Hello! How can I assist you today?</div>
+        <div class='message-container'>
+            <img src="/img/chatbot_icon.png" alt="Chatbot Icon" class="bot-icon">
+            <div class="message-box">
+                <div class="message bot">안녕하세요, {{managerName}}님. <br>오늘은 무엇을 도와 드릴까요?</div>
+                <span class='message-time-fix' data-time=""></span>
+            </div>
+        </div>
     </div>
 
     <!-- Chat Footer -->
     <div class="chat-footer">
-        <input type="text" class="chat-input" placeholder="Type a message..." />
-        <button class="send-button">Send</button>
+        <input type="text" class="chat-input" placeholder="궁금한 사항을 입력해 주세요" />
+        <button class="send-button"><img src="/img/send.svg" alt="Send" style="width: 21px; height: 21px;"  /></button>
+
     </div>
 </div>
 
@@ -162,60 +267,90 @@
     // JavaScript to toggle the chatbot visibility
     const chatbot = document.getElementById('chatbot');
     const toggleButton = document.querySelector('.toggle-chatbot');
-
-    toggleButton.addEventListener('click', () => {
-      if (chatbot.style.display === 'none' || chatbot.style.display === '') {
-        chatbot.style.display = 'flex'; // Show the chatbot
-      } else {
-        chatbot.style.display = 'none'; // Hide the chatbot
-      }
-    });
-
+    const chatbotInput = document.querySelector('.chat-input');
     const chatbotSendButton = document.querySelector('.send-button');
 
-    chatbotSendButton.addEventListener('click', () => {
+    // Chatbot 토글 버튼 클릭 시 표시/숨김
+    toggleButton.addEventListener('click', () => {
+        chatbot.style.display = (chatbot.style.display === 'none' || chatbot.style.display === '') ? 'flex' : 'none';
+    });
 
-        // Get the value from the input field
-        var value = $('.chat-input').val();
+    // ✅ Enter 키 이벤트 추가 (수정된 부분)
+    chatbotInput.addEventListener('keypress', (event) => {
+        if (event.key === "Enter") {
+            event.preventDefault(); // 기본 Enter 동작(줄바꿈) 방지
+            sendMessage(); // 메시지 전송 함수 실행
+        }
+    });
 
-        // Check if the value is not empty
-            if (value.trim() !== "") {
-                // Append the user message to the chat body
-                $('.chat-body').append(`
-                    <div class='message user'>${value}</div>
-                `);
+    // ✅ 전송 버튼 클릭 시 메시지 전송
+    chatbotSendButton.addEventListener('click', sendMessage);
 
-                // Clear the input field after sending the message
-                $('.chat-input').val("");
+    // 현재 시간을 가져오는 함수
+    function getCurrentTime() {
+        const now = new Date();
+        let hours = now.getHours();
+        let minutes = now.getMinutes();
+        let period = "오전";
 
-                // Auto-scroll to the latest message
-                $('.chat-body').scrollTop($('.chat-body')[0].scrollHeight);
-            }
+        if (hours >= 12) {
+            period = "오후";
+            if (hours > 12) hours -= 12;
+        }
+        if (minutes < 10) minutes = "0" + minutes; // 한 자리 숫자일 경우 0 추가
 
-        // fetch 로 넘기면 됨.
-        fetch('/api/chatbot', {
-            method: 'POST',
-            headers: {
-                'Content-Type':'application/json'
-            },
-            body: JSON.stringify({
-              text: value
-            })
-        })
-        .then(response => response.json()) // JSON 응답 처리
-        .then(data => {
-            console.log(data);
+        return `${period} ${hours}:${minutes}`;
+    }
+    // 모든 시간 표시 요소 업데이트 (HTML에서도 활용 가능)
+    document.querySelectorAll('.message-time, .message-time-fix').forEach(el => {
+        const time = getCurrentTime();
+        el.innerHTML = time;  // 실제 표시
+        el.setAttribute('data-time', time);  // HTML에서 접근 가능
+    });
+
+    // ✅ 메시지 전송 함수 (중복 코드 제거)
+    function sendMessage() {
+        const value = chatbotInput.value.trim(); // 입력값 가져오기
+
+        if (value !== "") {
+            const currentTime = getCurrentTime(); // 현재 시간 가져오기
+
+            // 사용자 메시지 추가 (시간 포함)
             $('.chat-body').append(`
-                    <div class='message bot'>${data.response}</div>
-            `);
-
-            // Auto-scroll to the latest message
+                                <div class='message-container user'>
+                                    <div class="message-box">
+                                        <span class='message-time'>${currentTime}</span>
+                                        <div class='message user'>${value} </div>
+                                    </div>
+                                </div>`);
+            chatbotInput.value = ""; // 입력 필드 초기화
             $('.chat-body').scrollTop($('.chat-body')[0].scrollHeight);
-        })
-        .catch(error => {
-            console.error('Error', error);
-        })
-    })
+
+            // 서버에 메시지 전송
+            fetch('/api/chatbot', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ text: value })
+            })
+                    .then(response => response.json())
+                    .then(data => {
+                        const botTime = getCurrentTime(); // 챗봇 응답 시간
+
+                        // 챗봇 응답(+아이콘, 시간)
+                        $('.chat-body').append(`
+                                    <div class='message-container'>
+                                        <img src="/img/chatbot_icon.png" alt="Chatbot Icon" class="bot-icon">
+                                        <div class="message-box">
+                                            <div class='message bot'>${data.response}</div>
+                                            <span class='message-time'>${botTime}</span>
+                                        </div>
+                                    </div>`);
+                        $('.chat-body').scrollTop($('.chat-body')[0].scrollHeight);
+                    })
+                    .catch(error => console.error('Error', error));
+        }
+    }
+
 </script>
 </body>
 </html>

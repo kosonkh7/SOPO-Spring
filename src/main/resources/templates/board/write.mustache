@@ -1,24 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>글 작성</title>
+    <link rel="stylesheet" href="/css/sidebarstyles.css">
+    <link rel="stylesheet" href="/css/headerstyles.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+        .content-container {
+            margin-left: 260px;
+            padding: 20px;
+            width: calc(100% - 260px);
         }
-        form {
+        .form-container {
             max-width: 600px;
             margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         label {
-            display: block;
-            margin-top: 10px;
             font-weight: bold;
         }
-        input, textarea, button {
+        input, textarea, button[type="submit"] {
             width: 100%;
             padding: 10px;
             margin-top: 5px;
@@ -29,37 +34,47 @@
             resize: vertical;
         }
         button {
-            background-color: #4CAF50;
+            background-color: rgba(17, 48, 237, 0.9);
             color: white;
             border: none;
             cursor: pointer;
         }
         button:hover {
-            background-color: #45a049;
+            background-color: #081da3;
         }
     </style>
 </head>
 <body>
-<h1>글 작성</h1>
-<form action="/board/post" method="POST" enctype="multipart/form-data">
-    <!-- 제목 -->
-    <label for="title">제목</label>
-    <input type="text" id="title" name="title" placeholder="제목을 입력하세요" required>
+{{> common/header}}
+{{> common/sidebar}}
 
-    <!-- 작성자 -->
-    <label for="userId">작성자</label>
-    <input type="text" id="userId" name="userId" placeholder="작성자 이름을 입력하세요" required>
+<div class="content-container">
+    <div class="form-container">
+        <h2>글 작성</h2>
+        <br>
+        <form action="/board/post" method="POST" enctype="multipart/form-data">
+            <label for="title">제목</label>
+            <input type="text" id="title" name="title" placeholder="제목을 입력하세요" required>
+            <br>
+<!--            <label for="userId">작성자</label>-->
+<!--            <br>-->
+<!--            <span id="author">{{managerName}}</span> &lt;!&ndash; 입력란 대신 텍스트로만 표시 &ndash;&gt;-->
+<!--            <br>-->
+            <input type="hidden" name="userId" value="{{managerName}}"> <!-- 백엔드로 값 전달 -->
+            <br>
+            <label for="content">내용</label>
+            <textarea id="content" name="content" placeholder="내용을 입력하세요" required></textarea>
+            <br>
+            <br>
+            <label for="imageFile">이미지 업로드</label>
+            <input type="file" id="imageFile" name="imageFile" accept="image/*">
 
-    <!-- 내용 -->
-    <label for="content">내용</label>
-    <textarea id="content" name="content" placeholder="내용을 입력하세요" required></textarea>
+            <button type="submit">저장하기</button>
+        </form>
+    </div>
+</div>
 
-    <!-- 이미지 업로드 -->
-    <label for="imageFile">이미지 업로드</label>
-    <input type="file" id="imageFile" name="imageFile" accept="image/*">
-
-    <!-- 제출 버튼 -->
-    <button type="submit">글 작성</button>
-</form>
+{{> common/footer}}
+{{> common/font}}
 </body>
 </html>

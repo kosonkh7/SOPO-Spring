@@ -1,3 +1,15 @@
 chatbot:
   api:
     host: http://127.0.0.1:8000
+
+stock:
+  api:
+    host: http://127.0.0.1:8001
+
+map:
+  api:
+    host: http://127.0.0.1:5000
+
+inspection:
+  api:
+    host: http://127.0.0.1:8003

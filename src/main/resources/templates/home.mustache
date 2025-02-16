@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="/css/homestyles.css" />
+    <link rel="stylesheet" href="/css/sidebarstyles.css">
+    <link rel="stylesheet" href="/css/headerstyles.css">
+    <!-- Tmap API -->
+    <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey={{tmapKey}}"></script>
+    <!-- jQuery 추가 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/home_script.js"></script>
+</head>
+<body>
+<!-- 헤더 포함 -->
+{{> common/header}}
+<!-- 사이드바 -->
+{{> common/sidebar}}
+
+<main>
+    <div class="layout-container">
+        <div class="map-button-container">
+            <!-- 지도 영역 -->
+            <div class="map-container">
+                <div class="map" id="map_div">
+                    <!-- 지도 표시 -->
+                </div>
+            </div>
+
+            <!-- 버튼 영역 -->
+            <div class="buttons-container">
+                <div class="info-box">
+                    <div class="info-content">
+                        <img src="/img/h_subway.png" alt="지하철" class="info-icon">
+                        <span class="info-text">지하철 창고 위치</span>
+                    </div>
+                </div>
+
+                <div class="info-box" onclick="location.href='http://localhost:8080/stock'" style="cursor: pointer;">
+                    <span class="info-title">보관 & 관리</span>
+                    <div class="info-content">
+                        <img src="/img/h_storage.png" alt="보관" class="info-icon">
+                        <span class="info-text">재고량 예측</span>
+                    </div>
+                </div>
+
+                <div class="info-box" onclick="location.href='http://localhost:8080/inspection/inspect'" style="cursor: pointer;">
+                    <span class="info-title">검수 / 포장</span>
+                    <div class="info-content">
+                        <img src="/img/h_inspection.png" alt="검수" class="info-icon">
+                        <span class="info-text">상품 검수</span>
+                    </div>
+                </div>
+
+                <div class="info-box" onclick="location.href='http://localhost:8080/map'" style="cursor: pointer;">
+                    <span class="info-title">출고</span>
+                    <div class="info-content">
+                        <img src="/img/h_shipping.png" alt="출고" class="info-icon">
+                        <span class="info-text">배송 경로 비교</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 입고 → 출고 프로세스 -->
+        <div class="process-flow">
+            <div class="process-step">
+                <div class="step-icon"><img src="/img/m_warehousing.png" alt="입고"></div>
+                <div class="step-label">입고</div>
+            </div>
+            <div class="process-step">
+                <div class="step-icon"><img src="/img/m_storage.png" alt="보관"></div>
+                <div class="step-label">보관</div>
+            </div>
+            <div class="process-step">
+                <div class="step-icon"><img src="/img/m_picking.png" alt="피킹"></div>
+                <div class="step-label">피킹</div>
+            </div>
+            <div class="process-step">
+                <div class="step-icon"><img src="/img/m_categorization.png" alt="분류"></div>
+                <div class="step-label">분류</div>
+            </div>
+            <div class="process-step">
+                <div class="step-icon"><img src="/img/m_packaging.png" alt="분류"></div>
+                <div class="step-label">검수/포장</div>
+            </div>
+            <div class="process-step">
+                <div class="step-icon"><img src="/img/m_delivery.png" alt="분류"></div>
+                <div class="step-label">출고</div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- 푸터 포함 -->
+{{> common/footer}}
+{{> common/font}}
+
+</body>
+</html>

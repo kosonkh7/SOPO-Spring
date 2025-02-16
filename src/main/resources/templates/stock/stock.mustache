@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Predictions</title>
+
+    <!-- 스타일 시트 -->
+    <link rel="stylesheet" href="/css/sidebarstyles.css">
+    <link rel="stylesheet" href="/css/headerstyles.css">
+    <link rel="stylesheet" href="/css/stockstyles.css">
+
+    <!-- 지도 출력 -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+    <!-- 🚛 로딩 애니메이션 -->
+    <div id="loading-container">
+        <img id="loading-truck" src="/img/prediction2.png" alt="Loading Truck">
+        <div id="loading-text">적정재고 예측 진행 중..</div>
+    </div>2
+
+</head>
+<body>
+{{> common/header}}
+{{> common/sidebar}}
+{{> common/footer}}
+{{> common/font}}
+
+
+<div class="container">
+    <!-- 지도 -->
+    <div id="map"></div>
+
+    <!-- 검색 폼 -->
+    <div class="form-container">
+        <h1>📉  AI 기반 적정 재고 예측</h1>
+
+        <form action="/stock" method="get">
+            <label for="date">예측 일자:</label>
+            <input type="date" id="date" name="date" required>
+
+            <label for="location">대상 물류센터:</label>
+            <select id="location" name="location" required>
+                {{#locations}}
+                    <option value="{{.}}">{{.}}</option>
+                {{/locations}}
+            </select>
+
+            <label for="category_name">대상 품목:</label>
+            <select id="category_name" name="category_name" required>
+                {{#categories}}
+                    <option value="{{.}}">{{.}}</option>
+                {{/categories}}
+            </select>
+
+            <button type="submit"><strong>실시간 적정 재고 예측하기</strong></button>
+        </form>
+    </div>
+
+    <!-- 예측 결과 출력 (입력값 포함) -->
+    <div class="result-container">
+        <h2>예측 결과</h2>
+        {{#predictedValue}}
+            <p><strong>입력 날짜:</strong> {{inputDate}}</p>
+            <p><strong>선택된 위치:</strong> {{inputLocation}}</p>
+            <p><strong>선택된 품목:</strong> {{inputCategory}}</p>
+            <hr>
+            <div class="data">
+                <div class="label"><strong>예측 수요량:</strong></div>
+                <div>{{predictedValue}} 개</div>
+            </div>
+            <div class="data">
+                <div class="label"><strong>안전 재고량:</strong></div>
+                <div>{{safetyStock}} 개</div>
+            </div>
+            <div class="data">
+                <div class="label"><strong>적정 재고량:</strong></div>
+                <div>{{properStock}} 개</div>
+            </div>
+            <div class="precaution">
+                <strong>⚠️ 주의사항:</strong> <span>{{precautionComment}}</span>
+            </div>
+        {{/predictedValue}}
+    </div>
+</div>
+
+
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script>
+    // 지도 초기화
+    var map = L.map('map').setView([37.5665, 126.9780], 10.1);
+
+    // OSM 타일 레이어 추가
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // 지하철역 좌표 데이터
+    var stations = [
+        {"name": "가락시장", "lat": 37.492522, "lng": 127.118234},
+        {"name": "고속터미널", "lat": 37.50481, "lng": 127.004943},
+        {"name": "군자", "lat": 37.557121, "lng": 127.079542},
+        {"name": "길음", "lat": 37.603407, "lng": 127.025053},
+        {"name": "김포공항", "lat": 37.562434, "lng": 126.801058},
+        {"name": "독산", "lat": 37.466613, "lng": 126.889249},
+        {"name": "목동", "lat": 37.526065, "lng": 126.864931},
+        {"name": "불광", "lat": 37.610469, "lng": 126.929887},
+        {"name": "석계", "lat": 37.614805, "lng": 127.065851},
+        {"name": "신내", "lat": 37.612887, "lng": 127.103218},
+        {"name": "신림", "lat": 37.484201, "lng": 126.929715},
+        {"name": "양재", "lat": 37.484147, "lng": 127.034631},
+        {"name": "온수", "lat": 37.492258, "lng": 126.823388},
+        {"name": "용산", "lat": 37.529849, "lng": 126.964561},
+        {"name": "창동", "lat": 37.653166, "lng": 127.047731},
+        {"name": "천호", "lat": 37.538397, "lng": 127.123572},
+        {"name": "화계", "lat": 37.634967, "lng": 126.835958}
+    ];
+
+    // 사용자 정의 마커 아이콘
+    var customIcon = L.icon({
+        iconUrl: '/img/h_marker.png', // 마커 이미지 경로
+        iconSize: [32, 32],  // 아이콘 크기 (픽셀)
+        iconAnchor: [16, 32], // 기준점 (아이콘의 중심)
+        popupAnchor: [0, -32]  // 팝업 위치 조정
+    });
+
+    // 마커 추가 및 드롭다운 연동
+    stations.forEach(function(station) {
+        var marker = L.marker([station.lat, station.lng], { icon: customIcon }).addTo(map);
+        marker.bindPopup(`<strong>${station.name}</strong>`);
+
+        // 마커에 커서를 올렸을 때 툴팁 표시
+        marker.bindTooltip(station.name, { permanent: false, direction: "top" });
+
+        // 마커 클릭 시 드롭다운 값 변경
+        marker.on('click', function() {
+            document.getElementById('location').value = station.name;
+        });
+    });
+
+    document.querySelector("form").addEventListener("submit", function() {
+        document.getElementById("loading-container").style.display = "block"; // 로딩 표시
+    });
+
+    // 오늘 날짜를 yyyy-MM-dd 형식으로 변환하는 함수
+    function getTodayDate() {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0'); // 월 (01~12)
+        const dd = String(today.getDate()).padStart(2, '0'); // 일 (01~31)
+        return `${yyyy}-${mm}-${dd}`;
+    }
+
+    // 페이지가 로드될 때 기본 날짜를 오늘 날짜로 설정
+    document.addEventListener("DOMContentLoaded", function() {
+        const dateInput = document.getElementById("date");
+        if (dateInput) {
+            dateInput.value = getTodayDate();
+        }
+    });
+</script>
+
+</body>
+</html>
