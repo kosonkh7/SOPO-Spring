@@ -92,7 +92,9 @@
 
     // OSM 타일 레이어 추가
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
+        attribution: '&copy; OpenStreetMap contributors',
+        maxZoom: 15,
+        minZoom: 10
     }).addTo(map);
 
     // 지하철역 좌표 데이터
