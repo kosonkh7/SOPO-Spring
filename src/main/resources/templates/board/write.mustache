@@ -56,11 +56,15 @@
             <label for="title">제목</label>
             <input type="text" id="title" name="title" placeholder="제목을 입력하세요" required>
             <br>
-            <label for="userId">작성자</label>
-            <input type="text" id="userId" name="userId" placeholder="작성자 이름을 입력하세요" required>
+<!--            <label for="userId">작성자</label>-->
+<!--            <br>-->
+<!--            <span id="author">{{managerName}}</span> &lt;!&ndash; 입력란 대신 텍스트로만 표시 &ndash;&gt;-->
+<!--            <br>-->
+            <input type="hidden" name="userId" value="{{managerName}}"> <!-- 백엔드로 값 전달 -->
             <br>
             <label for="content">내용</label>
             <textarea id="content" name="content" placeholder="내용을 입력하세요" required></textarea>
+            <br>
             <br>
             <label for="imageFile">이미지 업로드</label>
             <input type="file" id="imageFile" name="imageFile" accept="image/*">
@@ -71,5 +75,6 @@
 </div>
 
 {{> common/footer}}
+{{> common/font}}
 </body>
 </html>

@@ -15,15 +15,16 @@
 
     <!-- 🚛 로딩 애니메이션 -->
     <div id="loading-container">
-        <img id="loading-truck" src="/img/prediction.png" alt="Loading Truck">
-        <div id="loading-text">AI 모델이 적정재고량을 예측 중입니다...</div>
-    </div>
+        <img id="loading-truck" src="/img/prediction2.png" alt="Loading Truck">
+        <div id="loading-text">적정재고 예측 진행 중..</div>
+    </div>2
 
 </head>
 <body>
 {{> common/header}}
 {{> common/sidebar}}
 {{> common/footer}}
+{{> common/font}}
 
 
 <div class="container">
@@ -32,7 +33,7 @@
 
     <!-- 검색 폼 -->
     <div class="form-container">
-        <h1>AI 기반 적정 재고 관리</h1>
+        <h1>📉  AI 기반 적정 재고 예측</h1>
 
         <form action="/stock" method="get">
             <label for="date">예측 일자:</label>
@@ -91,7 +92,9 @@
 
     // OSM 타일 레이어 추가
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
+        attribution: '&copy; OpenStreetMap contributors',
+        maxZoom: 15,
+        minZoom: 10
     }).addTo(map);
 
     // 지하철역 좌표 데이터
@@ -117,7 +120,7 @@
 
     // 사용자 정의 마커 아이콘
     var customIcon = L.icon({
-        iconUrl: '/img/stock_icon.png', // 마커 이미지 경로
+        iconUrl: '/img/h_marker.png', // 마커 이미지 경로
         iconSize: [32, 32],  // 아이콘 크기 (픽셀)
         iconAnchor: [16, 32], // 기준점 (아이콘의 중심)
         popupAnchor: [0, -32]  // 팝업 위치 조정
