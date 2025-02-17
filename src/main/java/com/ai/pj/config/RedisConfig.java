@@ -23,7 +23,9 @@ public class RedisConfig {
     @Value("${spring.data.redis.host}")
     private String host;
 
-    @Value("${spring.data.redis.password}")
+    // 마지막에 ':' 추가하면 기본값이 "" 이란 의미.
+    // 비밀번호를 쓰지 않는 local과, 비밀번호 쓰는 dev 모두 만족하기 위한 방법.
+    @Value("${spring.data.redis.password:}")
     private String password;
 
     @Bean

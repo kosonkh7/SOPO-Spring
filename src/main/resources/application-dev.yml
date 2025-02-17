@@ -11,19 +11,18 @@ spring:
     lazy-initialization: true # 시작 속도 최적화
 
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://bigprojectteam04.mysql.database.azure.com:3306/bigproject?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
-    username: aivle
-    password: Team04BigProject
+    driver-class-name: com.mysql.cj.jdbc.Driver # 아래 url에 DB 이름 주의 (현재 transsys)
+    url: jdbc:mysql://${MYSQL_HOST}.mysql.database.azure.com:3306/transsys?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
 
   data:
     redis:
-      host: team04Redis.redis.cache.windows.net # password: <Azure Redis 접속 키>
+      host: ${REDIS_HOST} # password: <Azure Redis 접속 키>
       port: 6379
-      password: ${REDIS_KEY}
+      password: ${REDIS_PASSWORD}
       ssl:
         enabled: false
-
 
   jpa:
     open-in-view: true
@@ -39,16 +38,16 @@ spring:
 
 chat-bot:
   api:
-    host: https://bigprojectchatbot-eqcgcad6g2hxbqc0.koreacentral-01.azurewebsites.net
+    host: ${CHATBOT_HOST}
 
 stock:
   api:
-    host: https://team4-stock-eyhmh9b6d0dyhncm.koreacentral-01.azurewebsites.net
+    host: ${STOCK_HOST}
 
 map:
   api:
-    host: https://team4-map-e5anbcavgkaabbha.koreacentral-01.azurewebsites.net
+    host: ${MAP_HOST}
 
 inspection:
   api:
-    host: https://team4-inspection-gsfvc9hkh6exhgfb.koreacentral-01.azurewebsites.nets
+    host: ${INSPECTION_HOST}

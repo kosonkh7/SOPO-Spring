@@ -28,7 +28,7 @@ management:
 
 spring:
   profiles:
-    active: local
+    active: dev
   mustache:
     charset: UTF-8
   mvc:
