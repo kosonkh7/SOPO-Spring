@@ -6,6 +6,7 @@ import com.ai.pj.dto.ResponseDTO;
 import com.ai.pj.service.AdminService;
 import com.ai.pj.service.VisitCounterService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,7 @@ import java.util.Map;
 public class AdminRestController {
 
     private final AdminService adminService;
+
     private final VisitCounterService visitCounterService;
 
     @GetMapping("/{id}/prove")

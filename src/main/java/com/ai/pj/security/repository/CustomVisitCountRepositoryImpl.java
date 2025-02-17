@@ -2,6 +2,7 @@ package com.ai.pj.security.repository;
 
 import com.ai.pj.domain.VisitCount;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 

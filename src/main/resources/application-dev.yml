@@ -1,6 +1,45 @@
-chatbot:
+server:
+  compression:
+    enabled: false # Content-Length mismatch 문제 방지
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+
+spring:
+  main:
+    lazy-initialization: true # 시작 속도 최적화
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://bigprojectteam04.mysql.database.azure.com:3306/bigproject?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+    username: aivle
+    password: Team04BigProject
+
+  data:
+    redis:
+      host: team04Redis.redis.cache.windows.net # password: <Azure Redis 접속 키>
+      port: 6379
+      password: ${REDIS_KEY}
+      ssl:
+        enabled: false
+
+
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      use-new-id-generator-mappings: false
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+      dialect: org.hibernate.dialect.MySQL8InnoDBDialect
+
+chat-bot:
   api:
-    host: http://127.0.0.1:8000
+    host: https://bigprojectchatbot-eqcgcad6g2hxbqc0.koreacentral-01.azurewebsites.net
 
 stock:
   api:
@@ -12,25 +51,4 @@ map:
 
 inspection:
   api:
-    host: https://team4-inspection-gsfvc9hkh6exhgfb.koreacentral-01.azurewebsites.net
-
-spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3308/transSys?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true # 수정필요
-    username: root
-    password: aivle202406
-  redis:
-    host: team4-redis.redis.cache.windows.net # password: <Azure Redis 접속 키>
-    port: 6380
-  jpa:
-    open-in-view: true
-    hibernate:
-      ddl-auto: create
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-      use-new-id-generator-mappings: false
-    show-sql: true
-    properties:
-      hibernate.format_sql: true
-      dialect: org.hibernate.dialect.MySQL8InnoDBDialect
+    host: https://team4-inspection-gsfvc9hkh6exhgfb.koreacentral-01.azurewebsites.nets

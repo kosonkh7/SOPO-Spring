@@ -28,6 +28,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-mustache'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
+	// Azure Setting
+	implementation platform("com.azure.spring:spring-cloud-azure-dependencies:5.19.0")
+
 	// OAuth2
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
@@ -36,6 +39,8 @@ dependencies {
 
 	// Micrometer Prometheus Registry
 	implementation 'io.micrometer:micrometer-registry-prometheus'
+
+
 
 
 	// Sprint Security
@@ -48,6 +53,8 @@ dependencies {
 
 	// Redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+
 
 	// JWT
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
