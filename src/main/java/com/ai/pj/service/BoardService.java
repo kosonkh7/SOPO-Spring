@@ -1,6 +1,5 @@
 package com.ai.pj.service;
 
-
 import com.ai.pj.domain.Board;
 import com.ai.pj.domain.User;
 import com.ai.pj.dto.BoardDTO;
@@ -8,16 +7,14 @@ import com.ai.pj.mapper.BoardMapper;
 import com.ai.pj.repository.BoardRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.awt.print.Pageable;
 import java.io.IOException;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -29,32 +26,52 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class BoardService {
-
     private final BoardRepository boardRepository;
     private final BoardMapper boardMapper;
     private final UserService userService;
 
-    // 이미지 저장 처리
-    public String saveImage(MultipartFile imageFile) throws IOException {
-        if (imageFile == null || imageFile.isEmpty()) {
-            return null; // 이미지가 없는 경우
-        }
+    // 게시글 목록 조회 (페이지네이션 적용)
+    @Transactional(readOnly = true)
+    public Page<BoardDTO.Get> getAllBoards(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return boardRepository.findAllByOrderByCreatedDateDesc(pageable)
+                .map(board -> new BoardDTO.Get(
+                        board.getId(),
+                        board.getTitle(),
+                        board.getUser().getId(),
+                        board.getContent(),
+                        board.getViewCount(),
+                        board.getCreatedDate(),
+                        board.getImageUrl()
+                ));
+    }
 
-        // 실제 파일 저장 경로
-        String uploadDir = "src/main/resources/static/uploads/";
-        String originalFilename = imageFile.getOriginalFilename();
-        String fileName = URLEncoder.encode(System.currentTimeMillis() + "_" + originalFilename, StandardCharsets.UTF_8);
-        Path filePath = Paths.get(uploadDir, fileName);
+    // 추가: 관리자 페이지에서 사용할 모든 게시글 조회 (페이지네이션 없이 전체 리스트 반환)
+    @Transactional(readOnly = true)
+    public List<BoardDTO.Get> getAllBoardsForAdmin() {
+        return boardRepository.findAllByOrderByCreatedDateDesc().stream()
+                .map(board -> new BoardDTO.Get(
+                        board.getId(),
+                        board.getTitle(),
+                        board.getUser().getId(),
+                        board.getContent(),
+                        board.getViewCount(),
+                        board.getCreatedDate(),
+                        board.getImageUrl()
+                ))
+                .collect(Collectors.toList());
+    }
 
-        // 디렉토리가 없으면 생성
-        if (!Files.exists(filePath.getParent())) {
-            Files.createDirectories(filePath.getParent());
-        }
+    // 게시글 상세 조회
+    @Transactional(readOnly = false)
+    public BoardDTO.Get getBoardById(Long id) {
+        Board board = boardRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("게시글이 존재하지 않습니다: " + id));
 
-        Files.write(filePath, imageFile.getBytes());
+        // 조회수 증가
+        boardRepository.incrementViewCount(id);
 
-        // 클라이언트에서 접근 가능한 URL 반환
-        return "/uploads/" + fileName;
+        return boardMapper.EntityToGET(board);
     }
 
     // 게시글 저장
@@ -101,31 +118,26 @@ public class BoardService {
         boardRepository.deleteById(id);
     }
 
-    // 게시글 목록 조회
-    @Transactional(readOnly = false)
-    public List<BoardDTO.Get> getAllBoards() {
-        return boardRepository.findAllByOrderByCreatedDateDesc().stream()
-                .map(board -> new BoardDTO.Get(
-                        board.getId(),
-                        board.getTitle(),
-                        board.getUser().getId(),
-                        board.getContent(),
-                        board.getViewCount(), // 조회수 추가
-                        board.getCreatedDate(),
-                        board.getImageUrl() // 이미지 URL 추가
-                ))
-                .collect(Collectors.toList());
-    }
+    // 이미지 저장 처리
+    public String saveImage(MultipartFile imageFile) throws IOException {
+        if (imageFile == null || imageFile.isEmpty()) {
+            return null; // 이미지가 없는 경우
+        }
 
-    // 게시글 상세 조회
-    @Transactional(readOnly = false)
-    public BoardDTO.Get getBoardById(Long id) {
-        Board board = boardRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("게시글이 존재하지 않습니다: " + id));
+        // 실제 파일 저장 경로
+        String uploadDir = "src/main/resources/static/uploads/";
+        String originalFilename = imageFile.getOriginalFilename();
+        String fileName = URLEncoder.encode(System.currentTimeMillis() + "_" + originalFilename, StandardCharsets.UTF_8);
+        Path filePath = Paths.get(uploadDir, fileName);
 
-        // 조회수 증가
-        boardRepository.incrementViewCount(id);
+        // 디렉토리가 없으면 생성
+        if (!Files.exists(filePath.getParent())) {
+            Files.createDirectories(filePath.getParent());
+        }
 
-        return boardMapper.EntityToGET(board);
+        Files.write(filePath, imageFile.getBytes());
+
+        // 클라이언트에서 접근 가능한 URL 반환
+        return "/uploads/" + fileName;
     }
 }
