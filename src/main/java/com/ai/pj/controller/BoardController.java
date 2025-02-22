@@ -8,6 +8,7 @@ import com.ai.pj.service.BoardService;
 import com.ai.pj.service.CommentService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -34,7 +35,9 @@ public class BoardController {
     }
 
     @GetMapping("/")
-    public String reqBoard(Model model, Authentication authentication) {
+    public String reqBoard(@RequestParam(defaultValue = "0") int page,
+                           @RequestParam(defaultValue = "10") int size,
+                           Model model, Authentication authentication) {
 
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
         System.out.println(customUserDetails.getTokenUserInfo().getUserid());
@@ -43,8 +46,15 @@ public class BoardController {
         System.out.println(customUserDetails.getTokenUserInfo().getEmail());
         model.addAttribute("userId", customUserDetails.getTokenUserInfo().getIdentifier()) ;
 
-        List<BoardDTO.Get> boardList = boardService.getAllBoards();
-        model.addAttribute("boardList", boardList);
+        // 페이지네이션 추가
+        Page<BoardDTO.Get> boardPage = boardService.getAllBoards(page, size);
+        model.addAttribute("boardList", boardPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", boardPage.getTotalPages());
+        model.addAttribute("prevPage", page > 0 ? page - 1 : 0);
+        model.addAttribute("nextPage", page < boardPage.getTotalPages() - 1 ? page + 1 : boardPage.getTotalPages() - 1);
+        model.addAttribute("prevDisabled", page == 0);
+        model.addAttribute("nextDisabled", page == boardPage.getTotalPages() - 1);
         return "/board/board";
     }
 
@@ -79,20 +89,6 @@ public class BoardController {
                 return "redirect:/board/write";
             }
     }
-
-
-//    @GetMapping("/delete")
-//    public String reqDelete(@RequestParam Long reqNum, Model model) {
-//
-//        // 삭제
-//        if (boardService.delete(reqNum)) {
-//            model.addAttribute("response", "삭제성공");
-//        } else {
-//            model.addAttribute("response", "삭제실패");
-//        };
-//
-//        return "/board/";
-//    }
 
     @PostMapping("/delete/{id}")
     public String deleteBoard(@PathVariable Long id, RedirectAttributes redirectAttributes){
@@ -149,6 +145,4 @@ public class BoardController {
                 return "redirect:/board/edit/" + id;
         }
     }
-
-
 }

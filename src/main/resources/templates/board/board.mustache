@@ -160,12 +160,6 @@
 <div class="container board-container">
     <h2>Q&A</h2>
 
-    <!-- Q&A / 1:1 문의 버튼 -->
-    <div class="qa-menu">
-        <a href="javascript:void(0);" class="qa-tab active" onclick="refreshBoard()">Q&A</a>
-        <a href="#" class="qa-tab">1:1 문의</a>
-    </div>
-
     <!-- 게시판 테이블 -->
     <table class="table table-hover">
         <thead>
@@ -193,33 +187,32 @@
                 <td>{{viewCount}}</td>
             </tr>
         {{/boardList}}
-        <tr>
-            <td>3</td>
-            <td><img src="/img/lock.svg" alt="Lock Icon" class="lock-icon"> [문의] 문의드립니다.</td>
-            <td>익명</td>
-            <td>2024-12-25</td>
-            <td>15</td>
-        </tr>
-        <tr>
-            <td>2</td>
-
-
-            <td><img src="/img/lock.svg" alt="Lock Icon" class="lock-icon"> [문의] 문의드립니다.</td>
-            <td>익명</td>
-            <td>2024-12-24</td>
-            <td>35</td>
-        </tr>
-        <tr>
-            <td>1</td>
-
-
-            <td><img src="/img/lock.svg" alt="Lock Icon" class="lock-icon"> [문의] 문의드립니다.</td>
-            <td>익명</td>
-            <td>2024-12-23</td>
-            <td>50</td>
-        </tr>
         </tbody>
     </table>
+
+    <!-- 페이지네이션 -->
+    <nav>
+        <ul class="pagination justify-content-center">
+            <!-- 이전 버튼 -->
+            <li class="page-item {{#prevDisabled}}disabled{{/prevDisabled}}">
+                <a class="page-link" href="/board/?page={{prevPage}}&size=10">이전</a>
+            </li>
+
+            <!-- 페이지 번호 -->
+            {{#totalPages}}
+                {{#pages}}
+                    <li class="page-item {{#isCurrent}}active{{/isCurrent}}">
+                        <a class="page-link" href="/board/?page={{number}}&size=10">{{displayNumber}}</a>
+                    </li>
+                {{/pages}}
+            {{/totalPages}}
+
+            <!-- 다음 버튼 -->
+            <li class="page-item {{#nextDisabled}}disabled{{/nextDisabled}}">
+                <a class="page-link" href="/board/?page={{nextPage}}&size=10">다음</a>
+            </li>
+        </ul>
+    </nav>
 
     <!-- 검색창과 글쓰기 버튼을 같은 줄에 배치 -->
     <div class="d-flex justify-content-between align-items-center mt-3">
@@ -288,15 +281,6 @@
     function refreshBoard() {
         location.reload();  // 현재 페이지 새로고침
     }
-
-
-
-<!--    document.addEventListener("DOMContentLoaded", function () {-->
-<!--        const rows = document.querySelectorAll("tbody tr");-->
-<!--        rows.forEach((row, index) => {-->
-<!--            row.querySelector("td:first-child").innerText = rows.length - index; // 최신 글이 1번-->
-<!--        });-->
-<!--    });      자동 정렬 기능-->
 
 
 </script>
