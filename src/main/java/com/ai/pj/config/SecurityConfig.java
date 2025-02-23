@@ -39,7 +39,7 @@ public class SecurityConfig {
 
     // 허용할 주소?
     private static final String[] AUTH_WHITELIST = {
-            "/api/v1/auth/**", "/img/**", "/css/**", "/js/**", "/favicon.ico", "/public/**"
+            "/api/v1/auth/**", "/img/**", "/css/**", "/js/**", "/favicon.ico", "/public/**", "/board/**" // 게시판 컨트롤러 수정 전 임시 방편
     };
 
     // admin 권한 가진 사람 허용 주소.
