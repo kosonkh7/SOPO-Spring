@@ -99,7 +99,7 @@
 
         /* 검색창 스타일 */
         .search-container {
-            max-width: 300px;  /* 검색창 너비 조절 */
+            max-width: 600px;  /* 검색창 너비 조절 */
             margin: 0 auto;  /* 가운데 정렬 */
         }
 
@@ -107,8 +107,6 @@
         .search-input {
             border-radius: 0; /* 왼쪽 모서리 둥글게 */
             border-right: none; /* 오른쪽 테두리 제거 */
-
-
         }
 
         /* 검색 아이콘 스타일 */
@@ -124,7 +122,6 @@
             width: 18px;
             height: auto;
         }
-
 
         /* 글쓰기 버튼 스타일 */
         .write-button {
@@ -198,7 +195,7 @@
                 <a class="page-link" href="/board/?page={{prevPage}}&size=10">이전</a>
             </li>
 
-            <!-- 페이지 번호 -->
+            <!-- 페이지 번호, 이거 왠지 지금 안되고 있는 것 같은데 -->
             {{#totalPages}}
                 {{#pages}}
                     <li class="page-item {{#isCurrent}}active{{/isCurrent}}">
@@ -218,6 +215,13 @@
     <div class="d-flex justify-content-between align-items-center mt-3">
         <!-- 검색창 -->
         <div class="search-container input-group">
+            <!--검색 타입 드롭다운-->
+            <select id="searchType" class="form-select" style="max-width: 300px;">
+                <option value="title" {{#searchType_title}}selected{{/searchType_title}}>제목</option>
+                <option value="content" {{#searchType_content}}selected{{/searchType_content}}>본문</option>
+                <option value="titleAndContent" {{#searchType_content}}selected{{/searchType_content}}>제목+본문</option>
+                <option value="userId" {{#searchType_userId}}selected{{/searchType_userId}}>작성자</option>
+            </select>
             <input type="text" class="form-control search-input" placeholder="Search" id="searchBox">
             <span class="input-group-text search-icon" id="searchButton">
             <img src="/img/searchButton.svg" alt="Search Icon">
@@ -254,34 +258,38 @@
             }
         });
     });
-    document.addEventListener("DOMContentLoaded", function () {
-        let searchBox = document.getElementById("searchBox");
-        let searchButton = document.getElementById("searchButton");
 
-        function performSearch() {
-            let query = searchBox.value.trim();
-            if (query !== "") {
-                alert("검색 실행: " + query); // 여기에 실제 검색 로직 추가
-            }
+
+    document.getElementById('searchButton').addEventListener('click', function() {
+        let searchType = document.getElementById('searchType').value;
+        let keyword = document.getElementById('searchBox').value.trim();
+        let url = `/board/?page=0&size=10&searchType=${searchType}&keyword=${encodeURIComponent(keyword)}`;
+        window.location.href = url;
+    });
+    // 엔터 키 입력 시 검색 실행
+    document.getElementById('searchBox').addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            document.getElementById('searchButton').click();
         }
+    });
 
-        // 엔터 키 입력 시 검색 실행
-        searchBox.addEventListener("keypress", function (event) {
-            if (event.key === "Enter") {
-                performSearch();
-            }
-        });
+    // 페이지네이션 링크 업데이트
+    document.addEventListener('DOMContentLoaded', function() {
+        let searchParams = new URLSearchParams(window.location.search);
+        let searchType = searchParams.get('searchType') || '';
+        let keyword = searchParams.get('keyword') || '';
 
-        // 검색 아이콘 클릭 시 검색 실행
-        searchButton.addEventListener("click", function () {
-            performSearch();
+        document.querySelectorAll('.pagination a').forEach(function(link) {
+            let href = new URL(link.href);
+            href.searchParams.set('searchType', searchType);
+            href.searchParams.set('keyword', keyword);
+            link.href = href.toString();
         });
     });
 
     function refreshBoard() {
         location.reload();  // 현재 페이지 새로고침
     }
-
 
 </script>
 </html>

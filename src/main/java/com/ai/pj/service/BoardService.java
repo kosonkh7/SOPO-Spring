@@ -35,30 +35,19 @@ public class BoardService {
     public Page<BoardDTO.Get> getAllBoards(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return boardRepository.findAllByOrderByCreatedDateDesc(pageable)
-                .map(board -> new BoardDTO.Get(
-                        board.getId(),
-                        board.getTitle(),
-                        board.getUser().getId(),
-                        board.getContent(),
-                        board.getViewCount(),
-                        board.getCreatedDate(),
-                        board.getImageUrl()
-                ));
+                .map(BoardMapper::EntityToGET);
+//        return boardRepository.findAllByOrderByCreatedDateDesc(pageable) // Mapper로 코드 간소화
+//                .map(board -> new BoardDTO.Get(
+//                        board.getId(), board.getTitle(), board.getUser().getId(), board.getContent(),
+//                        board.getViewCount(), board.getCreatedDate(), board.getImageUrl()
+//                ));
     }
 
     // 추가: 관리자 페이지에서 사용할 모든 게시글 조회 (페이지네이션 없이 전체 리스트 반환)
     @Transactional(readOnly = true)
     public List<BoardDTO.Get> getAllBoardsForAdmin() {
         return boardRepository.findAllByOrderByCreatedDateDesc().stream()
-                .map(board -> new BoardDTO.Get(
-                        board.getId(),
-                        board.getTitle(),
-                        board.getUser().getId(),
-                        board.getContent(),
-                        board.getViewCount(),
-                        board.getCreatedDate(),
-                        board.getImageUrl()
-                ))
+                .map(BoardMapper::EntityToGET)
                 .collect(Collectors.toList());
     }
 
@@ -67,7 +56,6 @@ public class BoardService {
     public BoardDTO.Get getBoardById(Long id) {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("게시글이 존재하지 않습니다: " + id));
-
         // 조회수 증가
         boardRepository.incrementViewCount(id);
 
@@ -89,7 +77,7 @@ public class BoardService {
                 .user(user)
                 .imageUrl(imageUrl) // 이미지 URL 설정
                 .build();
-
+        // Board board = BoardMapper.PostToEntity(post, user, imageUrl);
         return boardMapper.EntityToGET(boardRepository.save(board));
     }
 
@@ -112,7 +100,7 @@ public class BoardService {
 
     // 게시글 삭제
     public void delete(Long id) {
-        if (!boardRepository.existsById(id)){
+        if (!boardRepository.existsById(id)) {
             throw new EntityNotFoundException("게시글을 찾을 수 없습니다. " + id);
         }
         boardRepository.deleteById(id);
@@ -139,5 +127,31 @@ public class BoardService {
 
         // 클라이언트에서 접근 가능한 URL 반환
         return "/uploads/" + fileName;
+    }
+
+    // 검색창
+    @Transactional(readOnly = true)
+    public Page<BoardDTO.Get> search(String searchType, String keyword, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Board> result;
+
+        switch (searchType) { // 검색 타입 (제목, 본문, 제목+본문, 작성자)
+            case "title":
+                result = boardRepository.searchByTitle(keyword, pageable);
+                break;
+            case "content":
+                result = boardRepository.searchByContent(keyword, pageable);
+                break;
+            case "titleAndContent":
+                result = boardRepository.searchByTitleAndContent(keyword, pageable);
+                break;
+            case "userId":
+                result = boardRepository.searchByUserId(keyword, pageable);
+                break;
+            default:
+                // 기본값은 전체로
+                result = boardRepository.findAllByOrderByCreatedDateDesc(pageable);
+        }
+        return result.map(board -> boardMapper.EntityToGET(board));
     }
 }
