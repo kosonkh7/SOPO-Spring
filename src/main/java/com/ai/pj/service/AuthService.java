@@ -61,7 +61,7 @@ public class AuthService {
         String accessToken = jwtUtil.createAccessToken(info);
         String refreshToken = jwtUtil.createRefreshToken(info);
 
-        tokenRepository.save(new Token(user.getIdentifier(), refreshToken,7*24*60*60L) );
+        tokenRepository.save(new Token(user.getIdentifier(), refreshToken, "use", 7*24*60*60L) );
 
         return new String[]{accessToken, refreshToken};
     }
