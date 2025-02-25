@@ -8,6 +8,7 @@ import com.ai.pj.repository.UserRepository;
 import com.ai.pj.security.handler.CustomAccessDeniedHandler;
 import com.ai.pj.security.handler.CustomAuthDeniedHandler;
 import com.ai.pj.security.jwt.JwtUtil;
+import com.ai.pj.security.repository.CustomTokenRepository;
 import com.ai.pj.security.repository.TokenRepository;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.Cookie;
@@ -55,6 +56,12 @@ public class AuthService {
             throw new CustomAuthDeniedHandler("회원가입을 요청 중입니다. 잠시만 기다려 주세요!");
         }
 
+        if (checkDuplicate(user.getIdentifier())) {
+            throw new CustomAuthDeniedHandler("이미 로그인 중인 아이디입니다.");
+        }
+
+
+
         UserDTO.TokenUserInfo info = userMapper.EntityToTokenUserInfo(user);
 
         // accessToken 생성.
@@ -71,6 +78,10 @@ public class AuthService {
 
         // redis에 저장된 거 제거해야됨.
         tokenRepository.deleteById(identifier);
+    }
+
+    public boolean checkDuplicate(String identifier) {
+       return tokenRepository.findByusable(identifier);
     }
 
 
