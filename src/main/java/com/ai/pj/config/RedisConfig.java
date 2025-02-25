@@ -1,5 +1,6 @@
 package com.ai.pj.config;
 
+import com.ai.pj.domain.Token;
 import com.ai.pj.domain.VisitCount;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.EnableCaching;
@@ -23,8 +24,6 @@ public class RedisConfig {
     @Value("${spring.data.redis.host}")
     private String host;
 
-    // 마지막에 ':' 추가하면 기본값이 "" 이란 의미.
-    // 비밀번호를 쓰지 않는 local과, 비밀번호 쓰는 dev 모두 만족하기 위한 방법.
     @Value("${spring.data.redis.password:}")
     private String password;
 
@@ -52,6 +51,27 @@ public class RedisConfig {
 
         return redisTemplate;
     }
+
+    @Bean
+    public RedisTemplate<String, Object> redisTemplate_str_token() {
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory());
+
+        // 🔹 Key는 String
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+
+        // 🔹 Value는 String (이전에는 JSON 직렬화됨)
+        redisTemplate.setValueSerializer(new StringRedisSerializer());
+
+        // 🔹 HashKey, HashValue도 String으로 설정
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashValueSerializer(new StringRedisSerializer()); // ✅ 여기 수정!
+
+        return redisTemplate;
+    }
+
+
+
 
     @Bean
     public RedisTemplate<String, VisitCount> redisTemplate_visitCount() {

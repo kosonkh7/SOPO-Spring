@@ -38,7 +38,8 @@ public class RoleBasedAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException("Access denied : Role not allowed");
         }
 
-        System.out.println(11);
+        System.out.println("USERNAME" + username);
+
 
         return new UsernamePasswordAuthenticationToken(user, password, user.getAuthorities());
     }
