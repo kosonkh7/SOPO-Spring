@@ -1,13 +1,16 @@
 package com.ai.pj.config;
 
 import io.github.cdimascio.dotenv.Dotenv;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class TmapConfig {
-    private static final Dotenv dotenv = Dotenv.load();
+
+    @Value("${tmap-api-key}")
+    private String TMAP_API_KEY;
 
     public String getTmapApiKey() {
-        return dotenv.get("TMAP_API_KEY");
+        return TMAP_API_KEY;
     }
 }

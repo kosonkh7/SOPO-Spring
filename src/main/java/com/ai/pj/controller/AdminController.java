@@ -46,7 +46,7 @@ public class AdminController {
         model.addAttribute("allUserList", allUserList);
 
         // 게시판 현황
-        List<BoardDTO.Get> allBoardList = boardService.getAllBoards();
+        List<BoardDTO.Get> allBoardList = boardService.getAllBoardsForAdmin(); // BoardService 수정으로 전용 함수 추가
         model.addAttribute("allBoardList",allBoardList);
 
         // role = HOLD로 갖고 있는 USER 목록 및 USER 관련 companyName

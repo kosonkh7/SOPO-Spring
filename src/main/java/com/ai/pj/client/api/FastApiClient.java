@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "fastApiClient", url = "${chatbot.api.host}",configuration = FeignConfig.class)
+@FeignClient(name = "fastApiClient", url = "${chat-bot.api.host}",configuration = FeignConfig.class)
 public interface FastApiClient {
     @PostMapping("/chat")
     public String getText(@RequestBody ChatbotDTO.Post post);
