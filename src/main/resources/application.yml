@@ -28,7 +28,7 @@ management:
 
 spring:
   profiles:
-    active: dev
+    active: k8s
   mustache:
     charset: UTF-8
   mvc:
@@ -41,6 +41,4 @@ spring:
       enabled: true
       force: true
 
-
 tmap-api-key: ${TMAP_API_KEY}
-

@@ -19,3 +19,6 @@ Thumbs.db
 *.log
 logs/
 *.out
+
+
+k8s/secret.yaml
