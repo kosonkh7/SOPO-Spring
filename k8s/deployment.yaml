@@ -1,0 +1,35 @@
+# 쿠버네티스 Deployment: Pod을 생성하고 관리하는 핵심 리소스
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-app                  # Deployment 이름
+  labels:
+    app: spring-app                # 라벨로 리소스 그룹화
+spec:
+  replicas: 1                       # Pod 수 (추후 HPA로 자동 스케일링 가능)
+  selector:
+    matchLabels:
+      app: spring-app              # 어떤 Pod을 관리할지 정의 (아래 template과 매칭)
+  template:
+    metadata:
+      labels:
+        app: spring-app            # Pod의 라벨
+    spec:
+      containers:
+        - name: spring-app
+          image: kosonkh7/team4-spring-local:v1.0.0   # 사용할 Docker 이미지
+          ports:
+            - containerPort: 8080                   # 컨테이너 내부 포트 (Spring 앱이 사용하는 포트)
+          envFrom:
+            - secretRef:
+                name: spring-secret                 # 환경변수 주입 (Secret로부터)
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: k8s  # application-k8s.yml을 사용하게 함
+          resources:  # HPA 리소스 요청 추가?
+            requests:
+              cpu: "100m"
+              memory: "512Mi"
+            limits:
+              cpu: "500m"
+              memory: "1Gi"
