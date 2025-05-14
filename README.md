@@ -35,9 +35,9 @@
 ## ✅ 담당 업무 (My Achievements!)
 - 팀 리더: 주제 선정 및 구체화, 협업 관리(GitFlow, Notion), 문서 작업 총괄, 최종 결과물 발표
 - GIS 툴을 이용한 생활 물류 데이터 분석 (Geopandas, )
-- LSTM 기반 적정 재고 예측 서비스 개발 (서비스 플로우, 모델링 및 API 개발 | TensorFlow, Sklearn, FastAPI, Docker)
-- 실시간 재고 입출고 관리 서비스 개발 (SQLAlchemy, MySQL, FastAPI, Docker)
-- Yolov11 기반 자동 상품 검수 API 개발 (API 개발 + Docker 이미지 빌드만 담당 | FastAPI, Docker)
+- [LSTM 기반 적정 재고 예측 서비스 개발](https://github.com/kosonkh7/Optimal-Stock-Forecasting) (서비스 플로우, 모델링 및 API 개발 | TensorFlow, Sklearn, FastAPI, Docker)
+- [실시간 재고 입출고 관리 서비스 개발](https://github.com/kosonkh7/Storage-Retrieval-System) (SQLAlchemy, MySQL, FastAPI, Docker)
+- [Yolov11 기반 자동 상품 검수 API 개발](https://github.com/team4-pj-25/Auto-Inspection) (API 개발 + Docker 이미지 빌드만 담당 | FastAPI, Docker)
 - 문의 게시판 CRUD 개발 (Spring Boot, Mustache)
 - Azure 웹앱 이용한 배포 (+ Azure Database for MySQL, Azure Cache for Redis)
 
