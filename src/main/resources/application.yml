@@ -28,7 +28,7 @@ management:
 
 spring:
   profiles:
-    active: k8s
+    active: local
   mustache:
     charset: UTF-8
   mvc:
